@@ -55,7 +55,7 @@ export const COPY = {
     // 說明彈窗
     limitSheet: {
       title: '額度限制',
-      body: '單筆借款最低 TWD 10,000，最高不超過剩餘可借金額，且單筆上限 TWD 1,000,000，金額須以 TWD 1,000 為單位。',
+      body: '單筆借款最低 TWD 10,000，最高為剩餘可借金額，金額須以 TWD 1,000 為單位。',
     },
     ratioSheet: {
       title: '借款後整戶維持率',

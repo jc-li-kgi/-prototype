@@ -45,8 +45,8 @@ export function CollateralSelect({ query }) {
       else delete next[code];
       return next;
     });
-  const toggleAll = (on) =>
-    setSelected(on ? Object.fromEntries(eligible.map((h) => [h.code, selected[h.code] || 1])) : {});
+  // 全選：每檔帶入全部可擔保張數
+  const toggleAll = (on) => setSelected(on ? Object.fromEntries(eligible.map((h) => [h.code, h.lots])) : {});
   const setLots = (code, lots) => setSelected((s) => ({ ...s, [code]: lots }));
 
   const submit = () => {

@@ -5,7 +5,7 @@ import { STOCKS, LOT_SIZE } from '../mock/stocks.js';
 export const LOAN_RULES = {
   min: 10000,          // 單筆最低
   step: 1000,          // 累加金額
-  singleMax: 1000000,  // 單筆上限
+  singleMax: null,     // 單筆上限（null = 不限，最高為剩餘可借金額）
   rate: 0.028,         // 參考年利率
   fee: 2,              // 借款手續費（每筆）
   termMonths: 6,       // 借款期間
@@ -94,7 +94,7 @@ export function maintenanceRatio(account, extraLoan = 0) {
 export function loanRange(account) {
   return {
     min: LOAN_RULES.min,
-    max: Math.min(LOAN_RULES.singleMax, remainingCredit(account)),
+    max: LOAN_RULES.singleMax ? Math.min(LOAN_RULES.singleMax, remainingCredit(account)) : remainingCredit(account),
     step: LOAN_RULES.step,
   };
 }
