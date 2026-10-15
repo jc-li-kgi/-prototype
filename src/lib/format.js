@@ -3,6 +3,9 @@ export const num = (n) => Number(n).toLocaleString('en-US');
 
 export const twd = (n) => `TWD ${num(n)}`;
 
+/** 以「萬」為單位（無條件捨去），例如 1,260,000 → 126 */
+export const wan = (n) => num(Math.floor(n / 10000));
+
 export const pct = (n) => (n == null ? '--' : `${num(n)} %`);
 
 export const rate = (r) => `${+(r * 100).toFixed(2)} %`;

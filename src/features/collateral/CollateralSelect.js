@@ -6,7 +6,7 @@ import {
   QtyStepper, Button, TotalBar, Sheet, SheetOptions, InfoSheet,
 } from '../../components/index.js';
 import { useStore, updateCollateralDraft, showToast } from '../../store.js';
-import { flowPosition, nextStep, prevStep } from '../../flows/flows.js';
+import { flowPosition, nextStep, prevStep, flowTitle } from '../../flows/flows.js';
 import { stockOf, perLotLoan, loanableOf, groupHoldings, HOLDING_SORTS } from '../../lib/calc.js';
 import { twd, num } from '../../lib/format.js';
 import { COPY } from '../../content/copy.js';
@@ -69,7 +69,7 @@ export function CollateralSelect({ query }) {
 
   return html`
     <${FlowPage}
-      title=${t.title}
+      title=${flowTitle(t.title)}
       step=${flowPosition(PATH)}
       onBack=${() => prevStep(PATH)}
       sticky=${html`

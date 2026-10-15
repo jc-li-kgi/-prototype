@@ -106,6 +106,18 @@ export function clampAmount(value, range) {
   return Math.min(range.max, Math.max(range.min, stepped));
 }
 
+/** 預估每日利息（以參考年利率計算） */
+export function dailyInterest(amount) {
+  return Math.round((amount * LOAN_RULES.rate) / 365);
+}
+
+/** 首次借款：把還沒送出的擔保品（{ code: lots }）先算進帳戶，用來計算可借額度 */
+export function withPendingCollateral(account, selected = {}) {
+  const pending = Object.entries(selected).map(([code, lots]) => ({ code, lots }));
+  if (!pending.length) return account;
+  return { ...account, collateral: [...account.collateral, ...pending] };
+}
+
 /** 借款期間利息（預設半年） */
 export function interestFor(amount, months = LOAN_RULES.termMonths) {
   return Math.round((amount * LOAN_RULES.rate * months) / 12);

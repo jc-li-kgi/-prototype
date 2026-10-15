@@ -14,6 +14,7 @@ python3 -m http.server 8080
 
 | 任務 | 網址 |
 |---|---|
+| T1 首次借款（匯入擔保品 + 借款） | `#/start?task=T1` |
 | T2 舊戶再借一筆 | `#/start?task=T2` |
 | T3 匯入擔保品 | `#/start?task=T3` |
 

@@ -1,10 +1,12 @@
-// 借款 第 1 步：填寫借款金額
+// 借款：填寫借款金額
+// 首次借款流程中，可借額度以「這次要匯入的擔保品」計算（尚未送出）
 import { html, useState } from '../../lib/preact.js';
 import { FlowPage, SummaryCard, DetailRow, InfoSheet, PickerField, AmountField, FeeCard, Button } from '../../components/index.js';
 import { useStore, updateDraft } from '../../store.js';
-import { flowPosition, nextStep, prevStep } from '../../flows/flows.js';
+import { flowPosition, nextStep, prevStep, flowTitle, isFlow } from '../../flows/flows.js';
 import {
   LOAN_RULES, LOAN_PURPOSES, loanBalance, remainingCredit, maintenanceRatio, loanRange, clampAmount, interestFor,
+  collateralValue, withPendingCollateral,
 } from '../../lib/calc.js';
 import { twd, pct, num } from '../../lib/format.js';
 import { COPY } from '../../content/copy.js';
@@ -13,7 +15,8 @@ const PATH = '/loan/amount';
 const DEFAULT_AMOUNT = 20000;
 
 export function LoanAmount() {
-  const account = useStore((s) => s.account);
+  const firstLoan = isFlow('newAccountLoan');
+  const account = useStore((s) => (firstLoan ? withPendingCollateral(s.account, s.collateralDraft.selected) : s.account));
   const draft = useStore((s) => s.draft);
   const t = COPY.loan;
   const range = loanRange(account);
@@ -39,21 +42,28 @@ export function LoanAmount() {
 
   return html`
     <${FlowPage}
-      title=${t.title}
+      title=${flowTitle(t.title)}
       step=${flowPosition(PATH)}
       onBack=${() => prevStep(PATH)}
       actions=${html`<${Button} onClick=${submit}>${COPY.common.next}<//>`}
     >
       <div class="loan-summary">
-        <${SummaryCard}
-          variant="flow"
-          label=${t.ratio}
-          value=${pct(maintenanceRatio(account))}
-          rows=${[
-            [t.remaining, twd(remainingCredit(account))],
-            [t.borrowed, twd(loanBalance(account))],
-          ]}
-        />
+        ${firstLoan
+          ? html`<${SummaryCard}
+              variant="flow"
+              label=${t.remaining}
+              value=${twd(remainingCredit(account))}
+              rows=${[[t.pendingCollateralValue, twd(collateralValue(account))]]}
+            />`
+          : html`<${SummaryCard}
+              variant="flow"
+              label=${t.ratio}
+              value=${pct(maintenanceRatio(account))}
+              rows=${[
+                [t.remaining, twd(remainingCredit(account))],
+                [t.borrowed, twd(loanBalance(account))],
+              ]}
+            />`}
       </div>
 
       <div class="loan-cards">

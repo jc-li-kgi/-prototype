@@ -31,6 +31,7 @@ export const COPY = {
     ratio: '整戶維持率',
     remaining: '剩餘可借金額',
     borrowed: '已借款金額',
+    pendingCollateralValue: '匯入擔保品市值',
     purpose: '借款目的',
     purposePlaceholder: '請選擇',
     purposeError: '請選擇借款目的',
@@ -122,6 +123,16 @@ export const COPY = {
     importableTitle: '尚可匯入擔保品',
     viewAll: '查看全部',
     importableHint: '匯入後，可借總額提升',
+
+    // 尚未借款（未開戶）
+    introTitle: '續抱好股票，借貸讓資金多一條出路',
+    introLoanable: '預估庫存可借貸',
+    introDailyInterest: '預估每日利息',
+    introNotice: '動用不受限，最快 1 小時撥款，隨借隨還',
+    picksTitle: '您的庫存精選擔保品',
+    pickLoanable: '庫存可借款',
+    borrowNow: '馬上借貸一筆',
+    wan: '萬',
   },
 
   holdings: {

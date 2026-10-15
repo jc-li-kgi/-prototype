@@ -455,6 +455,8 @@
   z-index: 20;
 }
 
+.sticky-footer--plain { background: transparent; border-top: 0; box-shadow: none; } /* 只有一顆按鈕時 */
+
 /* ---------- ResultPage 完成頁 ---------- */
 .result-page { display: flex; flex-direction: column; }
 .result-page__content {
@@ -599,3 +601,41 @@
 
 /* 小尺寸膠囊按鈕（列表內） */
 .btn-capsule--sm { padding: var(--spacing-4) var(--spacing-16); }
+
+/* ---------- StatGroup 並排數據 ---------- */
+.stat-group { display: flex; align-items: center; justify-content: center; gap: var(--spacing-20); }
+.stat-group__divider { width: 1px; height: 24px; background: var(--color-container-general-divider); flex-shrink: 0; }
+.stat { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: var(--spacing-4); white-space: nowrap; }
+.stat__value { display: flex; align-items: baseline; justify-content: center; gap: var(--spacing-4); color: var(--color-content-general-primary); }
+.stat--highlight .stat__value { color: var(--color-content-semantic-warning); } /* Guideline：Content/Semantic/Warning */
+
+/* ---------- NoticeBar 提示條（Guideline：Surface/Yellow） ---------- */
+.notice-bar {
+  padding: var(--spacing-8);
+  border-radius: var(--radius-small);
+  background: var(--color-surface-yellow);
+  text-align: center;
+}
+
+/* ---------- Carousel 橫向滑動卡片 ---------- */
+.carousel { display: flex; flex-direction: column; align-items: center; gap: var(--spacing-16); }
+.carousel__track {
+  width: 100%;
+  display: flex;
+  gap: var(--spacing-12);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding: var(--spacing-4) calc((100% - var(--carousel-item-width, 280px)) / 2) var(--spacing-12); /* 上下留陰影空間；左右讓第一、最後一張也能置中 */
+}
+.carousel__track::-webkit-scrollbar { display: none; }
+.carousel__item { flex: 0 0 var(--carousel-item-width, 280px); scroll-snap-align: center; display: flex; }
+.carousel__dots { display: flex; gap: var(--spacing-4); margin-top: calc(var(--spacing-4) - var(--spacing-16)); }
+.carousel__dot {
+  width: 4px;
+  height: 4px;
+  border-radius: var(--radius-xs);
+  background: var(--color-blue-100);
+  transition: width 0.2s ease;
+}
+.carousel__dot--active { width: 22px; background: var(--color-content-general-active); }
