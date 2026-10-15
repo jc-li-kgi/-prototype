@@ -5,7 +5,7 @@ import { STOCKS, LOT_SIZE } from '../mock/stocks.js';
 export const LOAN_RULES = {
   min: 10000,          // 單筆最低
   step: 1000,          // 累加金額
-  singleMax: 1000000,  // 單筆上限
+  singleMax: null,     // 單筆上限（null = 不限，最高為剩餘可借金額）
   rate: 0.028,         // 參考年利率
   fee: 2,              // 借款手續費（每筆）
   termMonths: 6,       // 借款期間
@@ -94,7 +94,7 @@ export function maintenanceRatio(account, extraLoan = 0) {
 export function loanRange(account) {
   return {
     min: LOAN_RULES.min,
-    max: Math.min(LOAN_RULES.singleMax, remainingCredit(account)),
+    max: LOAN_RULES.singleMax ? Math.min(LOAN_RULES.singleMax, remainingCredit(account)) : remainingCredit(account),
     step: LOAN_RULES.step,
   };
 }
@@ -104,6 +104,18 @@ export function clampAmount(value, range) {
   const n = Number(value) || 0;
   const stepped = Math.round(n / range.step) * range.step;
   return Math.min(range.max, Math.max(range.min, stepped));
+}
+
+/** 預估每日利息（以參考年利率計算） */
+export function dailyInterest(amount) {
+  return Math.round((amount * LOAN_RULES.rate) / 365);
+}
+
+/** 首次借款：把還沒送出的擔保品（{ code: lots }）先算進帳戶，用來計算可借額度 */
+export function withPendingCollateral(account, selected = {}) {
+  const pending = Object.entries(selected).map(([code, lots]) => ({ code, lots }));
+  if (!pending.length) return account;
+  return { ...account, collateral: [...account.collateral, ...pending] };
 }
 
 /** 借款期間利息（預設半年） */

@@ -43,9 +43,9 @@
 ## 程式結構規則
 
 - **優先用現有元件**（`src/components/index.js` 統一 import；元件負責樣式，內容由參數帶入）：
-  - ui：Button、Icon、InfoLabel（文字＋ⓘ）、DetailRow、DetailCard（確認資料卡）、SummaryCard（摘要卡，overview / flow）、FeeCard、AmountHero（確認頁大金額）、AmountCell（列表金額欄）、StockName（股票名稱＋代碼）、SectionHeader（區塊標題＋連結＋說明）、CollapsibleCard、ExpandToggle、IconAction（圓形圖示捷徑）、EmptyState、AccountPicker、Checkbox、FilterPill、Tag、SearchIcon
+  - ui：Button、Icon、InfoLabel（文字＋ⓘ）、DetailRow、DetailCard（確認資料卡）、SummaryCard（摘要卡，overview / flow）、FeeCard、AmountHero（確認頁大金額）、AmountCell（列表金額欄）、StockName（股票名稱＋代碼）、SectionHeader（區塊標題＋連結＋說明）、CollapsibleCard、ExpandToggle、IconAction（圓形圖示捷徑）、EmptyState、StatGroup（並排大數字）、NoticeBar（淡黃提示條）、StockPickCard（精選擔保品卡）、AccountPicker、Checkbox、FilterPill、Tag、SearchIcon
   - form：PickerField、AmountField（金額）、QtyStepper（張數）、SelectableItem（勾選項目）、SearchField
-  - layout：FlowPage（流程頁框架，流程每一步都用）、PageHeader、StepBar、BottomNav、TextTabs、SegmentedTabs、ListTable／ListRow（列表）、StickyFooter、TotalBar（置底總計）、ResultPage（完成頁）
+  - layout：FlowPage（流程頁框架，流程每一步都用）、PageHeader、StepBar、BottomNav、TextTabs、SegmentedTabs、ListTable／ListRow（列表）、Carousel（橫向滑動卡片）、StickyFooter（plain = 只有按鈕時）、TotalBar（置底總計）、ResultPage（完成頁）
   - overlay：Sheet、InfoSheet、SheetOptions（彈窗選項）、Toast
   - 2 個以上地方會用到的畫面才抽成新元件，放進對應資料夾並在 `index.js` 匯出，檔頭註明對應的 Figma 元件名稱與用法範例。
 - `Button` 用 `variant`（primary / text / capsule）與 `typo`（換文字層級）；需要換色的 icon 用 `<Icon tint />`。
@@ -54,6 +54,8 @@
 - 測試情境放 `src/scenarios/`（一個任務一個檔，並在 `index.js` 註冊）；已開戶客戶共用 `base-account.js`。資料結構改版時，遞增 `store.js` 的 `KEY` 版本。
 - 股票數量一律用「張」（`lots`）；股價、成數、擔保資格（eligible / ratioOnly / ineligible）在 `src/mock/stocks.js`。
 - 開始流程用 `startFlow(flowId, { query, returnTo })`，結束或第 1 步返回會回到進入流程前的頁面。
+- 同一頁可出現在多個流程（例如匯入擔保品第 1 步也是首次借款第 1 步）：頁首標題用 `flowTitle()`、依流程調整行為用 `isFlow()`；送出動作放在流程最後一步。
+- 帳戶 `opened = false` 代表尚未借款（未開戶）：專區顯示初始頁，借款走 `newAccountLoan`（匯入擔保品 → 填寫借款金額 → 確認資料，最後一次送出 `firstLoan`）。
 - 文案放 `src/content/copy.js`；公式與業務規則放 `src/lib/calc.js`；股價放 `src/mock/stocks.js`。
 - 新頁面要在 `src/routes.js` 註冊。
 - 未實作的按鈕呼叫 `showToast(COPY.common.notAvailable)`。

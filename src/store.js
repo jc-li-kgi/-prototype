@@ -133,6 +133,14 @@ export function pledgeCollateral(items) {
   return record;
 }
 
+/** 首次借款：匯入擔保品 + 開戶 + 借款，一次送出 */
+export function firstLoan(items, draft) {
+  pledgeCollateral(items);
+  const loan = borrow(draft);
+  setState((s) => ({ account: { ...s.account, opened: true } }));
+  return loan;
+}
+
 export function borrow({ amount, purpose }) {
   const date = today();
   const loan = {

@@ -5,6 +5,7 @@ import { navigate, parseHash } from '../router.js';
 
 export const FLOWS = {
   existingLoan: {
+    title: '申請借款',
     steps: [
       { path: '/loan/amount', label: '填寫借款金額' },
       { path: '/loan/confirm', label: '確認資料' },
@@ -13,6 +14,7 @@ export const FLOWS = {
   },
 
   collateralIn: {
+    title: '匯入擔保品',
     steps: [
       { path: '/collateral-in/select', label: '匯入擔保品' },
       { path: '/collateral-in/confirm', label: '確認資料' },
@@ -20,17 +22,27 @@ export const FLOWS = {
     done: '/collateral-in/result',
   },
 
-  // 之後新增，例如：
-  // newAccountLoan: {
-  //   steps: [
-  //     { path: '/onboarding/sign', label: '簽署契約' },
-  //     { path: '/collateral-in/select', label: '選擇擔保品' },
-  //     { path: '/loan/amount', label: '填寫借款金額' },
-  //     { path: '/loan/confirm', label: '確認資料' },
-  //   ],
-  //   done: '/loan/result',
-  // },
+  // 首次借款（未開戶）：匯入擔保品 → 借款，最後一次送出
+  newAccountLoan: {
+    title: '申請借款',
+    steps: [
+      { path: '/collateral-in/select', label: '匯入擔保品' },
+      { path: '/loan/amount', label: '填寫借款金額' },
+      { path: '/loan/confirm', label: '確認資料' },
+    ],
+    done: '/loan/result',
+  },
 };
+
+/** 目前是否在某個流程中 */
+export function isFlow(flowId) {
+  return getState().flow === flowId;
+}
+
+/** 頁首標題：依流程決定（同一頁在不同流程可有不同標題），沒有就用頁面預設 */
+export function flowTitle(fallback) {
+  return FLOWS[getState().flow]?.title || fallback;
+}
 
 /* 各入口的首頁（完成、返回時回到這裡） */
 export const ENTRY_HOME = {

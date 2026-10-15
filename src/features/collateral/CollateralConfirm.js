@@ -3,7 +3,7 @@ import { html, useEffect } from '../../lib/preact.js';
 import { FlowPage, DetailCard, DetailRow, Button, AmountHero, CollapsibleCard } from '../../components/index.js';
 import { useStore, pledgeCollateral } from '../../store.js';
 import { navigate } from '../../router.js';
-import { flowPosition, nextStep, prevStep } from '../../flows/flows.js';
+import { flowPosition, nextStep, prevStep, flowTitle } from '../../flows/flows.js';
 import { stockOf, loanableOf, marketValueOf, today } from '../../lib/calc.js';
 import { twd, date } from '../../lib/format.js';
 import { COPY } from '../../content/copy.js';
@@ -28,7 +28,7 @@ export function CollateralConfirm() {
 
   return html`
     <${FlowPage}
-      title=${t.title}
+      title=${flowTitle(t.title)}
       step=${flowPosition(PATH)}
       onBack=${() => prevStep(PATH)}
       actions=${html`<${Button} onClick=${submit}>${t.submit}<//>`}

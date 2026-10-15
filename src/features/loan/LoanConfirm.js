@@ -1,10 +1,11 @@
-// 借款 第 2 步：確認資料
+// 借款：確認資料
+// 首次借款流程中，同時列出要匯入的擔保品，按確認時一起送出
 import { html, useEffect } from '../../lib/preact.js';
-import { FlowPage, DetailCard, DetailRow, Button, AmountHero } from '../../components/index.js';
-import { useStore, borrow } from '../../store.js';
+import { FlowPage, DetailCard, DetailRow, Button, AmountHero, CollapsibleCard } from '../../components/index.js';
+import { useStore, borrow, firstLoan } from '../../store.js';
 import { navigate } from '../../router.js';
-import { flowPosition, nextStep, prevStep } from '../../flows/flows.js';
-import { LOAN_RULES, interestFor, today, addMonths } from '../../lib/calc.js';
+import { flowPosition, nextStep, prevStep, flowTitle, isFlow } from '../../flows/flows.js';
+import { LOAN_RULES, interestFor, today, addMonths, stockOf } from '../../lib/calc.js';
 import { twd, rate, date } from '../../lib/format.js';
 import { COPY } from '../../content/copy.js';
 
@@ -13,7 +14,10 @@ const PATH = '/loan/confirm';
 export function LoanConfirm() {
   const account = useStore((s) => s.account);
   const draft = useStore((s) => s.draft);
+  const selected = useStore((s) => s.collateralDraft.selected || {});
   const t = COPY.loan;
+  const isFirstLoan = isFlow('newAccountLoan');
+  const items = Object.entries(selected).map(([code, lots]) => ({ code, lots }));
 
   // 沒有草稿（例如直接開網址）就回第 1 步
   useEffect(() => {
@@ -25,13 +29,14 @@ export function LoanConfirm() {
   const bank = account.payoutBank;
 
   const submit = () => {
-    borrow(draft);
+    if (isFirstLoan) firstLoan(items, draft);
+    else borrow(draft);
     nextStep(PATH);
   };
 
   return html`
     <${FlowPage}
-      title=${t.title}
+      title=${flowTitle(t.title)}
       step=${flowPosition(PATH)}
       onBack=${() => prevStep(PATH)}
       actionsClass="confirm-actions"
@@ -50,6 +55,21 @@ export function LoanConfirm() {
           <${DetailRow} label=${t.purpose} value=${draft.purpose} valueClass="t-body-regular" />
           <${DetailRow} label=${t.payout} value=${html`<p class="t-body-regular">${bank.name}</p><p class="n-body-regular">${bank.number}</p>`} />
         <//>
+
+        ${isFirstLoan &&
+        html`
+          <${CollapsibleCard} title=${COPY.collateral.detailTitle}>
+            ${items.map(
+              (i) => html`
+                <${DetailRow}
+                  label=${`${stockOf(i.code).name} ${i.code}`}
+                  value=${`${i.lots} ${COPY.collateral.lotUnit}`}
+                  valueClass="t-body-regular"
+                />
+              `
+            )}
+          <//>
+        `}
       </div>
     <//>
   `;

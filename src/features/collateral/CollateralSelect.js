@@ -6,7 +6,7 @@ import {
   QtyStepper, Button, TotalBar, Sheet, SheetOptions, InfoSheet,
 } from '../../components/index.js';
 import { useStore, updateCollateralDraft, showToast } from '../../store.js';
-import { flowPosition, nextStep, prevStep } from '../../flows/flows.js';
+import { flowPosition, nextStep, prevStep, flowTitle } from '../../flows/flows.js';
 import { stockOf, perLotLoan, loanableOf, groupHoldings, HOLDING_SORTS } from '../../lib/calc.js';
 import { twd, num } from '../../lib/format.js';
 import { COPY } from '../../content/copy.js';
@@ -45,8 +45,8 @@ export function CollateralSelect({ query }) {
       else delete next[code];
       return next;
     });
-  const toggleAll = (on) =>
-    setSelected(on ? Object.fromEntries(eligible.map((h) => [h.code, selected[h.code] || 1])) : {});
+  // 全選：每檔帶入全部可擔保張數
+  const toggleAll = (on) => setSelected(on ? Object.fromEntries(eligible.map((h) => [h.code, h.lots])) : {});
   const setLots = (code, lots) => setSelected((s) => ({ ...s, [code]: lots }));
 
   const submit = () => {
@@ -69,7 +69,7 @@ export function CollateralSelect({ query }) {
 
   return html`
     <${FlowPage}
-      title=${t.title}
+      title=${flowTitle(t.title)}
       step=${flowPosition(PATH)}
       onBack=${() => prevStep(PATH)}
       sticky=${html`

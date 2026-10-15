@@ -1,4 +1,4 @@
-/* ===== 股票借貸專區（總覽）｜情境：資訊瀏覽 ===== */
+/* ===== 股票借貸專區｜情境：資訊瀏覽 ===== */
 .zone-page { padding-bottom: calc(var(--spacing-40) + env(safe-area-inset-bottom)); }
 
 .zone-header {
@@ -10,11 +10,18 @@
 
 .zone-content { display: flex; flex-direction: column; gap: var(--spacing-32); } /* Level 2：資訊瀏覽 區塊間距 32 */
 
+/* 主視覺 + 頁籤 */
+.zone-top { display: flex; flex-direction: column; gap: var(--spacing-24); }
+.zone-top + * { margin-top: calc(var(--spacing-20) - var(--spacing-32)); } /* 頁籤與下方內容 20（Guideline：Tab 間距） */
 .zone-hero { display: flex; align-items: flex-start; gap: var(--spacing-8); padding: 0 var(--spacing-16); }
 .zone-hero__text { flex: 1; display: flex; flex-direction: column; gap: var(--spacing-8); } /* Level 3：Title 配 Subtitle 8 */
 .zone-hero__text h1 { margin: 0; }
 .zone-hero__image { flex-shrink: 0; }
+.zone-tabs { padding: 0 var(--spacing-16); }
 
+.zone-section-head { padding: 0 var(--spacing-16); }
+
+/* ---------- 已借款：總覽 ---------- */
 .zone-overview { display: flex; flex-direction: column; gap: var(--spacing-12); padding: 0 var(--spacing-16); }
 
 /* 快捷功能（IconAction × 4） */
@@ -22,4 +29,14 @@
 
 /* 尚可匯入擔保品 */
 .zone-importable { display: flex; flex-direction: column; gap: var(--spacing-12); }
-.zone-importable__head { padding: 0 var(--spacing-16); }
+
+/* ---------- 尚未借款：初始頁 ---------- */
+.zone-intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+  margin: 0 var(--spacing-16);
+  padding: var(--spacing-16); /* 資訊瀏覽 卡片 16×16 */
+}
+
+.zone-picks { display: flex; flex-direction: column; gap: var(--spacing-12); } /* Level 3：標題與內容 12 */
