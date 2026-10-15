@@ -4,7 +4,7 @@
 //   已借款                          → 專區總覽：摘要卡 + 快捷功能 + 尚可匯入擔保品
 import { html, useState } from '../lib/preact.js';
 import {
-  Icon, SegmentedTabs, SectionHeader, StatGroup, NoticeBar, Carousel, StockPickCard, Button, StickyFooter,
+  Icon, SegmentedTabs, SectionHeader, StatGroup, NoticeBar, Carousel, StockPickCard, Button,
 } from '../components/index.js';
 import { useStore, showToast } from '../store.js';
 import { navigate } from '../router.js';
@@ -121,8 +121,9 @@ function ZoneIntro({ account }) {
       <//>
     </section>
 
-    <${StickyFooter} plain>
+    <!-- 放在頁面最底端（不固定）：內容少時貼齊畫面底部，內容多時接在內容後面 -->
+    <div class="zone-bottom-action">
       <${Button} onClick=${() => borrow()}>${t.borrowNow}<//>
-    <//>
+    </div>
   `;
 }
