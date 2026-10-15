@@ -4,7 +4,7 @@
 //   已借款                          → 專區總覽：摘要卡 + 快捷功能 + 尚可匯入擔保品
 import { html, useState } from '../lib/preact.js';
 import {
-  Icon, SegmentedTabs, SectionHeader, StatGroup, NoticeBar, Carousel, Button, StickyFooter,
+  Icon, SegmentedTabs, SectionHeader, StatGroup, NoticeBar, Carousel, StockPickCard, Button, StickyFooter,
 } from '../components/index.js';
 import { useStore, showToast } from '../store.js';
 import { navigate } from '../router.js';
@@ -107,15 +107,15 @@ function ZoneIntro({ account }) {
       <${Carousel} label=${t.picksTitle}>
         ${picks.map(
           (p) => html`
-            <button class="card card--shadow pick-card" onClick=${() => borrow(p.code)}>
-              <p class="t-title c-primary">${stockOf(p.code).name} ${p.code}</p>
-              <${StatGroup}
-                items=${[
-                  { label: t.pickLoanable, value: wan(p.loanable), unit: t.wan, highlight: true },
-                  { label: t.introDailyInterest, value: num(dailyInterest(p.loanable)), unit: 'TWD' },
-                ]}
-              />
-            </button>
+            <${StockPickCard}
+              name=${stockOf(p.code).name}
+              code=${p.code}
+              stats=${[
+                { label: t.pickLoanable, value: wan(p.loanable), unit: t.wan, highlight: true },
+                { label: t.introDailyInterest, value: num(dailyInterest(p.loanable)), unit: 'TWD' },
+              ]}
+              onClick=${() => borrow(p.code)}
+            />
           `
         )}
       <//>
