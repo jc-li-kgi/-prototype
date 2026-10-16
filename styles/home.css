@@ -1,0 +1,129 @@
+/* ===== 證券主頁「我的」｜情境：資訊瀏覽 ===== */
+.home-page {
+  display: flex;
+  flex-direction: column;
+  /* 頁尾與內容 40，另外讓出底部導覽列 */
+  padding-bottom: calc(var(--bottom-nav-height) + var(--spacing-40) + env(safe-area-inset-bottom));
+}
+
+/* 頁首：AI 助理 + 搜尋 + 新版切換 + 通知 */
+.home-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-12);
+  padding: var(--spacing-4) var(--spacing-16);
+}
+.home-search {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  padding: var(--spacing-8) var(--spacing-16);
+  border-radius: var(--radius-full);
+  background: var(--color-container-card-white);
+  text-align: left;
+}
+.home-search__text { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.home-version { display: flex; align-items: center; gap: var(--spacing-8); flex-shrink: 0; white-space: nowrap; }
+
+.home-content { display: flex; flex-direction: column; gap: var(--spacing-32); } /* 區塊間距 32 */
+
+/* 帳務總覽：大盤 → 標題 → 時間 → 卡片，間距 16 */
+.home-overview { display: flex; flex-direction: column; gap: var(--spacing-16); }
+.home-index {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  padding: var(--spacing-8) var(--spacing-16);
+  white-space: nowrap;
+}
+.home-index__change { display: inline-flex; align-items: center; }
+.home-index__toggle { margin-left: auto; }
+.home-overview__head,
+.home-overview__time { padding: 0 var(--spacing-16); }
+.home-overview__time { display: flex; align-items: center; gap: var(--spacing-8); }
+
+/* 帳務總覽卡片：橫向滑動，左邊對齊，露出下一張 */
+.finance-cards {
+  display: flex;
+  gap: var(--spacing-16);
+  padding: 0 var(--spacing-16) var(--spacing-4);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 0 var(--spacing-16);
+  scrollbar-width: none;
+}
+.finance-cards::-webkit-scrollbar { display: none; }
+.finance-card {
+  flex: 0 0 calc(100% - var(--spacing-40) - var(--spacing-4)); /* 375 寬時 = 332，同 Figma */
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-medium);
+  overflow: hidden;
+  box-shadow: var(--shadow-basic);
+}
+.finance-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-16);
+  padding: var(--spacing-16);
+  background: var(--color-container-general-active-primary);
+  color: var(--color-content-general-light-active);
+}
+.finance-card__top { display: flex; align-items: flex-start; justify-content: space-between; }
+.finance-card__account {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  padding: var(--spacing-4) var(--spacing-8) var(--spacing-4) var(--spacing-4);
+  border-radius: var(--radius-full);
+  background: var(--color-container-general-picker-bg-30);
+}
+.finance-card__badge {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background: var(--color-container-card-white);
+}
+.finance-card__expand {
+  display: flex;
+  padding: var(--spacing-4) var(--spacing-8);
+  border-radius: var(--radius-full);
+  background: var(--color-container-general-picker-bg-30);
+}
+.finance-card__asset { display: flex; flex-direction: column; gap: var(--spacing-12); }
+.finance-card__value { display: flex; flex-direction: column; gap: var(--spacing-4); }
+.finance-card__amount { display: flex; align-items: center; gap: var(--spacing-4); }
+.finance-card__number { flex: 1; min-width: 0; }
+.finance-card__profit { display: flex; align-items: center; gap: var(--spacing-4); flex-wrap: wrap; }
+.finance-card__change { display: inline-flex; align-items: center; gap: var(--spacing-8); }
+.finance-card__triangle { display: inline-flex; margin-right: calc(var(--spacing-4) - var(--spacing-8)); }
+.finance-card__triangle--down { transform: rotate(180deg); }
+.finance-card__ad {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  padding: var(--spacing-12) var(--spacing-8);
+  background: var(--color-container-card-white);
+  text-align: left;
+}
+.finance-card__ad span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* 快捷功能：標題→內容 16（同 Figma），4 欄 */
+.shortcuts { display: flex; flex-direction: column; gap: var(--spacing-16); padding: 0 var(--spacing-16); }
+.shortcuts__edit { display: inline-flex; align-items: center; gap: var(--spacing-8); }
+.shortcuts__grid { display: grid; grid-template-columns: repeat(4, 68px); justify-content: space-between; row-gap: var(--spacing-12); }
+.shortcut-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-12);
+  padding-top: var(--spacing-12);
+  text-align: center;
+}
+.shortcuts__dots { align-self: center; margin-top: 0; }

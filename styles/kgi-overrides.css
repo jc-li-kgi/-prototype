@@ -47,3 +47,13 @@
   --kgi-font-mweb-subtitle-bold-en-size: 18px;
   --kgi-font-mweb-subtitle-bold-en-size-rem: 1.125rem;
 }
+
+/**
+ * Guideline 顏色修正（2026-10-16）
+ * colors.css 的 --color-grey-0-30（白 30%）匯出時少了透明度，變成純白，
+ * 導致 --color-container-general-picker-bg-30（藍卡上的帳號選單、展開按鈕底色）看不到白字。
+ * Figma 的值是 rgba(255,255,255,0.3)。
+ */
+:root {
+  --color-grey-0-30: rgb(255 255 255 / 0.3);
+}

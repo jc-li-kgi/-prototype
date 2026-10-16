@@ -6,6 +6,6 @@ export default {
   title: '舊戶再借一筆',
   instruction: '你已經有股票借貸帳戶，想再借 5 萬元做資金周轉，請完成借款申請。',
   entry: 'account',          // 'account' = 帳務→授信管理；'lendingZone' = 股票借貸專區
-  startPath: '/account',
+  startPath: '/home',
   account: BASE_ACCOUNT,
 };

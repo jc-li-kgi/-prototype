@@ -7,6 +7,30 @@ export const COPY = {
     done: '完成',
   },
 
+  // 證券主頁「我的」
+  home: {
+    searchPlaceholder: '搜尋產品關鍵字或代碼',
+    newVersion: '新版',
+    overviewTitle: '帳務總覽',
+    edit: '編輯',
+    twStockValue: '台股庫存總市值',
+    profit: '參考損益',
+    twAd: '台股定期定額，輕鬆投資無負擔！',
+    shortcutTitle: '快捷功能',
+    shortcutEdit: '自訂',
+    // lending: true → 進股票借貸專區，其他未開放
+    shortcuts: [
+      { icon: 'shortcut-pre-market.png', label: '盤前必讀' },
+      { icon: 'shortcut-dividend.png', label: '股利專區' },
+      { icon: 'shortcut-lending.png', label: '股票借貸', lending: true },
+      { icon: 'shortcut-us-dca.png', label: '美股定期定額' },
+      { icon: 'shortcut-ipo-lottery.png', label: '股票抽籤' },
+      { icon: 'shortcut-us-quote.png', label: '即時美股行情' },
+      { icon: 'shortcut-wealth.png', label: '財富管理' },
+      { icon: 'shortcut-bank-account.png', label: '開立凱基銀行數位帳戶' },
+    ],
+  },
+
   account: {
     title: '帳務',
     productTabs: ['總覽', '台股', '海外', '財富管理', '期權', '外期權', '授信管理'],
@@ -22,6 +46,12 @@ export const COPY = {
     raiseLimit: '提升可借總額',
     borrowAgain: '再借一筆',
     moreServices: '更多服務',
+    // 尚未借款
+    introSection: '認識並開立借貸戶，活化資產更簡單',
+    introServices: [
+      { title: '認識股票借貸', desc: '瀏覽實際案例、試算以及常見問題' },
+      { title: '馬上借貸一筆', desc: '匯入擔保品與借款一次完成' },
+    ],
     goZone: '前往專區',
     services: ['查看借還款紀錄', '管理擔保品', '查看對帳單'],
   },

@@ -1,0 +1,8 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="36" height="24" viewBox="0 0 36 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Toggle Button_Mobile">
+<g id="Frame 626024">
+<path id="bg" d="M0 12C0 6.47715 4.47715 2 10 2H26C31.5228 2 36 6.47715 36 12C36 17.5228 31.5228 22 26 22H10C4.47715 22 0 17.5228 0 12Z" fill="#0044AD"/>
+</g>
+<path id="circle" d="M20 12C20 8.68629 22.6863 6 26 6C29.3137 6 32 8.68629 32 12C32 15.3137 29.3137 18 26 18C22.6863 18 20 15.3137 20 12Z" fill="white"/>
+</g>
+</svg>

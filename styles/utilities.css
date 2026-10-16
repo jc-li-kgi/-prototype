@@ -9,6 +9,8 @@
 .c-tertiary  { color: var(--color-content-general-tertiary); }
 .c-active    { color: var(--color-content-general-active); }
 .c-negative  { color: var(--color-content-semantic-negative); }
+.c-ascend    { color: var(--color-content-semantic-ascend); }  /* 漲（紅） */
+.c-descend   { color: var(--color-content-semantic-descend); } /* 跌（綠） */
 .c-disabled  { color: var(--color-content-general-disabled); }
 
 .nowrap { white-space: nowrap; }

@@ -650,3 +650,22 @@
   padding: var(--spacing-20) var(--spacing-16);
   text-align: center;
 }
+
+/* ---------- LoanIntroCard 方案卡（features/hub，專區與帳務共用；資訊瀏覽 卡片 16×16） ---------- */
+.loan-intro-card { display: flex; flex-direction: column; gap: var(--spacing-12); padding: var(--spacing-16); }
+
+/* ---------- ServiceCardList 服務卡片清單（Figma：Service Card - Onboarding） ---------- */
+.service-list { display: flex; flex-direction: column; }
+.service-card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-16);
+  min-height: 84px;
+  padding: var(--spacing-24) var(--spacing-16);
+  text-align: left;
+}
+.service-card__icon { flex-shrink: 0; }
+.service-card__text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--spacing-4); }
+.service-card__title { display: flex; align-items: center; gap: var(--spacing-16); }
+.service-card__title > :first-child { flex: 1; }
+.service-card__chevron { display: inline-flex; padding: var(--spacing-4); }

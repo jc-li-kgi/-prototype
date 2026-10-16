@@ -14,7 +14,7 @@ function App() {
 
   // 首頁或未載入情境 → 回到任務起點 / 主持人頁
   useEffect(() => {
-    if (!allowed) navigate(hasScenario ? startPath || '/account' : '/moderator', { replace: true });
+    if (!allowed) navigate(hasScenario ? startPath || '/home' : '/moderator', { replace: true });
   }, [path, allowed]);
 
   return html`

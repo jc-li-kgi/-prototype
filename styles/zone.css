@@ -35,13 +35,7 @@
 .zone-importable { display: flex; flex-direction: column; gap: var(--spacing-12); }
 
 /* ---------- 尚未借款：初始頁 ---------- */
-.zone-intro {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-12);
-  margin: 0 var(--spacing-16);
-  padding: var(--spacing-16); /* 資訊瀏覽 卡片 16×16 */
-}
+.zone-intro { padding: 0 var(--spacing-16); }
 
 .zone-picks { display: flex; flex-direction: column; gap: var(--spacing-12); } /* Level 3：標題與內容 12 */
 

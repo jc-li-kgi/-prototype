@@ -1,10 +1,10 @@
 // 入口二：股票借貸專區
-// 證券主頁 → 股票借貸專區；或 帳務 › 授信管理 ›「前往專區」
+// 證券主頁 › 快捷功能「股票借貸」→ 股票借貸專區（返回回到主頁）；或 帳務 › 授信管理 ›「前往專區」
 //   尚未借款（account.opened = false）→ 專區初始頁：可借額度試算 + 庫存精選擔保品 + 馬上借貸一筆
 //   已借款                          → 專區總覽：摘要卡 + 快捷功能 + 尚可匯入擔保品
 import { html, useState } from '../lib/preact.js';
 import {
-  Icon, SegmentedTabs, SectionHeader, StatGroup, NoticeBar, Carousel, StockPickCard, Button,
+  Icon, SegmentedTabs, SectionHeader, Carousel, StockPickCard, Button,
 } from '../components/index.js';
 import { useStore, showToast } from '../store.js';
 import { navigate } from '../router.js';
@@ -13,6 +13,7 @@ import { groupHoldings, importablePotential, perLotLoan, stockOf, dailyInterest 
 import { twd, wan, num, dateTime } from '../lib/format.js';
 import { COPY } from '../content/copy.js';
 import { LendingSummaryCard } from '../features/hub/LendingSummaryCard.js';
+import { LoanIntroCard } from '../features/hub/LoanIntroCard.js';
 import { QuickActions } from '../features/hub/QuickActions.js';
 import { HoldingsTable } from '../features/collateral/HoldingsTable.js';
 
@@ -26,7 +27,7 @@ export function LendingZoneShell() {
   return html`
     <div class="page zone-page">
       <header class="zone-header">
-        <button class="icon-btn page-header__slot" onClick=${() => navigate('/account')} aria-label="返回">
+        <button class="icon-btn page-header__slot" onClick=${() => navigate('/home')} aria-label="返回">
           <${Icon} name="chevron-back.svg" />
         </button>
         <button class="icon-btn page-header__slot" onClick=${notAvailable} aria-label="產品說明">
@@ -81,7 +82,6 @@ function ZoneOverview({ account }) {
 /** 尚未借款：專區初始頁 */
 function ZoneIntro({ account }) {
   const t = COPY.zone;
-  const potential = importablePotential(account);
   const picks = [...groupHoldings(account).eligible]
     .map((h) => ({ ...h, loanable: h.lots * perLotLoan(h.code) }))
     .sort((a, b) => b.loanable - a.loanable);
@@ -89,16 +89,9 @@ function ZoneIntro({ account }) {
   const borrow = (code) => startFlow('newAccountLoan', code ? { query: { code } } : undefined);
 
   return html`
-    <section class="card zone-intro">
-      <p class="t-subtitle-bold c-primary">${t.introTitle}</p>
-      <${StatGroup}
-        items=${[
-          { label: t.introLoanable, value: wan(potential), unit: t.wan, highlight: true },
-          { label: t.introDailyInterest, value: num(dailyInterest(potential)), unit: 'TWD' },
-        ]}
-      />
-      <${NoticeBar}>${t.introNotice}<//>
-    </section>
+    <div class="zone-intro">
+      <${LoanIntroCard} />
+    </div>
 
     <section class="zone-picks">
       <div class="zone-section-head">

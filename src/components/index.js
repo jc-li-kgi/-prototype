@@ -21,6 +21,7 @@ export { EmptyState } from './ui/EmptyState.js';
 export { StatGroup } from './ui/StatGroup.js';
 export { NoticeBar } from './ui/NoticeBar.js';
 export { StockPickCard } from './ui/StockPickCard.js';
+export { ServiceCardList } from './ui/ServiceCardList.js';
 export { AccountPicker } from './ui/AccountPicker.js';
 export { Checkbox } from './ui/Checkbox.js';
 export { FilterPill } from './ui/FilterPill.js';
