@@ -204,11 +204,13 @@
 .nav-fund__bar { position: absolute; width: 3.226px; background: var(--color-content-general-primary); }
 .nav-fund__line { position: absolute; left: 2.37px; top: 2.13px; }
 
-/* ---------- Sheet 底部彈窗（Guideline：Bottom Sheet Overlay 用 PopOver 陰影） ---------- */
+/* ---------- Sheet 底部彈窗｜Figma：Action Sheet_service list_Mobile（Guideline：Bottom Sheet 用 PopOver 陰影） ---------- */
 .sheet-mask {
   position: fixed;
   inset: 0;
   background: var(--color-overlay);
+  -webkit-backdrop-filter: blur(var(--overlay-blur));
+  backdrop-filter: blur(var(--overlay-blur));
   z-index: 50;
   display: flex;
   align-items: flex-end;
@@ -220,33 +222,75 @@
   max-width: var(--app-max-width);
   max-height: 90vh;
   overflow-y: auto;
-  background: var(--color-surface-white);
-  border-radius: var(--radius-medium) var(--radius-medium) var(--radius-none) var(--radius-none);
+  background: var(--color-container-card-white);
   box-shadow: var(--shadow-popover);
-  padding: var(--spacing-8) var(--spacing-16) calc(var(--spacing-24) + env(safe-area-inset-bottom));
+  padding-bottom: calc(var(--spacing-32) + env(safe-area-inset-bottom));
+  white-space: normal;
+  text-align: left;
   animation: slide-up 0.25s ease;
 }
-.sheet__handle {
-  width: 36px;
-  height: 4px;
-  border-radius: var(--radius-full);
-  background: var(--color-container-general-divider);
-  margin: 0 auto var(--spacing-12);
+/* 標題列：上 32、下 8、左右 16 */
+.sheet__header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  padding: var(--spacing-32) var(--spacing-16) var(--spacing-8);
 }
-.sheet__title { text-align: center; padding: var(--spacing-4) 0 var(--spacing-16); }
-.sheet__body { color: var(--color-content-general-secondary); }
+.sheet__title { flex: 1; }
+.sheet__content { padding: var(--spacing-8) var(--spacing-16) 0; }
+.sheet__options { display: flex; flex-direction: column; }
 .sheet__option {
   width: 100%;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--spacing-16) 0;
-  border-bottom: 1px solid var(--color-container-general-divider);
+  flex-direction: column;
+  gap: var(--spacing-4);
+  padding: var(--spacing-16);
+  background: var(--color-container-card-white);
   text-align: left;
 }
-.sheet__option:last-child { border-bottom: 0; }
-.sheet__option--selected { color: var(--color-content-general-active); }
-.sheet__option-desc { display: block; }
+.sheet__option:active { background: var(--color-container-general-option-selected-blue); }
+.sheet__option--selected { background: var(--color-container-general-option-selected-blue); }
+
+/* ---------- Dialog 置中對話框｜Figma：Dialog_Mobile（白底浮層用 PopOver 陰影） ---------- */
+.dialog-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--spacing-24);
+  background: var(--color-overlay);
+  -webkit-backdrop-filter: blur(var(--overlay-blur));
+  backdrop-filter: blur(var(--overlay-blur));
+  animation: fade-in 0.2s ease;
+}
+.dialog {
+  width: 100%;
+  max-width: calc(var(--app-max-width) - var(--spacing-48));
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--color-container-card-white);
+  border-radius: var(--radius-small);
+  box-shadow: var(--shadow-popover);
+  white-space: normal; /* 放在 nowrap 的表頭等處也能換行 */
+  text-align: left;
+}
+.dialog__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-16);
+  padding: var(--spacing-32) var(--spacing-24);
+  overflow-y: auto;
+}
+.dialog__title { text-align: center; }
+.dialog__body--left { text-align: left; }
+.dialog__body--center { text-align: center; }
+.dialog__actions { display: flex; border-top: 1px solid var(--color-container-general-divider); }
+.dialog__btn { flex: 1; padding: var(--spacing-16) var(--spacing-24); text-align: center; }
+.dialog__btn + .dialog__btn { border-left: 1px solid var(--color-container-general-divider); }
 
 @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes slide-up { from { transform: translateY(100%); } to { transform: translateY(0); } }
@@ -452,9 +496,12 @@
   background: var(--color-surface-white);
   border-top: 1px solid var(--color-container-general-divider);
   box-shadow: var(--shadow-popover);
+  max-height: 90vh;
+  max-height: 90dvh;
   z-index: 20;
 }
 
+.sticky-footer > :not(.total-bar__detail) { flex-shrink: 0; } /* 只有展開明細會被壓縮、捲動 */
 .sticky-footer--plain { background: transparent; border-top: 0; box-shadow: none; } /* 只有一顆按鈕時 */
 
 /* ---------- ResultPage 完成頁 ---------- */
@@ -564,6 +611,19 @@
 .total-bar { display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-8); padding: var(--spacing-12) 0; }
 .total-bar__value { display: inline-flex; align-items: center; gap: var(--spacing-4); }
 .total-bar__value:disabled { cursor: default; }
+/* 展開明細：在置底區內向上推開；置底區最高 90%，明細區自己捲動（Figma：標題→內容 12、條列 12） */
+.total-bar__detail {
+  flex: 0 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-12);
+  padding-bottom: var(--spacing-12);
+  animation: push-up 0.25s ease;
+}
+@keyframes push-up { from { max-height: 0; opacity: 0; } to { max-height: 90vh; opacity: 1; } }
 
 /* ---------- FlowPage 流程頁（流程申請：頁首→內容 24、區塊 24、內容→按鈕 32） ---------- */
 .flow-page { display: flex; flex-direction: column; gap: var(--spacing-24); }

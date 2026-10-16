@@ -32,7 +32,7 @@ export function PickerField({ label, value, options, onChange, placeholder = '�
       <span class=${'field__line' + (error ? ' field__line--error' : '')} />
       ${error && html`<p class="t-caption-regular field__error">${error}</p>`}
 
-      <${Sheet} open=${open} title=${sheetTitle ?? label} onClose=${() => setOpen(false)}>
+      <${Sheet} open=${open} title=${sheetTitle ?? `選擇${label}`} onClose=${() => setOpen(false)}>
         <${SheetOptions} options=${items} value=${value} onSelect=${(v) => pick(items.find((o) => o.value === v))} />
       <//>
     </div>

@@ -1,24 +1,31 @@
+// 底部彈窗｜Figma：Action Sheet_service list_Mobile（Atom_Section Header + list）
+// 用在選單（排序、借款目的）與明細；ⓘ 說明改用 overlay/Dialog.js 的 InfoDialog
 import { html } from '../../lib/preact.js';
+import { Icon } from '../ui/Icon.js';
+import { Portal } from './Portal.js';
 
-/** 底部彈窗：說明文字或選單都用這個 */
+/**
+ * 選單：
+ *   <Sheet open=${open} title="選擇排序方式" onClose=${close}>
+ *     <SheetOptions options=${…} value=${v} onSelect=${…} />
+ *   </Sheet>
+ * 其他內容（自己需要左右邊距時包 .sheet__content）：
+ *   <Sheet open=${open} title="匯入明細" onClose=${close}>
+ *     <div class="sheet__content">…</div>
+ *   </Sheet>
+ * 點遮罩或右上 ✕ 關閉
+ */
 export function Sheet({ open, title, onClose, children }) {
   if (!open) return null;
-  return html`
-    <div class="sheet-mask" onClick=${onClose}>
-      <div class="sheet" onClick=${(e) => e.stopPropagation()} role="dialog" aria-label=${title}>
-        <div class="sheet__handle" />
-        ${title && html`<p class="sheet__title t-subtitle-bold c-primary">${title}</p>`}
+  return html`<${Portal}>
+    <div class="sheet-mask" onClick=${(e) => { e.stopPropagation(); onClose?.(); }}>
+      <div class="sheet" onClick=${(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label=${title}>
+        <div class="sheet__header">
+          <p class="sheet__title t-body-regular c-secondary">${title}</p>
+          <button class="icon-btn" onClick=${onClose} aria-label="關閉"><${Icon} name="close.svg" /></button>
+        </div>
         ${children}
       </div>
     </div>
-  `;
-}
-
-/** 說明型彈窗 */
-export function InfoSheet({ info, onClose }) {
-  return html`
-    <${Sheet} open=${!!info} title=${info?.title} onClose=${onClose}>
-      <p class="sheet__body t-body-regular">${info?.body}</p>
-    <//>
-  `;
+  <//>`;
 }

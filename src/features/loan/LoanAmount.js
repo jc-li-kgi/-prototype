@@ -1,7 +1,7 @@
 // 借款：填寫借款金額
 // 首次借款流程中，可借額度以「這次要匯入的擔保品」計算（尚未送出）
 import { html, useState } from '../../lib/preact.js';
-import { FlowPage, SummaryCard, DetailRow, InfoSheet, PickerField, AmountField, FeeCard, Button } from '../../components/index.js';
+import { FlowPage, SummaryCard, DetailRow, InfoDialog, PickerField, AmountField, FeeCard, Button } from '../../components/index.js';
 import { useStore, updateDraft } from '../../store.js';
 import { flowPosition, nextStep, prevStep, flowTitle, isFlow } from '../../flows/flows.js';
 import {
@@ -108,7 +108,7 @@ export function LoanAmount() {
         />
       </div>
 
-      <${InfoSheet} info=${info} onClose=${() => setInfo(null)} />
+      <${InfoDialog} info=${info} onClose=${() => setInfo(null)} />
     <//>
   `;
 }

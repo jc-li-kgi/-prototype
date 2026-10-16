@@ -17,6 +17,9 @@ import { LoanIntroCard } from '../features/hub/LoanIntroCard.js';
 import { QuickActions } from '../features/hub/QuickActions.js';
 import { HoldingsTable } from '../features/collateral/HoldingsTable.js';
 
+// 庫存精選擔保品：取可借金額最高的前幾檔
+const PICKS_COUNT = 3;
+
 export function LendingZoneShell() {
   const account = useStore((s) => s.account);
   const t = COPY.zone;
@@ -84,7 +87,8 @@ function ZoneIntro({ account }) {
   const t = COPY.zone;
   const picks = [...groupHoldings(account).eligible]
     .map((h) => ({ ...h, loanable: h.lots * perLotLoan(h.code) }))
-    .sort((a, b) => b.loanable - a.loanable);
+    .sort((a, b) => b.loanable - a.loanable)
+    .slice(0, PICKS_COUNT);
 
   const borrow = (code) => startFlow('newAccountLoan', code ? { query: { code } } : undefined);
 

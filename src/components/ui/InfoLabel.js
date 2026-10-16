@@ -1,7 +1,7 @@
 // 文字 + ⓘ 說明（點 ⓘ 開說明彈窗）｜Figma：Stroke Icon/Basic/info 搭配標題
 import { html, useState } from '../../lib/preact.js';
 import { Icon } from './Icon.js';
-import { InfoSheet } from '../overlay/Sheet.js';
+import { InfoDialog } from '../overlay/Dialog.js';
 
 /**
  * <InfoLabel label="可借額度總計" info=${{ title, body }} />      ← 自己開說明彈窗
@@ -18,7 +18,7 @@ export function InfoLabel({ label, info, onInfo, labelClass = 't-body-regular', 
       html`<button class="icon-btn" onClick=${onInfo || (() => setOpen(true))} aria-label=${label + '說明'}>
         <${Icon} name="info.svg" size=${16} />
       </button>`}
-      ${info && html`<${InfoSheet} info=${open ? info : null} onClose=${() => setOpen(false)} />`}
+      ${info && html`<${InfoDialog} info=${open ? info : null} onClose=${() => setOpen(false)} />`}
     </span>
   `;
 }

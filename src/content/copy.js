@@ -5,6 +5,7 @@ export const COPY = {
     next: '下一步',
     confirm: '確認',
     done: '完成',
+    gotIt: '我知道了',
   },
 
   // 證券主頁「我的」
@@ -103,7 +104,7 @@ export const COPY = {
 
   collateral: {
     title: '匯入擔保品',
-    sortTitle: '排序方式',
+    sortTitle: '選擇排序方式',
     groups: {
       eligible: { title: '可借貸' },
       ratioOnly: { title: '僅可用於提升維持率', desc: '無法借款，借款後，可以匯入提高擔保品市值，提升維持率' },
@@ -125,7 +126,7 @@ export const COPY = {
       title: '可借額度總計',
       body: '可借額度 = 匯入張數 × 每張可借金額。每張可借金額 = 每張市值 × 可借貸成數。',
     },
-    breakdownTitle: '匯入明細',
+    breakdownTitle: '已選取擔保品',
     noneSelected: '尚未選擇擔保品',
     // 第 2 步
     marketValue: '匯入擔保品總市值',
