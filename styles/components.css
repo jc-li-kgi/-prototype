@@ -625,11 +625,15 @@
   gap: var(--spacing-12);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
+  scroll-padding: 0 var(--spacing-16);
   scrollbar-width: none;
-  padding: var(--spacing-4) calc((100% - var(--carousel-item-width, 280px)) / 2) var(--spacing-12); /* 上下留陰影空間；左右讓第一、最後一張也能置中 */
+  padding: var(--spacing-4) var(--spacing-16) var(--spacing-12); /* 上下留陰影空間；左右 16 = 頁面邊界 */
 }
 .carousel__track::-webkit-scrollbar { display: none; }
 .carousel__item { flex: 0 0 var(--carousel-item-width, 280px); scroll-snap-align: center; display: flex; }
+/* 第一張、最後一張停在距離畫面邊界 16 的位置；中間的置中 */
+.carousel__item:first-child { scroll-snap-align: start; }
+.carousel__item:last-child { scroll-snap-align: end; }
 .carousel__dots { display: flex; gap: var(--spacing-4); margin-top: calc(var(--spacing-4) - var(--spacing-16)); }
 .carousel__dot {
   width: 4px;
