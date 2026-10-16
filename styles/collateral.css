@@ -16,4 +16,3 @@
 .coll-qty { display: flex; align-items: center; gap: var(--spacing-12); }
 
 /* 匯入明細彈窗 */
-.coll-breakdown { display: flex; flex-direction: column; gap: var(--spacing-20); }

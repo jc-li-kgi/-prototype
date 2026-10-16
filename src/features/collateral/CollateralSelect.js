@@ -3,7 +3,7 @@
 import { html, useState } from '../../lib/preact.js';
 import {
   FlowPage, AccountPicker, FilterPill, SearchIcon, Checkbox, SelectableItem, StockName, SectionHeader, DetailRow,
-  QtyStepper, Button, TotalBar, Sheet, SheetOptions, InfoSheet,
+  QtyStepper, Button, TotalBar, Sheet, SheetOptions, InfoDialog,
 } from '../../components/index.js';
 import { useStore, updateCollateralDraft, showToast } from '../../store.js';
 import { flowPosition, nextStep, prevStep, flowTitle } from '../../flows/flows.js';
@@ -73,7 +73,20 @@ export function CollateralSelect({ query }) {
       step=${flowPosition(PATH)}
       onBack=${() => prevStep(PATH)}
       sticky=${html`
-        <${TotalBar} label=${t.total} info=${t.totalSheet} value=${twd(total)} onExpand=${() => setBreakdownOpen(true)} />
+        <${TotalBar}
+          label=${t.total}
+          info=${t.totalSheet}
+          value=${twd(total)}
+          expanded=${breakdownOpen}
+          onToggle=${() => setBreakdownOpen(!breakdownOpen)}
+        >
+          <p class="t-body-bold c-primary">${t.breakdownTitle}</p>
+          ${items.length === 0
+            ? html`<p class="t-body-regular c-secondary">${t.noneSelected}</p>`
+            : items.map(
+                (i) => html`<${DetailRow} label=${`${stockOf(i.code).name} ${i.code}`} value=${`${num(i.lots)} ${t.lotUnit}`} valueClass="t-body-regular" />`
+              )}
+        <//>
         <${Button} disabled=${items.length === 0} onClick=${submit}>${COPY.common.next}<//>
       `}
     >
@@ -168,25 +181,7 @@ export function CollateralSelect({ query }) {
         />
       <//>
 
-      <${Sheet} open=${breakdownOpen} title=${t.breakdownTitle} onClose=${() => setBreakdownOpen(false)}>
-        ${items.length === 0
-          ? html`<p class="t-body-regular c-secondary sheet__body">${t.noneSelected}</p>`
-          : html`
-              <div class="coll-breakdown">
-                ${items.map(
-                  (i) => html`
-                    <${DetailRow}
-                      label=${`${stockOf(i.code).name} ${i.code} × ${i.lots} ${t.lotUnit}`}
-                      value=${twd(i.lots * perLotLoan(i.code))}
-                    />
-                  `
-                )}
-                <${DetailRow} label=${t.total} labelClass="t-body-bold c-primary" value=${twd(total)} valueClass="n-subtitle-bold" />
-              </div>
-            `}
-      <//>
-
-      <${InfoSheet} info=${info} onClose=${() => setInfo(null)} />
+      <${InfoDialog} info=${info} onClose=${() => setInfo(null)} />
     <//>
   `;
 }

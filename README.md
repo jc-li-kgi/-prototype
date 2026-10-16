@@ -85,7 +85,7 @@ src/
     ui/          Button、Icon、DetailRow、FeeCard
     form/        PickerField（下拉）、AmountField（金額/數量輸入）
     layout/      PageHeader、StepBar、BottomNav
-    overlay/     Sheet、InfoSheet、Toast
+    overlay/     Dialog、Sheet、Toast
   shells/        入口外框（帳務頁；之後加借貸專區）
   features/      功能模組：hub、loan、records…
   pages/         TaskStart、Moderator

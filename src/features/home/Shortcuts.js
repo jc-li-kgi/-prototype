@@ -1,4 +1,4 @@
-// 快捷功能｜Figma：證券主頁 › ShortCut_Mobile（Atom_Shortcut Btn_Mobile × 8 + carousel bar）
+// 快捷功能｜Figma：證券主頁 › ShortCut_Mobile（Atom_Shortcut Btn_Mobile × 8）
 // 只有「股票借貸」可以點（進股票借貸專區），其他顯示未開放
 import { html } from '../../lib/preact.js';
 import { Icon, SectionHeader, Button } from '../../components/index.js';
@@ -28,11 +28,6 @@ export function Shortcuts() {
             </button>
           `
         )}
-      </div>
-      <!-- 第 2 頁捷徑不在本次測試範圍，指示條只做外觀 -->
-      <div class="carousel__dots shortcuts__dots" aria-hidden="true">
-        <span class="carousel__dot carousel__dot--active" />
-        <span class="carousel__dot" />
       </div>
     </section>
   `;

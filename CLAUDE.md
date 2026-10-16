@@ -12,7 +12,7 @@
   - 間距 `var(--spacing-N)`，N 只有 0/2/4/8/12/16/20/24/28/32/40/48/60/80
   - 圓角 `var(--radius-none|xs|small|medium|full)`（0/1/3/6/100px）；卡片用 `medium`，膠囊按鈕 / Tag 用 `full`
   - **滿版卡片（貼齊畫面左右）不用圓角**：加 `.card--full`（FeeCard 傳 `full`）；左右有留邊的卡片才用 `.card`（6px）
-  - 陰影：藍底（Surface Blue）上的卡片用 `--shadow-basic`；白底上的浮層、Bottom Sheet、Toast、導覽列用 `--shadow-popover`；未選取 / 停用用 `--shadow-light`
+  - 陰影：藍底（Surface Blue）上的卡片用 `--shadow-basic`；白底上的浮層、Dialog、Bottom Sheet、Toast、導覽列用 `--shadow-popover`；未選取 / 停用用 `--shadow-light`
 - **文字只能用 class**：`styles/typography.css` 的 `.t-*`（中文）、`.n-*`（英文 / 數字），不要在 CSS 寫 font-size。
   - 層級：`display-l/m/s`、`headline`（頁面主標）、`title`（區塊標題 / 大數字）、`subtitle-bold`（卡片標題、頁首標題、主要按鈕）、`subtitle-regular`（清單項目、輸入值）、`body-bold`（欄位標題、重點）、`body-regular`（內文、標籤、Tab）、`caption-regular`（輔助說明、欄位下方提示）
   - 金額、百分比、日期、帳號用 `.n-*`；中文標籤用 `.t-*`；中英混排（如「可借款金額 TWD 10,000」）用 `.t-*`
@@ -45,8 +45,8 @@
 - **優先用現有元件**（`src/components/index.js` 統一 import；元件負責樣式，內容由參數帶入）：
   - ui：Button、Icon、InfoLabel（文字＋ⓘ）、DetailRow、DetailCard（確認資料卡）、SummaryCard（摘要卡，overview / flow）、FeeCard、AmountHero（確認頁大金額）、AmountCell（列表金額欄）、StockName（股票名稱＋代碼）、SectionHeader（區塊標題＋連結＋說明）、CollapsibleCard、ExpandToggle、IconAction（圓形圖示捷徑）、EmptyState、StatGroup（並排大數字）、NoticeBar（淡黃提示條）、StockPickCard（精選擔保品卡）、ServiceCardList（圖示＋標題＋說明的服務清單）、AccountPicker、Checkbox、FilterPill、Tag、SearchIcon
   - form：PickerField、AmountField（金額）、QtyStepper（張數）、SelectableItem（勾選項目）、SearchField
-  - layout：FlowPage（流程頁框架，流程每一步都用）、PageHeader、StepBar、BottomNav、TextTabs、SegmentedTabs、ListTable／ListRow（列表）、Carousel（橫向滑動卡片）、StickyFooter（plain = 只有按鈕時）、TotalBar（置底總計）、ResultPage（完成頁）
-  - overlay：Sheet、InfoSheet、SheetOptions（彈窗選項）、Toast
+  - layout：FlowPage（流程頁框架，流程每一步都用）、PageHeader、StepBar、BottomNav、TextTabs、SegmentedTabs、ListTable／ListRow（列表）、Carousel（橫向滑動卡片）、StickyFooter（plain = 只有按鈕時）、TotalBar（置底總計；`expanded` + `onToggle` + children = 在置底區內向上展開明細，最高 90%）、ResultPage（完成頁）
+  - overlay：Dialog / InfoDialog（置中對話框：ⓘ、注意事項說明、確認提示）、Sheet（底部彈窗：選單、明細；非選單內容包 `.sheet__content`）、SheetOptions（彈窗選項，選中項淡藍底）、Toast
   - 2 個以上地方會用到的畫面才抽成新元件，放進對應資料夾並在 `index.js` 匯出，檔頭註明對應的 Figma 元件名稱與用法範例。
 - `Button` 用 `variant`（primary / text / capsule）與 `typo`（換文字層級）；需要換色的 icon 用 `<Icon tint />`。
 - 新功能放 `src/features/<功能>/`；功能之間不互相 import，只透過 `store.js` 讀寫資料。需要組合多個功能的頁面放 `src/shells/`（入口頁）或 `src/pages/`（例如股票借貸明細）。

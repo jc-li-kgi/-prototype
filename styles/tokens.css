@@ -20,6 +20,9 @@
   --color-surface-white-hover: #F2F2F2;                        /* #FFFFFF (B 100%) → −5% */
 
   /* ---------- 遮罩（Guideline：Surface/Blue-75「遮罩背景」） ---------- */
+  /* 選單選中項的淡藍底（Figma：container/general/option-selected-blue，Guideline 尚無此 token） */
+  --color-container-general-option-selected-blue: var(--color-sky-blue-0);
+  --overlay-blur: 4px;          /* 對話框遮罩的背景模糊（Figma Dialog 背景） */
   --color-overlay: color-mix(in srgb, var(--color-surface-blue-75) 75%, transparent);
 
   /* ---------- 字型：網頁字型（Guideline › Typography › 3. 字體） ----------

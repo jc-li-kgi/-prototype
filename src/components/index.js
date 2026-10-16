@@ -49,6 +49,7 @@ export { TotalBar } from './layout/TotalBar.js';
 export { ResultPage } from './layout/ResultPage.js';
 
 // overlay：彈出層
-export { Sheet, InfoSheet } from './overlay/Sheet.js';
+export { Sheet } from './overlay/Sheet.js';
+export { Dialog, InfoDialog } from './overlay/Dialog.js';
 export { SheetOptions } from './overlay/SheetOptions.js';
 export { Toast } from './overlay/Toast.js';
