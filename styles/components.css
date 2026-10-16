@@ -201,8 +201,8 @@
 
 /* 「選股」icon：三根柱 + 折線（Figma 為組合圖層） */
 .nav-fund { position: relative; width: 20px; height: 20px; }
-.nav-fund__bar { position: absolute; width: 3.226px; background: var(--color-content-general-primary); }
-.nav-fund__line { position: absolute; left: 2.37px; top: 2.13px; }
+.nav-fund__bar { position: absolute; width: 3.226px; background: currentColor; }
+.nav-fund__line { position: absolute; left: 2.37px; top: 2.13px; display: flex; }
 
 /* ---------- Sheet 底部彈窗｜Figma：Action Sheet_service list_Mobile（Guideline：Bottom Sheet 用 PopOver 陰影） ---------- */
 .sheet-mask {
