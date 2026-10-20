@@ -40,4 +40,4 @@
 .zone-picks { display: flex; flex-direction: column; gap: var(--spacing-12); } /* Level 3：標題與內容 12 */
 
 /* 馬上借貸一筆：頁面最底端。margin-top: auto 推到底，gap 32 保底（Guideline：內容→按鈕 32） */
-.zone-bottom-action { margin-top: auto; padding: 0 var(--spacing-16); }
+.zone-page--with-actions { padding-bottom: 0; } /* 頁尾 40 由 BottomActions 負責 */

@@ -36,8 +36,7 @@ export function RepayConfirm() {
       title=${flowTitle(t.title)}
       step=${flowPosition(PATH)}
       onBack=${() => prevStep(PATH)}
-      sticky=${html`<${Button} onClick=${submit}>${t.submit}<//>`}
-      stickyPlain
+      actions=${html`<${Button} onClick=${submit}>${COPY.common.submit}<//>`}
     >
       <div class="card-stack">
         <${DetailCard}>

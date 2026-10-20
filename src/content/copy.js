@@ -4,6 +4,7 @@ export const COPY = {
     notAvailable: '此功能未開放於本次測試',
     next: '下一步',
     confirm: '確認',
+    submit: '確認送出', // 所有確認資料頁的送出按鈕
     done: '完成',
     gotIt: '我知道了',
     resetDone: '已清除所有測試資料',
@@ -63,7 +64,6 @@ export const COPY = {
     ratio: '整戶維持率',
     remaining: '剩餘可借金額',
     borrowed: '已借款金額',
-    pendingCollateralValue: '匯入擔保品市值',
     purpose: '借款目的',
     purposePlaceholder: '請選擇',
     purposeError: '請選擇借款目的',
@@ -132,7 +132,6 @@ export const COPY = {
     balanceError: '扣款帳戶餘額不足',
     applyDate: '申請日',
     purpose: '借款目的',
-    submit: '確認送出',
     resultHeader: '申請現金還款',
     resultTitle: '成功送出申請',
     resultDesc: '我們即將為您進行扣款，請稍後確認還款結果',
@@ -171,7 +170,6 @@ export const COPY = {
     channel: '申請管道',
     channelValue: 'APP',
     detailTitle: '擔保品匯入明細',
-    submit: '確認送出',
     // 完成頁
     resultTitle: '匯入成功',
     resultDesc: '可以隨時動用借款，靈活操作',

@@ -47,6 +47,7 @@ export { ListTable, ListRow } from './layout/ListTable.js';
 export { Carousel } from './layout/Carousel.js';
 export { StickyFooter } from './layout/StickyFooter.js';
 export { TotalBar } from './layout/TotalBar.js';
+export { BottomActions } from './layout/BottomActions.js';
 export { ResultPage } from './layout/ResultPage.js';
 
 // overlay：彈出層

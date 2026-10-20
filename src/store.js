@@ -167,6 +167,10 @@ export function updateRepayDraft(patch) {
   setState((s) => ({ repayDraft: { ...(s.repayDraft || {}), ...patch } }));
 }
 
+export function clearRepayDraft() {
+  setState({ repayDraft: {} });
+}
+
 /** 現金還款：依試算扣減各筆借款餘額，並新增一筆還款紀錄（回傳紀錄，完成頁用來展開明細） */
 export function repay({ loanId, principal }) {
   const account = state.account;

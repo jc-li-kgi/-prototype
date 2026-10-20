@@ -2,6 +2,7 @@
 import { html } from '../../lib/preact.js';
 import { PageHeader } from './PageHeader.js';
 import { Button } from '../ui/Button.js';
+import { BottomActions } from './BottomActions.js';
 
 /**
  * <ResultPage
@@ -25,10 +26,10 @@ export function ResultPage({ header, title, desc, primary, secondary }) {
         </div>
       </div>
 
-      <div class="bottom-actions">
+      <${BottomActions}>
         ${primary && html`<${Button} onClick=${primary.onClick}>${primary.label}<//>`}
         ${secondary && html`<${Button} variant="text" block onClick=${secondary.onClick}>${secondary.label}<//>`}
-      </div>
+      <//>
     </div>
   `;
 }

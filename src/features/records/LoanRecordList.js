@@ -1,12 +1,11 @@
 // 借還款紀錄（股票借貸明細 › 借還款紀錄）
-//   借款：到期前 DUE_SOON_DAYS 天顯示「即將到期」＋ 展延 / 還款；還款 → 選擇還款方式（底部彈窗）
+//   借款：到期前 DUE_SOON_DAYS 天顯示「即將到期」＋ 展延 / 還款；還款 → onRepay(借款)，由頁面開啟選擇還款方式
 //   還款：還款紀錄列表，可展開明細
 import { html, useState } from '../../lib/preact.js';
 import {
-  SegmentedTabs, FilterPill, Tag, Button, DetailRow, ListTable, ListRow, EmptyState, Sheet, SheetOptions,
+  SegmentedTabs, FilterPill, Tag, Button, DetailRow, ListTable, ListRow, EmptyState,
 } from '../../components/index.js';
 import { showToast } from '../../store.js';
-import { startFlow } from '../../flows/flows.js';
 import { isDueSoon } from '../../lib/calc.js';
 import { twd, date, rate, dateTime } from '../../lib/format.js';
 import { COPY } from '../../content/copy.js';
@@ -14,25 +13,17 @@ import { COPY } from '../../content/copy.js';
 /**
  * initialSub   一開始顯示的子頁籤：borrow（預設）| repay
  * initialOpen  一開始展開的紀錄編號（完成頁「查看還款紀錄」會帶）
+ * onRepay      點借款的「還款」(loan)
  */
-export function LoanRecordList({ loans = [], repayments = [], initialSub = 'borrow', initialOpen = null }) {
+export function LoanRecordList({ loans = [], repayments = [], initialSub = 'borrow', initialOpen = null, onRepay }) {
   const t = COPY.records;
   const [sub, setSub] = useState(initialSub);
   const [open, setOpen] = useState(initialOpen);
-  const [repayLoan, setRepayLoan] = useState(null); // 正在選擇還款方式的借款
   const notAvailable = () => showToast(COPY.common.notAvailable);
 
   const switchSub = (key) => {
     setSub(key);
     setOpen(null);
-  };
-
-  const chooseMethod = (value) => {
-    const method = COPY.repay.methods.find((m) => m.value === value);
-    const loan = repayLoan;
-    setRepayLoan(null);
-    if (!method?.available) return notAvailable();
-    startFlow('cashRepay', { query: { loan: loan.id } });
   };
 
   return html`
@@ -46,12 +37,8 @@ export function LoanRecordList({ loans = [], repayments = [], initialSub = 'borr
         </div>
       </div>
 
-      ${sub === 'borrow' && html`<${BorrowList} loans=${loans} open=${open} setOpen=${setOpen} onRepay=${setRepayLoan} />`}
+      ${sub === 'borrow' && html`<${BorrowList} loans=${loans} open=${open} setOpen=${setOpen} onRepay=${onRepay} />`}
       ${sub === 'repay' && html`<${RepayList} repayments=${repayments} open=${open} setOpen=${setOpen} />`}
-
-      <${Sheet} open=${!!repayLoan} title=${COPY.repay.methodTitle} onClose=${() => setRepayLoan(null)}>
-        <${SheetOptions} chevron options=${COPY.repay.methods} onSelect=${chooseMethod} />
-      <//>
     </div>
   `;
 }

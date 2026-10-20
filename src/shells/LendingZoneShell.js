@@ -4,7 +4,7 @@
 //   已借款                          → 專區總覽：摘要卡 + 快捷功能 + 尚可匯入擔保品
 import { html, useState } from '../lib/preact.js';
 import {
-  Icon, SegmentedTabs, SectionHeader, Carousel, StockPickCard, Button,
+  Icon, SegmentedTabs, SectionHeader, Carousel, StockPickCard, Button, BottomActions,
 } from '../components/index.js';
 import { useStore, showToast } from '../store.js';
 import { navigate } from '../router.js';
@@ -15,6 +15,7 @@ import { COPY } from '../content/copy.js';
 import { LendingSummaryCard } from '../features/hub/LendingSummaryCard.js';
 import { LoanIntroCard } from '../features/hub/LoanIntroCard.js';
 import { QuickActions } from '../features/hub/QuickActions.js';
+import { RepayMethodSheet } from '../features/repay/RepayMethodSheet.js';
 import { HoldingsTable } from '../features/collateral/HoldingsTable.js';
 
 // 庫存精選擔保品：取可借金額最高的前幾檔
@@ -28,7 +29,7 @@ export function LendingZoneShell() {
   const switchTab = (key) => (key === 'overview' ? setTab(key) : notAvailable());
 
   return html`
-    <div class="page zone-page">
+    <div class=${'page zone-page' + (account.opened ? '' : ' zone-page--with-actions')}>
       <header class="zone-header">
         <button class="icon-btn page-header__slot" onClick=${() => navigate('/home')} aria-label="返回">
           <${Icon} name="chevron-back.svg" />
@@ -54,6 +55,13 @@ export function LendingZoneShell() {
 
         ${account.opened ? html`<${ZoneOverview} account=${account} />` : html`<${ZoneIntro} account=${account} />`}
       </div>
+
+      ${!account.opened &&
+      html`
+        <${BottomActions} context="browse">
+          <${Button} onClick=${() => startFlow('newAccountLoan')}>${t.borrowNow}<//>
+        <//>
+      `}
     </div>
   `;
 }
@@ -61,13 +69,15 @@ export function LendingZoneShell() {
 /** 已借款：專區總覽 */
 function ZoneOverview({ account }) {
   const t = COPY.zone;
+  const [repayOpen, setRepayOpen] = useState(false);
   return html`
     <div class="zone-overview">
       <p class="t-caption-regular c-secondary">${COPY.account.updatedAt} ${dateTime()}</p>
       <${LendingSummaryCard} variant="zone" />
     </div>
 
-    <${QuickActions} />
+    <${QuickActions} onRepay=${() => setRepayOpen(true)} />
+    <${RepayMethodSheet} open=${repayOpen} onClose=${() => setRepayOpen(false)} />
 
     <section class="zone-importable">
       <div class="zone-section-head">
@@ -118,9 +128,5 @@ function ZoneIntro({ account }) {
       <//>
     </section>
 
-    <!-- 放在頁面最底端（不固定）：內容少時貼齊畫面底部，內容多時接在內容後面 -->
-    <div class="zone-bottom-action">
-      <${Button} onClick=${() => borrow()}>${t.borrowNow}<//>
-    </div>
   `;
 }

@@ -20,7 +20,7 @@ export function RepayAmount({ query }) {
   const total = loanBalance(account);
   const range = repayRange(account);
   const dueSoon = account.loans.filter(isDueSoon).reduce((sum, l) => sum + l.balance, 0);
-  const loanId = draft.loanId ?? query.loan ?? account.loans.find(isDueSoon)?.id;
+  const loanId = query.loan ?? draft.loanId ?? account.loans.find(isDueSoon)?.id;
   const partialDefault = clampAmount(dueSoon || range.min, range);
 
   const [mode, setMode] = useState(draft.mode ?? 'partial');

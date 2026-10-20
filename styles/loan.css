@@ -12,6 +12,3 @@
 /* 摘要卡左右留 16 */
 .loan-summary { padding: 0 var(--spacing-16); }
 
-/* 確認頁按鈕寬 325（Figma） */
-.confirm-actions { align-items: center; }
-.confirm-actions__btn { max-width: 325px; }

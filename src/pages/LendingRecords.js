@@ -10,6 +10,7 @@ import { startFlow, entryHome } from '../flows/flows.js';
 import { groupHoldings, stockOf } from '../lib/calc.js';
 import { COPY } from '../content/copy.js';
 import { LoanRecordList } from '../features/records/LoanRecordList.js';
+import { RepayMethodSheet } from '../features/repay/RepayMethodSheet.js';
 import { HoldingsTable } from '../features/collateral/HoldingsTable.js';
 import { PledgedList } from '../features/collateral/PledgedList.js';
 import { CollateralHistory } from '../features/collateral/CollateralHistory.js';
@@ -22,6 +23,7 @@ export function LendingRecords({ query }) {
   const tab = t.tabs.some((x) => x.key === query.tab) ? query.tab : 'loans';
   const [sub, setSub] = useState(t.collateralTabs.some((x) => x.key === query.sub) ? query.sub : 'pledged');
   const [keyword, setKeyword] = useState('');
+  const [repayLoan, setRepayLoan] = useState(null); // 正在選擇還款方式的借款
 
   const back = () => (history.length > 1 ? history.back() : navigate(entryHome()));
   const switchTab = (key) => navigate(`/records?tab=${key}`, { replace: true });
@@ -40,6 +42,7 @@ export function LendingRecords({ query }) {
         repayments=${account.repayments || []}
         initialSub=${query.sub === 'repay' ? 'repay' : 'borrow'}
         initialOpen=${query.open}
+        onRepay=${setRepayLoan}
       />`}
 
       ${tab === 'collateral' &&
@@ -77,6 +80,8 @@ export function LendingRecords({ query }) {
       `}
 
       ${tab === 'statement' && html`<${EmptyState} text=${t.statementNotAvailable} />`}
+
+      <${RepayMethodSheet} open=${!!repayLoan} loanId=${repayLoan?.id} onClose=${() => setRepayLoan(null)} />
     </div>
   `;
 }
