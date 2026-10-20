@@ -23,19 +23,12 @@ export function LoanAmount() {
 
   const [amount, setAmount] = useState(clampAmount(draft.amount ?? DEFAULT_AMOUNT, range));
   const [purpose, setPurpose] = useState(draft.purpose ?? '');
-  const [purposeError, setPurposeError] = useState(false);
   const [info, setInfo] = useState(null);
 
-  const choosePurpose = (p) => {
-    setPurpose(p);
-    setPurposeError(false);
-  };
+  // 必填都完成才能按下一步（不採用點擊後才顯示錯誤）
+  const canSubmit = Boolean(purpose) && range.max >= range.min;
 
   const submit = () => {
-    if (!purpose) {
-      setPurposeError(true);
-      return;
-    }
     updateDraft({ amount, purpose });
     nextStep(PATH);
   };
@@ -45,7 +38,7 @@ export function LoanAmount() {
       title=${flowTitle(t.title)}
       step=${flowPosition(PATH)}
       onBack=${() => prevStep(PATH)}
-      actions=${html`<${Button} onClick=${submit}>${COPY.common.next}<//>`}
+      actions=${html`<${Button} disabled=${!canSubmit} onClick=${submit}>${COPY.common.next}<//>`}
     >
       <!-- 首次借款不顯示摘要卡（可借範圍見借款金額下方提示） -->
       ${!firstLoan &&
@@ -70,8 +63,7 @@ export function LoanAmount() {
             placeholder=${t.purposePlaceholder}
             value=${purpose}
             options=${LOAN_PURPOSES}
-            onChange=${choosePurpose}
-            error=${purposeError && t.purposeError}
+            onChange=${setPurpose}
           />
 
           <${AmountField}

@@ -66,7 +66,6 @@ export const COPY = {
     borrowed: '已借款金額',
     purpose: '借款目的',
     purposePlaceholder: '請選擇',
-    purposeError: '請選擇借款目的',
     amount: '借款金額',
     limitLink: '額度限制',
     rangeHint: (min, max) => `可借款金額 TWD ${min}～TWD ${max}`,
