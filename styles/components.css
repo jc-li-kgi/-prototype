@@ -166,6 +166,7 @@
   gap: 0.3em; /* 一個空白字寬，「TWD」與金額之間 */
   color: var(--color-content-general-primary);
 }
+.amount-input__value input::placeholder { color: var(--color-content-general-tertiary); opacity: 1; } /* 未填 */
 .amount-input__value input {
   border: 0;
   outline: 0;

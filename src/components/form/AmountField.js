@@ -14,19 +14,25 @@ import { num } from '../../lib/format.js';
  *   hints=${['可借款金額…', '累加金額…']}
  *   error="超過可借額度"
  *   disabled                            // 鎖定金額（例如還款選「全部」）
+ *   placeholder="請輸入借款金額"          // value 為 null 時顯示（tertiary 色），＋ 會從 min 開始
  * />
- * 直接輸入時，離開欄位會自動修正到 min～max 並對齊 step
+ * 直接輸入時，離開欄位會自動修正到 min～max 並對齊 step；清空則回到未填狀態（null）
  */
-export function AmountField({ label, value, onChange, min, max, step = 1, prefix, suffix, action, hints = [], error, disabled = false }) {
+export function AmountField({ label, value, onChange, min, max, step = 1, prefix, suffix, action, hints = [], error, disabled = false, placeholder }) {
   const [text, setText] = useState(null); // 編輯中的字串；null = 沒在編輯
   const range = { min, max, step };
+  const filled = value != null;
 
-  const change = (delta) => onChange(clampAmount(value + delta, range));
+  const change = (delta) => onChange(filled ? clampAmount(value + delta, range) : delta > 0 ? min : null);
   const commit = () => {
-    if (text !== null) onChange(clampAmount(text.replace(/\D/g, ''), range));
+    if (text !== null) {
+      const digits = text.replace(/\D/g, '');
+      onChange(digits ? clampAmount(digits, range) : null);
+    }
     setText(null);
   };
-  const shown = text ?? num(value);
+  const shown = text ?? (filled ? num(value) : '');
+  const empty = shown === ''; // 未填：顯示 placeholder，隱藏幣別，改用中文字樣式
 
   return html`
     <div class="field">
@@ -36,24 +42,25 @@ export function AmountField({ label, value, onChange, min, max, step = 1, prefix
       </div>
 
       <div class="amount-input">
-        <button class="icon-btn amount-input__btn" onClick=${() => change(-step)} disabled=${disabled || value <= min} aria-label="減少">
+        <button class="icon-btn amount-input__btn" onClick=${() => change(-step)} disabled=${disabled || !filled || value <= min} aria-label="減少">
           <${Icon} name="minus.svg" width=${16.25} height=${1.25} tint />
         </button>
-        <label class="amount-input__value n-title">
-          ${prefix && html`<span>${prefix}</span>`}
+        <label class=${'amount-input__value ' + (empty ? 't-subtitle-regular' : 'n-title')}>
+          ${prefix && !empty && html`<span>${prefix}</span>`}
           <input
             inputmode="numeric"
             readOnly=${disabled}
             value=${shown}
-            size=${Math.max(4, shown.length)}
-            onFocus=${() => setText(String(value))}
+            placeholder=${placeholder}
+            size=${empty && placeholder ? placeholder.length * 2 : Math.max(4, shown.length)}
+            onFocus=${() => setText(filled ? String(value) : '')}
             onInput=${(e) => setText(e.currentTarget.value)}
             onBlur=${commit}
             onKeyDown=${(e) => e.key === 'Enter' && e.currentTarget.blur()}
           />
-          ${suffix && html`<span>${suffix}</span>`}
+          ${suffix && !empty && html`<span>${suffix}</span>`}
         </label>
-        <button class="icon-btn amount-input__btn" onClick=${() => change(step)} disabled=${disabled || value >= max} aria-label="增加">
+        <button class="icon-btn amount-input__btn" onClick=${() => change(step)} disabled=${disabled || (filled && value >= max)} aria-label="增加">
           <${Icon} name="add.svg" width=${16.25} height=${16.25} tint />
         </button>
       </div>
