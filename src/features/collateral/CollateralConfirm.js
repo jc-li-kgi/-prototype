@@ -31,7 +31,7 @@ export function CollateralConfirm() {
       title=${flowTitle(t.title)}
       step=${flowPosition(PATH)}
       onBack=${() => prevStep(PATH)}
-      actions=${html`<${Button} onClick=${submit}>${t.submit}<//>`}
+      actions=${html`<${Button} onClick=${submit}>${COPY.common.submit}<//>`}
     >
       <div class="card-stack">
         <${DetailCard}>

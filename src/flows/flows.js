@@ -32,6 +32,16 @@ export const FLOWS = {
     ],
     done: '/loan/result',
   },
+
+  // 現金還款：從股票借貸明細 › 借款紀錄「還款」→ 選擇還款方式 → 現金還款
+  cashRepay: {
+    title: '現金還款',
+    steps: [
+      { path: '/repay/amount', label: '輸入還款金額' },
+      { path: '/repay/confirm', label: '確認資料' },
+    ],
+    done: '/repay/result',
+  },
 };
 
 /** 目前是否在某個流程中 */
@@ -86,13 +96,15 @@ export function flowPosition(path) {
   return { index, total: steps.length, label: steps[index]?.label };
 }
 
-export function nextStep(path) {
+/** 前往下一步；query 會帶給下一頁，例如完成頁要知道剛送出的紀錄編號 */
+export function nextStep(path, { query } = {}) {
   const { steps, done } = currentFlow();
   const index = steps.findIndex((s) => s.path === path);
   const next = steps[index + 1];
+  const qs = query ? '?' + new URLSearchParams(query) : '';
   // 進完成頁時用 replace，避免按返回又回到確認頁重複送出
-  if (next) navigate(next.path);
-  else navigate(done, { replace: true });
+  if (next) navigate(next.path + qs);
+  else navigate(done + qs, { replace: true });
 }
 
 export function prevStep(path) {

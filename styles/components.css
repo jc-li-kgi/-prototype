@@ -53,6 +53,8 @@
 
 /* ---------- DetailRow：左標題 右數值 ---------- */
 .detail-row { display: flex; gap: var(--spacing-8); align-items: flex-start; }
+.detail-row--warning .detail-row__label,
+.detail-row--warning .detail-row__value { color: var(--color-content-semantic-warning); }
 .detail-row__label {
   flex: 1;
   color: var(--color-content-general-secondary);
@@ -112,13 +114,19 @@
   mask: var(--icon) center / contain no-repeat;
 }
 
-/* 頁面底部按鈕區（Guideline Level 1：流程申請 頁尾與內容 48px；含 iPhone 安全區） */
+/* ---------- BottomActions 頁面底部按鈕區（不固定） ----------
+ * 與內容至少 32（padding-top）；內容不滿一屏時 margin-top: auto 把按鈕推到底
+ * 頁尾：流程申請 48、資訊瀏覽 40（Guideline Level 1），含 iPhone 安全區
+ * 父層必須是撐滿高度的直式 flex 容器，且不要再加 gap（距離由這裡負責）
+ */
 .bottom-actions {
+  margin-top: auto;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-16);
-  padding: 0 var(--spacing-16) calc(var(--spacing-48) + env(safe-area-inset-bottom));
+  padding: var(--spacing-32) var(--spacing-16) calc(var(--spacing-48) + env(safe-area-inset-bottom));
 }
+.bottom-actions--browse { padding-bottom: calc(var(--spacing-40) + env(safe-area-inset-bottom)); }
 
 /* ---------- Form：PickerField / AmountField（Guideline：標題與輸入框 8px） ---------- */
 .field { display: flex; flex-direction: column; gap: var(--spacing-8); }
@@ -242,14 +250,42 @@
 .sheet__option {
   width: 100%;
   display: flex;
-  flex-direction: column;
-  gap: var(--spacing-4);
+  align-items: flex-start;
+  gap: var(--spacing-8);
   padding: var(--spacing-16);
   background: var(--color-container-card-white);
   text-align: left;
 }
 .sheet__option:active { background: var(--color-container-general-option-selected-blue); }
 .sheet__option--selected { background: var(--color-container-general-option-selected-blue); }
+.sheet__option-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--spacing-4); }
+/* 前往型選單（例如選擇還款方式）：項目間距較大、右側 › */
+.sheet__option--nav { padding: var(--spacing-16); }
+.sheet__option--nav + .sheet__option--nav { margin-top: var(--spacing-8); }
+
+/* ---------- RadioGroup 單選按鈕｜Figma：📱 Radio button ---------- */
+.radio-group { display: flex; gap: var(--spacing-12); }
+.radio { flex: 1; display: flex; align-items: center; gap: var(--spacing-8); cursor: pointer; }
+.radio__input { position: absolute; opacity: 0; width: 0; height: 0; }
+.radio__circle {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--color-content-general-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.radio__input:checked + .radio__circle { border-color: var(--color-content-general-active); }
+.radio__input:checked + .radio__circle::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  background: var(--color-content-general-active);
+}
+.radio__input:focus-visible + .radio__circle { outline: 2px solid var(--color-content-general-active); outline-offset: 2px; }
 
 /* ---------- Dialog 置中對話框｜Figma：Dialog_Mobile（白底浮層用 PopOver 陰影） ---------- */
 .dialog-mask {
@@ -627,7 +663,7 @@
 
 /* ---------- FlowPage 流程頁（流程申請：頁首→內容 24、區塊 24、內容→按鈕 32） ---------- */
 .flow-page { display: flex; flex-direction: column; gap: var(--spacing-24); }
-.flow-page__body { display: flex; flex-direction: column; gap: var(--spacing-32); }
+.flow-page__body { flex: 1; display: flex; flex-direction: column; } /* 內容→按鈕 32 由 BottomActions 負責 */
 .flow-page__content { display: flex; flex-direction: column; gap: var(--spacing-24); }
 
 /* ---------- ListTable 列表 ---------- */
@@ -653,7 +689,9 @@
   padding: var(--spacing-16) 0;
   border-bottom: 1px solid var(--color-container-general-divider);
 }
-.list-table__detail { display: flex; flex-direction: column; gap: var(--spacing-8); }
+.list-table__detail { display: flex; flex-direction: column; }
+/* DetailPanel 列表展開明細：白色卡片，內距 16×16、資料列 12（Figma 3089:63010） */
+.detail-panel { display: flex; flex-direction: column; gap: var(--spacing-12); padding: var(--spacing-16); }
 .list-table__footer { display: flex; align-items: center; gap: var(--spacing-8); }
 .list-table__footer--end { justify-content: flex-end; padding-right: calc(24px + var(--spacing-8)); } /* 與箭頭欄左緣對齊 */
 .list-table__footer--between { justify-content: space-between; }

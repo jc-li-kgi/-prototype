@@ -6,7 +6,7 @@ import { useStore, updateDraft } from '../../store.js';
 import { flowPosition, nextStep, prevStep, flowTitle, isFlow } from '../../flows/flows.js';
 import {
   LOAN_RULES, LOAN_PURPOSES, loanBalance, remainingCredit, maintenanceRatio, loanRange, clampAmount, interestFor,
-  collateralValue, withPendingCollateral,
+  withPendingCollateral,
 } from '../../lib/calc.js';
 import { twd, pct, num } from '../../lib/format.js';
 import { COPY } from '../../content/copy.js';
@@ -47,24 +47,21 @@ export function LoanAmount() {
       onBack=${() => prevStep(PATH)}
       actions=${html`<${Button} onClick=${submit}>${COPY.common.next}<//>`}
     >
-      <div class="loan-summary">
-        ${firstLoan
-          ? html`<${SummaryCard}
-              variant="flow"
-              label=${t.remaining}
-              value=${twd(remainingCredit(account))}
-              rows=${[[t.pendingCollateralValue, twd(collateralValue(account))]]}
-            />`
-          : html`<${SummaryCard}
-              variant="flow"
-              label=${t.ratio}
-              value=${pct(maintenanceRatio(account))}
-              rows=${[
-                [t.remaining, twd(remainingCredit(account))],
-                [t.borrowed, twd(loanBalance(account))],
-              ]}
-            />`}
-      </div>
+      <!-- 首次借款不顯示摘要卡（可借範圍見借款金額下方提示） -->
+      ${!firstLoan &&
+      html`
+        <div class="loan-summary">
+          <${SummaryCard}
+            variant="flow"
+            label=${t.ratio}
+            value=${pct(maintenanceRatio(account))}
+            rows=${[
+              [t.remaining, twd(remainingCredit(account))],
+              [t.borrowed, twd(loanBalance(account))],
+            ]}
+          />
+        </div>
+      `}
 
       <div class="loan-cards">
         <section class="card card--full loan-form">

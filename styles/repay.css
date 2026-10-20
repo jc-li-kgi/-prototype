@@ -1,0 +1,4 @@
+/* ===== 現金還款｜情境：流程申請（表單卡沿用 loan.css 的 .loan-form / .loan-summary） ===== */
+
+/* 利息、手續費、總扣款、扣款帳號：Figma 條列間距 12 */
+.repay-breakdown { display: flex; flex-direction: column; gap: var(--spacing-12); }

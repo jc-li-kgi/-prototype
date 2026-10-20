@@ -39,8 +39,7 @@ export function LoanConfirm() {
       title=${flowTitle(t.title)}
       step=${flowPosition(PATH)}
       onBack=${() => prevStep(PATH)}
-      actionsClass="confirm-actions"
-      actions=${html`<${Button} class="confirm-actions__btn" onClick=${submit}>${COPY.common.confirm}<//>`}
+      actions=${html`<${Button} onClick=${submit}>${COPY.common.submit}<//>`}
     >
       <div class="card-stack">
         <${DetailCard}>

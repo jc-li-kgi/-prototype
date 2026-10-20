@@ -6,15 +6,16 @@ import { showToast } from '../../store.js';
 import { navigate } from '../../router.js';
 import { COPY } from '../../content/copy.js';
 
-// 對應 COPY.zone.actions 的順序；null = 尚未實作
+// 對應 COPY.zone.actions 的順序；repay = 交給 onRepay（開啟選擇還款方式），null = 尚未實作
 const ACTIONS = [
-  { icon: 'action-repay.png', to: null },
+  { icon: 'action-repay.png', repay: true },
   { icon: 'action-records.png', to: '/records?tab=loans' },
   { icon: 'action-collateral.png', to: '/records?tab=collateral' },
   { icon: 'action-more.png', to: null },
 ];
 
-export function QuickActions() {
+/** <QuickActions onRepay=${openRepaySheet} /> */
+export function QuickActions({ onRepay }) {
   return html`
     <nav class="quick-actions">
       ${ACTIONS.map(
@@ -22,7 +23,7 @@ export function QuickActions() {
           <${IconAction}
             icon=${a.icon}
             label=${COPY.zone.actions[i]}
-            onClick=${() => (a.to ? navigate(a.to) : showToast(COPY.common.notAvailable))}
+            onClick=${() => (a.repay && onRepay ? onRepay() : a.to ? navigate(a.to) : showToast(COPY.common.notAvailable))}
           />
         `
       )}

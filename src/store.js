@@ -1,9 +1,9 @@
 // 假資料庫：所有功能都透過這裡讀寫，功能之間不互相 import
 // 存在 localStorage，受測者重新整理不會遺失進度
 import { useReducer, useEffect } from './lib/preact.js';
-import { LOAN_RULES, addMonths, today } from './lib/calc.js';
+import { LOAN_RULES, addMonths, today, repayPlan } from './lib/calc.js';
 
-const KEY = 'lending-proto-state-v2'; // 資料結構改版時遞增，避免讀到舊格式
+const KEY = 'lending-proto-state-v3'; // 資料結構改版時遞增，避免讀到舊格式
 const listeners = new Set();
 
 let state = load();
@@ -17,7 +17,7 @@ function load() {
 }
 
 function emptyState() {
-  return { taskId: null, entry: null, flow: null, flowReturn: null, account: null, draft: {}, collateralDraft: {}, toast: null };
+  return { taskId: null, entry: null, flow: null, flowReturn: null, account: null, draft: {}, collateralDraft: {}, repayDraft: {}, toast: null };
 }
 
 function save() {
@@ -159,4 +159,48 @@ export function borrow({ amount, purpose }) {
     draft: {},
   }));
   return loan;
+}
+
+/* ---------- 還款草稿：{ loanId, mode: 'partial' | 'full', principal } ---------- */
+
+export function updateRepayDraft(patch) {
+  setState((s) => ({ repayDraft: { ...(s.repayDraft || {}), ...patch } }));
+}
+
+export function clearRepayDraft() {
+  setState({ repayDraft: {} });
+}
+
+/** 現金還款：依試算扣減各筆借款餘額，並新增一筆還款紀錄（回傳紀錄，完成頁用來展開明細） */
+export function repay({ loanId, principal }) {
+  const account = state.account;
+  const plan = repayPlan(account, principal);
+  const now = new Date();
+  const record = {
+    id: 'A' + Date.now().toString().slice(-7),
+    method: '現金還款',
+    status: '扣款中',
+    appliedAt: now.toISOString(),
+    loanId,
+    principal: plan.principal,
+    interest: plan.interest,
+    fee: plan.fee,
+    total: plan.total,
+    bank: account.payoutBank,
+    channel: 'APP',
+  };
+  const paid = Object.fromEntries(plan.allocations.map((a) => [a.loanId, a.amount]));
+  setState((s) => ({
+    account: {
+      ...s.account,
+      loans: s.account.loans.map((l) => {
+        if (!paid[l.id]) return l;
+        const balance = l.balance - paid[l.id];
+        return { ...l, balance, status: balance === 0 ? '已還清' : l.status };
+      }),
+      repayments: [record, ...(s.account.repayments || [])],
+    },
+    repayDraft: {},
+  }));
+  return record;
 }

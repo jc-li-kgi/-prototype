@@ -4,7 +4,8 @@ export const BASE_ACCOUNT = {
   opened: true,
   id: '9999-999999',
   name: '流川楓',
-  payoutBank: { name: '凱基銀行', number: '12122323232' },
+  payoutBank: { name: '凱基銀行', number: '12122323232' }, // 撥款 / 還款扣款帳號
+  bankBalance: 30000000,                                     // 扣款帳戶餘額
 
   // 已擔保（已匯入專區）的股票
   collateral: [
