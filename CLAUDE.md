@@ -31,7 +31,7 @@
 - **不固定的底部按鈕**一律用 `BottomActions`（FlowPage 的 `actions`、ResultPage 已內建）：
   - 與上方內容至少 **32px**
   - 內容不滿一屏時（距離會大於 32px），按鈕**置底**
-  - 下方頁尾：流程申請 48（預設）、資訊瀏覽 40（`context="browse"`），含 iPhone 安全區
+  - 距離畫面底部 **48px**（所有頁面一致；iPhone 安全區包含在 48 內）
   - 多顆按鈕直排，間距 16；按鈕滿版、左右 16
   - 必須是撐滿高度的直式 flex 容器（`.page`）的最後一個，父層不要再加 gap
 - **固定（fixed）在畫面底部的按鈕**（`StickyFooter`、FlowPage 的 `sticky`，例如總計＋下一步）不適用以上規則。
