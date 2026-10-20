@@ -7,6 +7,7 @@ export { Icon } from './ui/Icon.js';
 export { Button } from './ui/Button.js';
 export { InfoLabel } from './ui/InfoLabel.js';
 export { DetailRow } from './ui/DetailRow.js';
+export { DetailPanel } from './ui/DetailPanel.js';
 export { DetailCard } from './ui/DetailCard.js';
 export { SummaryCard } from './ui/SummaryCard.js';
 export { FeeCard } from './ui/FeeCard.js';

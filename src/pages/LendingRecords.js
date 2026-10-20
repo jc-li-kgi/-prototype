@@ -23,13 +23,16 @@ export function LendingRecords({ query }) {
   const account = useStore((s) => s.account);
   const t = COPY.records;
   const tab = t.tabs.some((x) => x.key === query.tab) ? query.tab : 'loans';
-  const [sub, setSub] = useState(t.collateralTabs.some((x) => x.key === query.sub) ? query.sub : 'pledged');
   const [keyword, setKeyword] = useState('');
   const [repayLoan, setRepayLoan] = useState(null); // 正在選擇還款方式的借款
 
   const parent = query.back || '/lending-zone';
   const back = () => navigate(parent, { replace: true });
-  const switchTab = (key) => navigate(`/records?tab=${key}${query.back ? `&back=${query.back}` : ''}`, { replace: true });
+  const backQs = query.back ? `&back=${query.back}` : '';
+  const switchTab = (key) => navigate(`/records?tab=${key}${backQs}`, { replace: true });
+  // 擔保品子頁籤跟著網址走（從其他頁帶 &sub= 進來時也會正確切換）
+  const sub = t.collateralTabs.some((x) => x.key === query.sub) ? query.sub : 'pledged';
+  const setSub = (key) => navigate(`/records?tab=collateral&sub=${key}${backQs}`, { replace: true });
 
   return html`
     <div class="page records-page">

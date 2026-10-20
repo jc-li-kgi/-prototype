@@ -3,6 +3,7 @@ import { html } from '../../lib/preact.js';
 import { InfoLabel } from '../ui/InfoLabel.js';
 import { ExpandToggle } from '../ui/ExpandToggle.js';
 import { EmptyState } from '../ui/EmptyState.js';
+import { DetailPanel } from '../ui/DetailPanel.js';
 
 /**
  * <ListTable
@@ -55,7 +56,7 @@ export function ListTable({ columns, expandable = false, sort, onSort, empty, he
  *   cells=${[<StockName/>, '20', <AmountCell/>]}   ← 對應 columns
  *   align=${['left', 'center', 'right']}
  *   expanded=${open} onToggle=${toggle}             ← 有 onToggle 時整列可點、最右側顯示箭頭
- *   detail=${html`…展開內容…`}
+ *   detail=${html`<DetailRow …/>…`}              ← 展開內容，自動包在 DetailPanel（白色明細卡）裡
  *   footer=${html`…列下方的標籤 / 按鈕…`}
  * />
  */
@@ -69,7 +70,7 @@ export function ListRow({ cells, align = [], expanded = false, onToggle, detail,
       ${onToggle
         ? html`<button class="list-table__main" onClick=${onToggle} aria-expanded=${expanded}>${main}</button>`
         : html`<div class="list-table__main">${main}</div>`}
-      ${expanded && detail && html`<div class="list-table__detail">${detail}</div>`}
+      ${expanded && detail && html`<div class="list-table__detail"><${DetailPanel}>${detail}<//></div>`}
       ${footer && html`<div class=${'list-table__footer list-table__footer--' + footerAlign}>${footer}</div>`}
     </div>
   `;

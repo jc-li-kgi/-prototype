@@ -130,15 +130,13 @@ function RepayList({ repayments, open, setOpen }) {
             expanded=${open === r.id}
             onToggle=${() => setOpen(open === r.id ? null : r.id)}
             detail=${html`
-              <div class="card repay-record-detail">
-                <${DetailRow} label=${d.appliedAt} value=${day} />
-                <${DetailRow} label=${d.principal} value=${twd(r.principal)} />
-                <${DetailRow} label=${d.interest} value=${twd(r.interest)} />
-                <${DetailRow} label=${d.fee} value=${twd(r.fee)} />
-                <${DetailRow} label=${d.bank} value=${html`<p class="t-body-regular">${r.bank.name}</p><p class="n-body-regular">${r.bank.number}</p>`} />
-                <${DetailRow} label=${d.serial} value=${r.id} />
-                <${DetailRow} label=${d.channel} value=${r.channel} />
-              </div>
+              <${DetailRow} label=${d.appliedAt} value=${day} />
+              <${DetailRow} label=${d.principal} value=${twd(r.principal)} />
+              <${DetailRow} label=${d.interest} value=${twd(r.interest)} />
+              <${DetailRow} label=${d.fee} value=${twd(r.fee)} />
+              <${DetailRow} label=${d.bank} value=${html`<p class="t-body-regular">${r.bank.name}</p><p class="n-body-regular">${r.bank.number}</p>`} />
+              <${DetailRow} label=${d.serial} value=${r.id} />
+              <${DetailRow} label=${d.channel} value=${r.channel} />
             `}
           />
         `;
