@@ -8,6 +8,9 @@ import { LoanResult } from './features/loan/LoanResult.js';
 import { CollateralSelect } from './features/collateral/CollateralSelect.js';
 import { CollateralConfirm } from './features/collateral/CollateralConfirm.js';
 import { CollateralResult } from './features/collateral/CollateralResult.js';
+import { RepayAmount } from './features/repay/RepayAmount.js';
+import { RepayConfirm } from './features/repay/RepayConfirm.js';
+import { RepayResult } from './features/repay/RepayResult.js';
 import { LendingRecords } from './pages/LendingRecords.js';
 import { TaskStart } from './pages/TaskStart.js';
 import { Moderator } from './pages/Moderator.js';
@@ -30,6 +33,11 @@ export const ROUTES = {
   '/collateral-in/select': CollateralSelect,
   '/collateral-in/confirm': CollateralConfirm,
   '/collateral-in/result': CollateralResult,
+
+  // 現金還款
+  '/repay/amount': RepayAmount,
+  '/repay/confirm': RepayConfirm,
+  '/repay/result': RepayResult,
 
   // 股票借貸明細（?tab=loans|collateral|statement）
   '/records': LendingRecords,

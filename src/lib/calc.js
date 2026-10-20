@@ -11,6 +11,12 @@ export const LOAN_RULES = {
   termMonths: 6,       // 借款期間
 };
 
+/* 還款規則（現金還款） */
+export const REPAY_RULES = {
+  step: 1000,          // 還款本金累加金額
+  feeRate: 0.0008,     // 借款手續費：首次還款或展延時收取，參考費率 0.08%（以還款本金計）
+};
+
 /* 借款目的選項 */
 export const LOAN_PURPOSES = ['資金周轉', '投資理財', '個人消費', '其他'];
 
@@ -131,7 +137,39 @@ export function daysUntil(isoDate) {
 }
 
 /** 即將到期的天數門檻 */
-export const DUE_SOON_DAYS = 30;
+export const DUE_SOON_DAYS = 20;
+
+/** 是否即將到期（到期前 DUE_SOON_DAYS 天內，含當天） */
+export function isDueSoon(loan) {
+  const days = daysUntil(loan.dueDate);
+  return loan.balance > 0 && days >= 0 && days <= DUE_SOON_DAYS;
+}
+
+/* ---------- 還款 ---------- */
+
+/** 還款試算：本金依到期日先後分攤到各筆借款，利息按日計，手續費依本金計 */
+export function repayPlan(account, principal) {
+  const open = account.loans.filter((l) => l.balance > 0).sort((a, b) => a.dueDate.localeCompare(b.dueDate));
+  let left = principal;
+  const allocations = [];
+  let interest = 0;
+  for (const l of open) {
+    if (left <= 0) break;
+    const amount = Math.min(left, l.balance);
+    const days = Math.max(1, -daysUntil(l.startDate));
+    interest += (amount * l.rate * days) / 365;
+    allocations.push({ loanId: l.id, amount });
+    left -= amount;
+  }
+  interest = Math.round(interest);
+  const fee = Math.round(principal * REPAY_RULES.feeRate);
+  return { principal, interest, fee, total: principal + interest + fee, allocations };
+}
+
+/** 部分還款的範圍：最少一個級距，最多為全部借款餘額 */
+export function repayRange(account) {
+  return { min: REPAY_RULES.step, max: loanBalance(account), step: REPAY_RULES.step };
+}
 
 export function today() {
   return new Date().toISOString().slice(0, 10);

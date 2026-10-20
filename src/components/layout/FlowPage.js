@@ -12,9 +12,10 @@ import { StickyFooter } from './StickyFooter.js';
  *   actions        內容下方的按鈕（距內容 32，Guideline：內容→按鈕）
  *   actionsClass   按鈕區額外 class（例如限制按鈕寬度）
  *   sticky         固定在畫面底部的操作區（例如總計 + 下一步），和 actions 擇一
+ *   stickyPlain    置底區只有一顆按鈕時：透明底、無分隔線（按鈕滿版、左右 16）
  * 間距：頁首→內容 24、內容區塊之間 24（Guideline：流程申請）
  */
-export function FlowPage({ title, step, onBack, actions, actionsClass = '', sticky, children }) {
+export function FlowPage({ title, step, onBack, actions, actionsClass = '', sticky, stickyPlain = false, children }) {
   return html`
     <div class="page flow-page">
       <div>
@@ -27,7 +28,7 @@ export function FlowPage({ title, step, onBack, actions, actionsClass = '', stic
         ${actions && html`<div class=${'bottom-actions ' + actionsClass}>${actions}</div>`}
       </div>
 
-      ${sticky && html`<${StickyFooter}>${sticky}<//>`}
+      ${sticky && html`<${StickyFooter} plain=${stickyPlain}>${sticky}<//>`}
     </div>
   `;
 }

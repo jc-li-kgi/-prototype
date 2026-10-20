@@ -13,10 +13,11 @@ import { num } from '../../lib/format.js';
  *   action=${{ label: '額度限制', onClick }}
  *   hints=${['可借款金額…', '累加金額…']}
  *   error="超過可借額度"
+ *   disabled                            // 鎖定金額（例如還款選「全部」）
  * />
  * 直接輸入時，離開欄位會自動修正到 min～max 並對齊 step
  */
-export function AmountField({ label, value, onChange, min, max, step = 1, prefix, suffix, action, hints = [], error }) {
+export function AmountField({ label, value, onChange, min, max, step = 1, prefix, suffix, action, hints = [], error, disabled = false }) {
   const [text, setText] = useState(null); // 編輯中的字串；null = 沒在編輯
   const range = { min, max, step };
 
@@ -35,13 +36,14 @@ export function AmountField({ label, value, onChange, min, max, step = 1, prefix
       </div>
 
       <div class="amount-input">
-        <button class="icon-btn amount-input__btn" onClick=${() => change(-step)} disabled=${value <= min} aria-label="減少">
+        <button class="icon-btn amount-input__btn" onClick=${() => change(-step)} disabled=${disabled || value <= min} aria-label="減少">
           <${Icon} name="minus.svg" width=${16.25} height=${1.25} tint />
         </button>
         <label class="amount-input__value n-title">
           ${prefix && html`<span>${prefix}</span>`}
           <input
             inputmode="numeric"
+            readOnly=${disabled}
             value=${shown}
             size=${Math.max(4, shown.length)}
             onFocus=${() => setText(String(value))}
@@ -51,7 +53,7 @@ export function AmountField({ label, value, onChange, min, max, step = 1, prefix
           />
           ${suffix && html`<span>${suffix}</span>`}
         </label>
-        <button class="icon-btn amount-input__btn" onClick=${() => change(step)} disabled=${value >= max} aria-label="增加">
+        <button class="icon-btn amount-input__btn" onClick=${() => change(step)} disabled=${disabled || value >= max} aria-label="增加">
           <${Icon} name="add.svg" width=${16.25} height=${16.25} tint />
         </button>
       </div>

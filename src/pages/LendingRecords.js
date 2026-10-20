@@ -1,5 +1,6 @@
 // 股票借貸明細：借還款紀錄 / 擔保品 / 對帳單
-// 網址：#/records?tab=loans|collateral|statement（擔保品可再帶 &sub=pledged|unpledged|history）
+// 網址：#/records?tab=loans|collateral|statement
+//   借還款紀錄可再帶 &sub=borrow|repay&open=紀錄編號（展開該筆）；擔保品可再帶 &sub=pledged|unpledged|history
 // 頁面負責組合各功能模組（features 之間不互相 import）
 import { html, useState } from '../lib/preact.js';
 import { PageHeader, TextTabs, SegmentedTabs, SearchField, Button, InfoLabel, EmptyState } from '../components/index.js';
@@ -32,7 +33,14 @@ export function LendingRecords({ query }) {
         <${TextTabs} tabs=${t.tabs} active=${tab} onChange=${switchTab} />
       </div>
 
-      ${tab === 'loans' && html`<${LoanRecordList} loans=${account.loans} repayments=${account.repayments} />`}
+      ${tab === 'loans' &&
+      html`<${LoanRecordList}
+        key=${`${query.sub}-${query.open}`}
+        loans=${account.loans}
+        repayments=${account.repayments || []}
+        initialSub=${query.sub === 'repay' ? 'repay' : 'borrow'}
+        initialOpen=${query.open}
+      />`}
 
       ${tab === 'collateral' &&
       html`

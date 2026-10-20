@@ -5,7 +5,7 @@ import { Icon } from './Icon.js';
 /**
  * <SummaryCard
  *   label="整戶維持率" value="285%"
- *   rows=${[['擔保品市值', 'TWD 5,700,000'], …]}
+ *   rows=${[['擔保品市值', 'TWD 5,700,000'], ['即將到期金額', 'TWD 1,000,000', 'warning'], …]}   ← 第 3 個值 warning = 整列橘字
  *   actions=${html`<Button …/>…`}
  *   onBell=${…}                 ← 右上角通知鈴（不給就不顯示）
  *   variant="overview"          ← overview：大數字在標題下方、內距 16（資訊瀏覽）
@@ -38,8 +38,8 @@ export function SummaryCard({ label, value, rows = [], actions, onBell, variant 
     <section class=${'card card--shadow summary-card summary-card--' + variant}>
       ${head}
       ${rows.map(
-        ([l, v]) => html`
-          <div class="detail-row">
+        ([l, v, tone]) => html`
+          <div class=${'detail-row' + (tone ? ' detail-row--' + tone : '')}>
             <span class="detail-row__label t-body-regular">${l}</span>
             <span class="detail-row__value n-body-regular">${v}</span>
           </div>
