@@ -15,7 +15,7 @@ export function Shortcuts() {
       <${SectionHeader}
         title=${t.shortcutTitle}
         action=${{
-          label: html`<span class="shortcuts__edit"><${Icon} name="shortcut-edit.svg" size=${16} />${t.shortcutEdit}</span>`,
+          label: html`<span class="icon-text--body"><${Icon} name="shortcut-edit.svg" level="body" />${t.shortcutEdit}</span>`,
           onClick: notAvailable,
         }}
       />

@@ -42,7 +42,7 @@
 .home-index__toggle { margin-left: auto; }
 .home-overview__head,
 .home-overview__time { padding: 0 var(--spacing-16); }
-.home-overview__time { display: flex; align-items: center; gap: var(--spacing-8); }
+.home-overview__time { display: flex; align-items: center; gap: var(--icon-gap-caption); } /* Caption 文字＋icon 4 */
 
 /* 帳務總覽卡片：橫向滑動，左邊對齊，露出下一張 */
 .finance-cards {
@@ -107,7 +107,7 @@
 .finance-card__ad {
   display: flex;
   align-items: center;
-  gap: var(--spacing-8);
+  gap: var(--icon-gap-body); /* Body 文字＋icon 4 */
   padding: var(--spacing-12) var(--spacing-8);
   background: var(--color-container-card-white);
   text-align: left;
@@ -116,7 +116,6 @@
 
 /* 快捷功能：標題→內容 16（同 Figma），4 欄 */
 .shortcuts { display: flex; flex-direction: column; gap: var(--spacing-16); padding: 0 var(--spacing-16); }
-.shortcuts__edit { display: inline-flex; align-items: center; gap: var(--spacing-8); }
 .shortcuts__grid { display: grid; grid-template-columns: repeat(4, 68px); justify-content: space-between; row-gap: var(--spacing-12); }
 .shortcut-btn {
   display: flex;

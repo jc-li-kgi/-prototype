@@ -39,7 +39,7 @@ export function ListTable({ columns, expandable = false, sort, onSort, empty, he
                     </button>
                   `
                 : c.info
-                ? html`<${InfoLabel} label=${c.label} labelClass="" info=${c.info} />`
+                ? html`<${InfoLabel} label=${c.label} labelClass="" level="caption" info=${c.info} />`
                 : c.label}
             </span>
           `

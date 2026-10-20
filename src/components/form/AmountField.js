@@ -17,6 +17,7 @@ import { num } from '../../lib/format.js';
  *   placeholder="請輸入借款金額"          // value 為 null 時顯示（tertiary 色），＋ 會從 min 開始
  * />
  * 直接輸入時，離開欄位會自動修正到 min～max 並對齊 step；清空則回到未填狀態（null）
+ * 輸入框寬度跟著字數（ch = 一個數字寬），輸入中最多只能打 max 的位數，避免文字被裁切
  */
 export function AmountField({ label, value, onChange, min, max, step = 1, prefix, suffix, action, hints = [], error, disabled = false, placeholder }) {
   const [text, setText] = useState(null); // 編輯中的字串；null = 沒在編輯
@@ -52,7 +53,8 @@ export function AmountField({ label, value, onChange, min, max, step = 1, prefix
             readOnly=${disabled}
             value=${shown}
             placeholder=${placeholder}
-            size=${empty && placeholder ? placeholder.length * 2 : Math.max(4, shown.length)}
+            maxlength=${text !== null ? String(max).length : undefined}
+            style=${`width: ${empty ? `${(placeholder || '').length}em` : `${Math.max(1, shown.length) + 0.5}ch`}`}
             onFocus=${() => setText(filled ? String(value) : '')}
             onInput=${(e) => setText(e.currentTarget.value)}
             onBlur=${commit}

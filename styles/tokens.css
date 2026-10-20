@@ -29,7 +29,28 @@
      英數 Montserrat 在前、中文 思源黑體在後，瀏覽器自動混排；所有裝置相同      */
   --font-base: "Montserrat", "Noto Sans TC", sans-serif;
 
+  /* ---------- Icon 尺寸與文字層級（Guideline › Icon：尺寸與間距應用） ----------
+     用在 text button、下拉選單、ⓘ 等「文字＋icon」；手機 ≤768px / 電腦 >768px（同字級斷點）
+       Caption   16 / 16   間距 4
+       Body      16 / 20   間距 4
+       Subtitle  20 / 24   前置 icon 間距 8、後置 icon（›、▼）間距 4                       */
+  --icon-size-caption: 16px;
+  --icon-size-body: 16px;
+  --icon-size-subtitle: 20px;
+  --icon-gap-caption: var(--spacing-4);
+  --icon-gap-body: var(--spacing-4);
+  --icon-gap-subtitle-leading: var(--spacing-8);
+  --icon-gap-subtitle-trailing: var(--spacing-4);
+
   /* ---------- 版面 ---------- */
   --app-max-width: 430px;      /* 桌機預覽時置中的手機寬度 */
   --bottom-nav-height: 73px;   /* 底部導覽高度（不含安全區） */
+}
+
+/* 電腦版（>768px）：Body / Subtitle 的 icon 放大 */
+@media (min-width: 769px) {
+  :root {
+    --icon-size-body: 20px;
+    --icon-size-subtitle: 24px;
+  }
 }

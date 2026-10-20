@@ -44,7 +44,7 @@
 /* 更多服務（Level 3：標題與內容 12；產品選單卡 16×16） */
 .more-services { display: flex; flex-direction: column; gap: var(--spacing-12); padding: 0 var(--spacing-16); }
 .more-services__list { display: flex; flex-direction: column; gap: var(--spacing-20); padding: var(--spacing-16); }
-.more-services__item { display: flex; align-items: center; gap: var(--spacing-8); text-align: left; }
+.more-services__item { display: flex; align-items: center; gap: var(--icon-gap-subtitle-trailing); text-align: left; }
 .more-services__item span { flex: 1; }
 
 /* 尚未借款：認識並開立借貸戶（Level 3：標題與內容 12） */

@@ -46,7 +46,7 @@ export function HomeShell() {
           </div>
           <div class="home-overview__time">
             <span class="t-caption-regular c-secondary">${COPY.account.updatedAt} ${dateTime()}</span>
-            <button onClick=${notAvailable} aria-label="重新整理"><${Icon} name="refresh.svg" size=${16} /></button>
+            <button onClick=${notAvailable} aria-label="重新整理"><${Icon} name="refresh.svg" level="caption" /></button>
           </div>
           <${FinanceCards} />
         </div>

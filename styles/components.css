@@ -105,6 +105,17 @@
 
 .icon-btn { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
+/* ---------- Icon 尺寸跟著文字層級（token 見 tokens.css；手機 / 電腦自動切換） ---------- */
+.icon--caption  { width: var(--icon-size-caption);  height: var(--icon-size-caption);  flex-shrink: 0; }
+.icon--body     { width: var(--icon-size-body);     height: var(--icon-size-body);     flex-shrink: 0; }
+.icon--subtitle { width: var(--icon-size-subtitle); height: var(--icon-size-subtitle); flex-shrink: 0; }
+
+/* 文字＋icon 的間距：前置 / 後置 icon 都適用；Subtitle 前置 icon 用 --leading（8） */
+.icon-text--caption  { display: inline-flex; align-items: center; gap: var(--icon-gap-caption); }
+.icon-text--body     { display: inline-flex; align-items: center; gap: var(--icon-gap-body); }
+.icon-text--subtitle { display: inline-flex; align-items: center; gap: var(--icon-gap-subtitle-trailing); }
+.icon-text--subtitle.icon-text--leading { gap: var(--icon-gap-subtitle-leading); }
+
 /* 可換色的 icon（用 mask，顏色跟著 currentColor 走，停用時可變灰） */
 .icon-tint {
   display: inline-block;
@@ -133,13 +144,12 @@
 .field__picker {
   display: flex;
   align-items: center;
-  gap: var(--spacing-8);
+  gap: var(--icon-gap-subtitle-trailing); /* Subtitle 文字＋後置 icon 4 */
   padding-top: var(--spacing-4);
   margin-bottom: calc(var(--spacing-4) - var(--spacing-8)); /* 與底線間距 4px（抵銷 .field 的 8px） */
   text-align: left;
 }
 .field__picker > span:first-child { flex: 1; }
-.field__picker-icon { padding: var(--spacing-4); }
 .field__line {
   display: block;
   height: 1px;
@@ -260,7 +270,7 @@
 .sheet__option--selected { background: var(--color-container-general-option-selected-blue); }
 .sheet__option-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--spacing-4); }
 /* 前往型選單（例如選擇還款方式）：項目間距較大、右側 › */
-.sheet__option--nav { padding: var(--spacing-16); }
+.sheet__option--nav { padding: var(--spacing-16); gap: var(--icon-gap-subtitle-trailing); }
 .sheet__option--nav + .sheet__option--nav { margin-top: var(--spacing-8); }
 
 /* ---------- RadioGroup 單選按鈕｜Figma：📱 Radio button ---------- */
@@ -458,7 +468,7 @@
 .filter-pill {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-8);
+  gap: var(--icon-gap-body); /* Body 文字＋icon 4 */
   height: 32px;
   padding: var(--spacing-4) var(--spacing-16);
   border-radius: var(--radius-full);
@@ -570,7 +580,7 @@
 
 
 /* ---------- InfoLabel 文字 + ⓘ（Guideline：圖示與標題水平間距 4） ---------- */
-.info-label { display: inline-flex; align-items: center; gap: var(--spacing-4); }
+.info-label { display: inline-flex; align-items: center; } /* 文字與 ⓘ 間距由 .icon-text--{level} 決定 */
 
 /* ---------- DetailCard 確認資料卡（流程申請 詳情概覽卡 24×24；條列 20） ---------- */
 .detail-card { display: flex; flex-direction: column; gap: var(--spacing-20); padding: var(--spacing-24); }
@@ -645,7 +655,7 @@
 
 /* ---------- TotalBar 置底總計列 ---------- */
 .total-bar { display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-8); padding: var(--spacing-12) 0; }
-.total-bar__value { display: inline-flex; align-items: center; gap: var(--spacing-4); }
+.total-bar__value { display: inline-flex; align-items: center; }
 .total-bar__value:disabled { cursor: default; }
 /* 展開明細：在置底區內向上推開；置底區最高 90%，明細區自己捲動（Figma：標題→內容 12、條列 12） */
 .total-bar__detail {
@@ -768,6 +778,5 @@
 }
 .service-card__icon { flex-shrink: 0; }
 .service-card__text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--spacing-4); }
-.service-card__title { display: flex; align-items: center; gap: var(--spacing-16); }
+.service-card__title { display: flex; align-items: center; gap: var(--icon-gap-subtitle-trailing); }
 .service-card__title > :first-child { flex: 1; }
-.service-card__chevron { display: inline-flex; padding: var(--spacing-4); }
