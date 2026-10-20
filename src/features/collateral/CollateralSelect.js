@@ -13,9 +13,9 @@ import { COPY } from '../../content/copy.js';
 
 const PATH = '/collateral-in/select';
 
-function initialSelection(draft, query, eligible) {
+function initialSelection(draft, query, importable) {
   if (draft.selected) return draft.selected;
-  const h = eligible.find((x) => x.code === query.code);
+  const h = importable.find((x) => x.code === query.code);
   return h ? { [h.code]: 1 } : {};
 }
 
@@ -26,13 +26,14 @@ export function CollateralSelect({ query }) {
   const groups = groupHoldings(account);
 
   const [sort, setSort] = useState(draft.sort ?? HOLDING_SORTS[0].value);
-  const [selected, setSelected] = useState(() => initialSelection(draft, query, groups.eligible));
+  const [selected, setSelected] = useState(() => initialSelection(draft, query, [...groups.eligible, ...groups.ratioOnly]));
   const [sortOpen, setSortOpen] = useState(false);
   const [breakdownOpen, setBreakdownOpen] = useState(false);
   const [info, setInfo] = useState(null);
 
   const sortDef = HOLDING_SORTS.find((s) => s.value === sort);
   const eligible = [...groups.eligible].sort(sortDef.fn);
+  const ratioOnly = [...groups.ratioOnly].sort(sortDef.fn); // 僅可提升維持率：可匯入，但不增加可借額度
   const items = Object.entries(selected).map(([code, lots]) => ({ code, lots }));
   const total = loanableOf(items);
   const allChecked = eligible.length > 0 && eligible.every((h) => selected[h.code]);
@@ -66,6 +67,23 @@ export function CollateralSelect({ query }) {
   `;
 
   const lotsRow = (h) => html`<${DetailRow} label=${t.availableLots} value=${num(h.lots)} />`;
+
+  // 勾選後出現的匯入張數
+  const qtyRow = (h) =>
+    selected[h.code] &&
+    html`
+      <div class="coll-qty">
+        <span class="t-body-regular c-secondary nowrap">${t.importLots}</span>
+        <${QtyStepper}
+          value=${selected[h.code]}
+          min=${1}
+          max=${h.lots}
+          unit=${t.lotUnit}
+          label=${t.importLots}
+          onChange=${(n) => setLots(h.code, n)}
+        />
+      </div>
+    `;
 
   return html`
     <${FlowPage}
@@ -113,20 +131,7 @@ export function CollateralSelect({ query }) {
                     ${lotsRow(h)}
                     <${DetailRow} label=${t.perLot} value=${num(perLotLoan(h.code))} />
                     <${DetailRow} label=${t.ratio} value=${`${Math.round(stockOf(h.code).ratio * 100)}%`} />
-                    ${selected[h.code] &&
-                    html`
-                      <div class="coll-qty">
-                        <span class="t-body-regular c-secondary nowrap">${t.importLots}</span>
-                        <${QtyStepper}
-                          value=${selected[h.code]}
-                          min=${1}
-                          max=${h.lots}
-                          unit=${t.lotUnit}
-                          label=${t.importLots}
-                          onChange=${(n) => setLots(h.code, n)}
-                        />
-                      </div>
-                    `}
+                    ${qtyRow(h)}
                   <//>
                 `
               )}
@@ -134,16 +139,17 @@ export function CollateralSelect({ query }) {
           </section>
 
           <!-- 僅可用於提升維持率 -->
-          ${groups.ratioOnly.length > 0 &&
+          ${ratioOnly.length > 0 &&
           html`
             <section class="coll-group">
-              ${groupHead('ratioOnly', groups.ratioOnly.length)}
-              <div class="card card--full coll-card coll-card--disabled">
-                ${groups.ratioOnly.map(
+              ${groupHead('ratioOnly', ratioOnly.length)}
+              <div class="card card--full coll-card">
+                ${ratioOnly.map(
                   (h) => html`
-                    <${SelectableItem} disabled label=${stockOf(h.code).name}>
+                    <${SelectableItem} checked=${!!selected[h.code]} onChange=${(on) => toggle(h.code, on)} label=${stockOf(h.code).name}>
                       <${StockName} inline name=${stockOf(h.code).name} code=${h.code} />
                       ${lotsRow(h)}
+                      ${qtyRow(h)}
                     <//>
                   `
                 )}

@@ -58,7 +58,7 @@ export function ListTable({ columns, expandable = false, sort, onSort, empty, he
  *   align=${['left', 'center', 'right']}
  *   expanded=${open} onToggle=${toggle}             ← 有 onToggle 時整列可點、最右側顯示箭頭
  *   detail=${html`<DetailRow …/>…`}              ← 展開內容，自動包在 DetailPanel（白色明細卡）裡
- *   footer=${html`…列下方的標籤 / 按鈕…`}
+ *   footer=${html`…列下方的標籤 / 按鈕…`}         ← 放在展開明細上方
  * />
  */
 export function ListRow({ cells, align = [], expanded = false, onToggle, detail, footer, footerAlign = 'end' }) {
@@ -71,8 +71,8 @@ export function ListRow({ cells, align = [], expanded = false, onToggle, detail,
       ${onToggle
         ? html`<button class="list-table__main" onClick=${onToggle} aria-expanded=${expanded}>${main}</button>`
         : html`<div class="list-table__main">${main}</div>`}
-      ${expanded && detail && html`<div class="list-table__detail"><${DetailPanel}>${detail}<//></div>`}
       ${footer && html`<div class=${'list-table__footer list-table__footer--' + footerAlign}>${footer}</div>`}
+      ${expanded && detail && html`<div class="list-table__detail"><${DetailPanel}>${detail}<//></div>`}
     </div>
   `;
 }
