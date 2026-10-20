@@ -1,12 +1,14 @@
 // 匯入擔保品 第 1 步：從庫存選擇要匯入的股票與張數
-// 網址可帶 ?code=2330，預先勾選該檔（專區、明細頁的「匯入」按鈕會帶）
+// 網址可帶 ?code=2330，預先勾選該檔
+//   匯入擔保品流程（collateralIn）帶 code：只顯示這一檔（明細 / 專區列表的「匯入」按鈕）
+//   首次借款（newAccountLoan）：「僅可用於提升維持率」不能勾選（還沒有借款，匯入無法提升維持率）
 import { html, useState } from '../../lib/preact.js';
 import {
   FlowPage, AccountPicker, FilterPill, SearchIcon, Checkbox, SelectableItem, StockName, SectionHeader, DetailRow,
   QtyStepper, Button, TotalBar, Sheet, SheetOptions, InfoDialog,
 } from '../../components/index.js';
 import { useStore, updateCollateralDraft, showToast } from '../../store.js';
-import { flowPosition, nextStep, prevStep, flowTitle } from '../../flows/flows.js';
+import { flowPosition, nextStep, prevStep, flowTitle, isFlow } from '../../flows/flows.js';
 import { stockOf, perLotLoan, loanableOf, groupHoldings, HOLDING_SORTS } from '../../lib/calc.js';
 import { twd, num } from '../../lib/format.js';
 import { COPY } from '../../content/copy.js';
@@ -14,9 +16,10 @@ import { COPY } from '../../content/copy.js';
 const PATH = '/collateral-in/select';
 
 function initialSelection(draft, query, importable) {
-  if (draft.selected) return draft.selected;
+  // 從列表的「匯入」進來：重新開始，只勾這一檔
   const h = importable.find((x) => x.code === query.code);
-  return h ? { [h.code]: 1 } : {};
+  if (h) return { [h.code]: 1 };
+  return draft.selected || {};
 }
 
 export function CollateralSelect({ query }) {
@@ -24,16 +27,23 @@ export function CollateralSelect({ query }) {
   const draft = useStore((s) => s.collateralDraft);
   const t = COPY.collateral;
   const groups = groupHoldings(account);
+  const firstLoan = isFlow('newAccountLoan');
+  const importable = firstLoan ? groups.eligible : [...groups.eligible, ...groups.ratioOnly];
+  // 單檔模式：匯入擔保品流程從列表帶 code 進來（返回此頁時從草稿帶回）
+  const singleCode = isFlow('collateralIn') ? query.code ?? draft.single : null;
+  const single = importable.some((h) => h.code === singleCode) ? singleCode : null;
+  const only = (list) => (single ? list.filter((h) => h.code === single) : list);
 
   const [sort, setSort] = useState(draft.sort ?? HOLDING_SORTS[0].value);
-  const [selected, setSelected] = useState(() => initialSelection(draft, query, [...groups.eligible, ...groups.ratioOnly]));
+  const [selected, setSelected] = useState(() => initialSelection(draft, query, importable));
   const [sortOpen, setSortOpen] = useState(false);
   const [breakdownOpen, setBreakdownOpen] = useState(false);
   const [info, setInfo] = useState(null);
 
   const sortDef = HOLDING_SORTS.find((s) => s.value === sort);
-  const eligible = [...groups.eligible].sort(sortDef.fn);
-  const ratioOnly = [...groups.ratioOnly].sort(sortDef.fn); // 僅可提升維持率：可匯入，但不增加可借額度
+  const eligible = only([...groups.eligible].sort(sortDef.fn));
+  const ratioOnly = only([...groups.ratioOnly].sort(sortDef.fn)); // 僅可提升維持率：可匯入，但不增加可借額度
+  const ineligible = single ? [] : groups.ineligible;
   const items = Object.entries(selected).map(([code, lots]) => ({ code, lots }));
   const total = loanableOf(items);
   const allChecked = eligible.length > 0 && eligible.every((h) => selected[h.code]);
@@ -51,7 +61,7 @@ export function CollateralSelect({ query }) {
   const setLots = (code, lots) => setSelected((s) => ({ ...s, [code]: lots }));
 
   const submit = () => {
-    updateCollateralDraft({ selected, sort });
+    updateCollateralDraft({ selected, sort, single });
     nextStep(PATH);
   };
 
@@ -111,16 +121,21 @@ export function CollateralSelect({ query }) {
       <div class="coll-list">
         <div class="coll-toolbar">
           <${AccountPicker} account=${account} onClick=${notAvailable} />
-          <div class="coll-toolbar__filters">
-            <${FilterPill} label=${sortDef.label} onClick=${() => setSortOpen(true)} />
-            <button class="icon-btn" onClick=${notAvailable} aria-label="搜尋"><${SearchIcon} /></button>
-          </div>
+          ${!single &&
+          html`
+            <div class="coll-toolbar__filters">
+              <${FilterPill} label=${sortDef.label} onClick=${() => setSortOpen(true)} />
+              <button class="icon-btn" onClick=${notAvailable} aria-label="搜尋"><${SearchIcon} /></button>
+            </div>
+          `}
         </div>
 
         <div class="coll-groups">
           <!-- 可借貸 -->
+          ${(!single || eligible.length > 0) &&
+          html`
           <section class="coll-group">
-            ${groupHead('eligible', eligible.length, html`
+            ${groupHead('eligible', eligible.length, !single && html`
               <${Checkbox} checked=${allChecked} disabled=${!eligible.length} onChange=${toggleAll} label="全選可借貸" />
             `)}
             <div class="card card--full coll-card">
@@ -137,33 +152,41 @@ export function CollateralSelect({ query }) {
               )}
             </div>
           </section>
+          `}
 
           <!-- 僅可用於提升維持率 -->
           ${ratioOnly.length > 0 &&
           html`
             <section class="coll-group">
               ${groupHead('ratioOnly', ratioOnly.length)}
-              <div class="card card--full coll-card">
-                ${ratioOnly.map(
-                  (h) => html`
-                    <${SelectableItem} checked=${!!selected[h.code]} onChange=${(on) => toggle(h.code, on)} label=${stockOf(h.code).name}>
-                      <${StockName} inline name=${stockOf(h.code).name} code=${h.code} />
-                      ${lotsRow(h)}
-                      ${qtyRow(h)}
-                    <//>
-                  `
+              <div class=${'card card--full coll-card' + (firstLoan ? ' coll-card--disabled' : '')}>
+                ${ratioOnly.map((h) =>
+                  firstLoan
+                    ? html`
+                        <${SelectableItem} disabled label=${stockOf(h.code).name}>
+                          <${StockName} inline name=${stockOf(h.code).name} code=${h.code} />
+                          ${lotsRow(h)}
+                        <//>
+                      `
+                    : html`
+                        <${SelectableItem} checked=${!!selected[h.code]} onChange=${(on) => toggle(h.code, on)} label=${stockOf(h.code).name}>
+                          <${StockName} inline name=${stockOf(h.code).name} code=${h.code} />
+                          ${lotsRow(h)}
+                          ${qtyRow(h)}
+                        <//>
+                      `
                 )}
               </div>
             </section>
           `}
 
           <!-- 無法作為擔保品 -->
-          ${groups.ineligible.length > 0 &&
+          ${ineligible.length > 0 &&
           html`
             <section class="coll-group">
-              ${groupHead('ineligible', groups.ineligible.length)}
+              ${groupHead('ineligible', ineligible.length)}
               <div class="card card--full coll-card coll-card--disabled">
-                ${groups.ineligible.map(
+                ${ineligible.map(
                   (h) => html`
                     <${SelectableItem} disabled label=${stockOf(h.code).name}>
                       <${StockName} inline name=${stockOf(h.code).name} code=${h.code} />

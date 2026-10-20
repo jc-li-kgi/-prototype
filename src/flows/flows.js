@@ -71,7 +71,8 @@ export function entryHome() {
  */
 export function startFlow(flowId, { query, returnTo } = {}) {
   const from = returnTo || location.hash.slice(1) || entryHome();
-  setState({ flow: flowId, flowReturn: from });
+  // 每次開始流程都從空白草稿開始，避免帶到上次沒完成的資料
+  setState({ flow: flowId, flowReturn: from, draft: {}, collateralDraft: {}, repayDraft: {} });
   const qs = query ? '?' + new URLSearchParams(query) : '';
   navigate(FLOWS[flowId].steps[0].path + qs);
 }
