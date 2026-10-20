@@ -1,12 +1,14 @@
 // 股票借貸明細：借還款紀錄 / 擔保品 / 對帳單
 // 網址：#/records?tab=loans|collateral|statement
 //   借還款紀錄可再帶 &sub=borrow|repay&open=紀錄編號（展開該筆）；擔保品可再帶 &sub=pledged|unpledged|history
+//   &back=返回頁：明細頁屬於專區，預設返回專區（例如從完成頁進來，按返回回專區，不會回到完成頁）；
+//   從帳務 › 授信管理進來時帶 back=/account
 // 頁面負責組合各功能模組（features 之間不互相 import）
 import { html, useState } from '../lib/preact.js';
 import { PageHeader, TextTabs, SegmentedTabs, SearchField, Button, InfoLabel, EmptyState } from '../components/index.js';
 import { useStore } from '../store.js';
 import { navigate } from '../router.js';
-import { startFlow, entryHome } from '../flows/flows.js';
+import { startFlow } from '../flows/flows.js';
 import { groupHoldings, stockOf } from '../lib/calc.js';
 import { COPY } from '../content/copy.js';
 import { LoanRecordList } from '../features/records/LoanRecordList.js';
@@ -25,8 +27,9 @@ export function LendingRecords({ query }) {
   const [keyword, setKeyword] = useState('');
   const [repayLoan, setRepayLoan] = useState(null); // 正在選擇還款方式的借款
 
-  const back = () => (history.length > 1 ? history.back() : navigate(entryHome()));
-  const switchTab = (key) => navigate(`/records?tab=${key}`, { replace: true });
+  const parent = query.back || '/lending-zone';
+  const back = () => navigate(parent, { replace: true });
+  const switchTab = (key) => navigate(`/records?tab=${key}${query.back ? `&back=${query.back}` : ''}`, { replace: true });
 
   return html`
     <div class="page records-page">

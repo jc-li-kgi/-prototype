@@ -5,8 +5,8 @@ import { showToast } from '../../store.js';
 import { navigate } from '../../router.js';
 import { COPY } from '../../content/copy.js';
 
-// 對應 COPY.hub.services 的順序
-const TARGETS = ['/records?tab=loans', '/records?tab=collateral', '/records?tab=statement'];
+// 對應 COPY.hub.services 的順序；back=/account：明細頁按返回回到帳務
+const TARGETS = ['/records?tab=loans&back=/account', '/records?tab=collateral&back=/account', '/records?tab=statement&back=/account'];
 
 export function MoreServices({ showZoneLink = true }) {
   const t = COPY.hub;
