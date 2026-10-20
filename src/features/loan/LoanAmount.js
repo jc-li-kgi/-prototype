@@ -12,7 +12,6 @@ import { twd, pct, num } from '../../lib/format.js';
 import { COPY } from '../../content/copy.js';
 
 const PATH = '/loan/amount';
-const DEFAULT_AMOUNT = 20000;
 
 export function LoanAmount() {
   const firstLoan = isFlow('newAccountLoan');
@@ -21,12 +20,13 @@ export function LoanAmount() {
   const t = COPY.loan;
   const range = loanRange(account);
 
-  const [amount, setAmount] = useState(clampAmount(draft.amount ?? DEFAULT_AMOUNT, range));
+  // 不預帶金額：未填時為 null，顯示 placeholder；從確認頁返回時帶回已填的金額
+  const [amount, setAmount] = useState(draft.amount != null ? clampAmount(draft.amount, range) : null);
   const [purpose, setPurpose] = useState(draft.purpose ?? '');
   const [info, setInfo] = useState(null);
 
   // 必填都完成才能按下一步（不採用點擊後才顯示錯誤）
-  const canSubmit = Boolean(purpose) && range.max >= range.min;
+  const canSubmit = Boolean(purpose) && amount != null && range.max >= range.min;
 
   const submit = () => {
     updateDraft({ amount, purpose });
@@ -70,6 +70,7 @@ export function LoanAmount() {
             label=${t.amount}
             prefix="TWD"
             value=${amount}
+            placeholder=${t.amountPlaceholder}
             onChange=${setAmount}
             ...${range}
             action=${{ label: t.limitLink, onClick: () => setInfo(t.limitSheet) }}
@@ -79,7 +80,7 @@ export function LoanAmount() {
           <${DetailRow}
             label=${t.ratioAfter}
             labelClass="t-body-bold c-primary"
-            value=${pct(maintenanceRatio(account, amount))}
+            value=${amount == null ? pct(null) : pct(maintenanceRatio(account, amount))}
             valueClass="n-subtitle-bold"
             info=${t.ratioSheet}
           />
@@ -90,7 +91,7 @@ export function LoanAmount() {
           title=${t.feeTitle}
           rows=${[
             { label: t.refRate, value: `${+(LOAN_RULES.rate * 100).toFixed(2)}%` },
-            { label: t.halfYearInterest, value: twd(interestFor(amount)) },
+            { label: t.halfYearInterest, value: amount == null ? '--' : twd(interestFor(amount)) },
             { label: t.fee, value: twd(LOAN_RULES.fee), info: t.feeSheet },
           ]}
           note=${t.feeNote}
