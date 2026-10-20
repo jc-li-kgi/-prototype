@@ -635,6 +635,7 @@
 /* ---------- SearchField 搜尋框 ---------- */
 .search-field {
   flex: 1;
+  min-width: 0; /* 讓搜尋框可以縮窄，旁邊的按鈕才不會被擠出畫面 */
   display: flex;
   align-items: center;
   gap: var(--spacing-8);
@@ -645,6 +646,7 @@
 }
 .search-field input {
   flex: 1;
+  width: 0;     /* 不用 input 預設寬度（約 20 個字），由 flex 分配 */
   min-width: 0;
   border: 0;
   outline: 0;

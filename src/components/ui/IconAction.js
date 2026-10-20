@@ -10,7 +10,7 @@ export function IconAction({ icon, label, onClick }) {
   return html`
     <button class="icon-action" onClick=${onClick}>
       <span class="icon-action__circle"><${Icon} name=${icon} tint /></span>
-      <span class="t-body-regular c-primary">${label}</span>
+      <span class="t-caption-regular c-primary">${label}</span>
     </button>
   `;
 }
