@@ -211,6 +211,7 @@ export const COPY = {
     },
     importBtn: '匯入',
     typeLabel: { ratioOnly: '僅可提升維持率', ineligible: '無法作為擔保品' }, // 預估可借總額欄（非可借貸的庫存）
+    detail: { name: '商品名稱', pledgedLots: '已匯入張數', price: '收盤價' }, // 展開明細
     empty: '目前沒有可匯入的庫存',
   },
 
