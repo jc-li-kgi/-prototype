@@ -6,6 +6,7 @@ export const COPY = {
     confirm: '確認',
     done: '完成',
     gotIt: '我知道了',
+    resetDone: '已清除所有測試資料',
   },
 
   // 證券主頁「我的」
