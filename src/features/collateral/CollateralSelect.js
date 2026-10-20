@@ -4,7 +4,7 @@
 //   首次借款（newAccountLoan）：「僅可用於提升維持率」不能勾選（還沒有借款，匯入無法提升維持率）
 import { html, useState } from '../../lib/preact.js';
 import {
-  FlowPage, AccountPicker, FilterPill, SearchIcon, Checkbox, SelectableItem, StockName, SectionHeader, DetailRow,
+  FlowPage, AccountPicker, FilterPill, SearchIcon, CheckboxHeader, SelectableItem, StockName, SectionHeader, DetailRow,
   QtyStepper, Button, TotalBar, Sheet, SheetOptions, InfoDialog,
 } from '../../components/index.js';
 import { useStore, updateCollateralDraft, showToast } from '../../store.js';
@@ -46,7 +46,6 @@ export function CollateralSelect({ query }) {
   const ineligible = single ? [] : groups.ineligible;
   const items = Object.entries(selected).map(([code, lots]) => ({ code, lots }));
   const total = loanableOf(items);
-  const allChecked = eligible.length > 0 && eligible.every((h) => selected[h.code]);
   const notAvailable = () => showToast(COPY.common.notAvailable);
 
   const toggle = (code, on) =>
@@ -56,8 +55,14 @@ export function CollateralSelect({ query }) {
       else delete next[code];
       return next;
     });
-  // 全選：每檔帶入全部可擔保張數
-  const toggleAll = (on) => setSelected(on ? Object.fromEntries(eligible.map((h) => [h.code, h.lots])) : {});
+  // 全選（各群組各自一個）：每檔帶入全部可擔保張數；不影響其他群組的勾選
+  const toggleAll = (list, on) =>
+    setSelected((s) => {
+      const next = { ...s };
+      list.forEach((h) => (on ? (next[h.code] = h.lots) : delete next[h.code]));
+      return next;
+    });
+  const allOf = (list) => list.length > 0 && list.every((h) => selected[h.code]);
   const setLots = (code, lots) => setSelected((s) => ({ ...s, [code]: lots }));
 
   const submit = () => {
@@ -65,16 +70,25 @@ export function CollateralSelect({ query }) {
     nextStep(PATH);
   };
 
-  const groupHead = (key, count, leading) => html`
-    <div class="coll-group__head">
-      <${SectionHeader}
-        title=${`${t.groups[key].title} (${count})`}
-        leading=${leading}
-        desc=${t.groups[key].desc}
-        descClass="t-caption-regular"
-      />
-    </div>
-  `;
+  // 群組標題；給 list 時有全選勾選框（CheckboxHeader）。單檔匯入不顯示
+  const groupHead = (key, count, { list, desc = t.groups[key].desc } = {}) => {
+    if (single) return null;
+    const title = `${t.groups[key].title} (${count})`;
+    return html`
+      <div class="coll-group__head">
+        ${list
+          ? html`<${CheckboxHeader}
+              title=${title}
+              desc=${desc}
+              checked=${allOf(list)}
+              disabled=${!list.length}
+              onChange=${(on) => toggleAll(list, on)}
+              label=${`全選${t.groups[key].title}`}
+            />`
+          : html`<${SectionHeader} title=${title} desc=${desc} descClass="t-caption-regular" />`}
+      </div>
+    `;
+  };
 
   const lotsRow = (h) => html`<${DetailRow} label=${t.availableLots} value=${num(h.lots)} />`;
 
@@ -119,25 +133,24 @@ export function CollateralSelect({ query }) {
       `}
     >
       <div class="coll-list">
-        <div class="coll-toolbar">
-          <${AccountPicker} account=${account} onClick=${notAvailable} />
-          ${!single &&
-          html`
+        <!-- 單檔匯入：只顯示該檔，不需要帳號、排序、搜尋 -->
+        ${!single &&
+        html`
+          <div class="coll-toolbar">
+            <${AccountPicker} account=${account} onClick=${notAvailable} />
             <div class="coll-toolbar__filters">
               <${FilterPill} label=${sortDef.label} onClick=${() => setSortOpen(true)} />
               <button class="icon-btn" onClick=${notAvailable} aria-label="搜尋"><${SearchIcon} /></button>
             </div>
-          `}
-        </div>
+          </div>
+        `}
 
         <div class="coll-groups">
           <!-- 可借貸 -->
           ${(!single || eligible.length > 0) &&
           html`
           <section class="coll-group">
-            ${groupHead('eligible', eligible.length, !single && html`
-              <${Checkbox} checked=${allChecked} disabled=${!eligible.length} onChange=${toggleAll} label="全選可借貸" />
-            `)}
+            ${groupHead('eligible', eligible.length, { list: eligible })}
             <div class="card card--full coll-card">
               ${eligible.map(
                 (h) => html`
@@ -158,7 +171,9 @@ export function CollateralSelect({ query }) {
           ${ratioOnly.length > 0 &&
           html`
             <section class="coll-group">
-              ${groupHead('ratioOnly', ratioOnly.length)}
+              ${firstLoan
+                ? groupHead('ratioOnly', ratioOnly.length)
+                : groupHead('ratioOnly', ratioOnly.length, { list: ratioOnly, desc: t.groups.ratioOnly.descImport })}
               <div class=${'card card--full coll-card' + (firstLoan ? ' coll-card--disabled' : '')}>
                 ${ratioOnly.map((h) =>
                   firstLoan
