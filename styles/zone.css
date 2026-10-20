@@ -29,7 +29,8 @@
 .zone-overview { display: flex; flex-direction: column; gap: var(--spacing-12); padding: 0 var(--spacing-16); }
 
 /* 快捷功能（IconAction × 4） */
-.quick-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-8); padding: 0 var(--spacing-8); }
+.quick-actions { display: flex; justify-content: space-between; padding: 0 var(--spacing-16); }
+.quick-actions .icon-action { width: 60px; } /* 每顆快捷按鈕固定寬 60，平均分布 */
 
 /* 尚可匯入擔保品 */
 .zone-importable { display: flex; flex-direction: column; gap: var(--spacing-12); }

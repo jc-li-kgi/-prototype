@@ -19,7 +19,7 @@ export function ServiceCardList({ items }) {
             <span class="service-card__text">
               <span class="service-card__title">
                 <span class="t-subtitle-bold c-primary">${s.title}</span>
-                <span class="service-card__chevron"><${Icon} name="chevron-forward.svg" size=${16} /></span>
+                <${Icon} name="chevron-forward-24.svg" level="subtitle" />
               </span>
               ${s.desc && html`<span class="t-caption-regular c-secondary">${s.desc}</span>`}
             </span>

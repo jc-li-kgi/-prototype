@@ -19,7 +19,8 @@ import { DetailPanel } from '../ui/DetailPanel.js';
  * >
  *   ${rows.map((r) => html`<ListRow cells=${[…]} … />`)}
  * </ListTable>
- * 欄寬：沒給 width 的欄平分剩餘寬度
+ * 欄寬：沒給 width 的欄平分剩餘寬度；全部都有 width 時，多出的寬度平均分到欄與欄之間
+ *       窄螢幕要能縮的欄用 'minmax(0, 71px)'（最寬 71，不夠時縮小）
  */
 export function ListTable({ columns, expandable = false, sort, onSort, empty, headAlign = 'center', children }) {
   const template = columns.map((c) => c.width || 'minmax(0, 1fr)').join(' ') + (expandable ? ' 24px' : '');
@@ -35,11 +36,11 @@ export function ListTable({ columns, expandable = false, sort, onSort, empty, he
                 ? html`
                     <button class="sort-head" onClick=${() => onSort?.(sort === c.sortKey ? null : c.sortKey)} aria-pressed=${sort === c.sortKey}>
                       <span>${c.label}</span>
-                      <img src="assets/icons/sort.svg" width="6" height="11" alt="" />
+                      <span class="sort-head__icon"><img src="assets/icons/sort.svg" width="6" height="11" alt="" /></span>
                     </button>
                   `
                 : c.info
-                ? html`<${InfoLabel} label=${c.label} labelClass="" info=${c.info} />`
+                ? html`<${InfoLabel} label=${c.label} labelClass="" level="caption" info=${c.info} />`
                 : c.label}
             </span>
           `

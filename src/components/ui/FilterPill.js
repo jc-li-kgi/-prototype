@@ -9,7 +9,7 @@ export function FilterPill({ label, onClick }) {
   return html`
     <button class="filter-pill" onClick=${onClick}>
       <span class="t-body-regular">${label}</span>
-      <${Icon} name="triangle-down.svg" size=${16} tint />
+      <${Icon} name="triangle-down.svg" level="body" tint />
     </button>
   `;
 }

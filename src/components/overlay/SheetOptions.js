@@ -25,7 +25,7 @@ export function SheetOptions({ options, value, onSelect, chevron = false }) {
               <span class="t-subtitle-regular c-primary">${o.label}</span>
               ${o.desc && html`<span class="t-caption-regular c-secondary">${o.desc}</span>`}
             </span>
-            ${chevron && html`<${Icon} name="chevron-forward-24.svg" />`}
+            ${chevron && html`<${Icon} name="chevron-forward-24.svg" level="subtitle" />`}
           </button>
         `
       )}

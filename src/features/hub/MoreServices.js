@@ -23,7 +23,7 @@ export function MoreServices({ showZoneLink = true }) {
           (label, i) => html`
             <button class="more-services__item" onClick=${() => go(TARGETS[i])}>
               <span class="t-subtitle-regular c-primary">${label}</span>
-              <${Icon} name="chevron-forward.svg" size=${16} />
+              <${Icon} name="chevron-forward-24.svg" level="subtitle" />
             </button>
           `
         )}

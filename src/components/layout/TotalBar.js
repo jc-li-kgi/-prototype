@@ -18,9 +18,9 @@ export function TotalBar({ label, info, value, expanded = false, onToggle, child
   return html`
     <div class="total-bar">
       <${InfoLabel} class="c-secondary" label=${label} info=${info} />
-      <button class="total-bar__value" onClick=${onToggle} disabled=${!onToggle} aria-expanded=${onToggle ? expanded : undefined} aria-label=${label + '明細'}>
+      <button class="total-bar__value icon-text--subtitle" onClick=${onToggle} disabled=${!onToggle} aria-expanded=${onToggle ? expanded : undefined} aria-label=${label + '明細'}>
         <span class="n-subtitle-bold c-primary">${value}</span>
-        ${onToggle && html`<${Icon} name=${expanded ? 'chevron-down.svg' : 'chevron-up.svg'} />`}
+        ${onToggle && html`<${Icon} name=${expanded ? 'chevron-down.svg' : 'chevron-up.svg'} level="subtitle" />`}
       </button>
     </div>
     ${expanded && html`<div class="total-bar__detail">${children}</div>`}

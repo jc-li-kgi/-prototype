@@ -12,7 +12,7 @@ export function CollapsibleCard({ title, defaultOpen = true, children }) {
       <button class="collapsible__head" aria-expanded=${open} onClick=${() => setOpen(!open)}>
         <span class="t-subtitle-bold c-primary">${title}</span>
         <span class=${'collapsible__chevron' + (open ? '' : ' collapsible__chevron--closed')}>
-          <${Icon} name="chevron-up.svg" />
+          <${Icon} name="chevron-up.svg" level="subtitle" />
         </span>
       </button>
       ${open && html`<div class="collapsible__body">${children}</div>`}

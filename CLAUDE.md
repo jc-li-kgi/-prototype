@@ -26,6 +26,20 @@
 - 工具 class（`.c-*` 文字顏色、`.nowrap`）放 `styles/utilities.css`，必須在 `index.html` 最後載入，才能覆蓋元件預設色。新增 CSS 檔要放在它前面。
 - 按下 / hover 色依 `Color/color-state-utils.ts` 規則預先算好放 `tokens.css`；停用狀態用 `--color-content-general-disabled` / `--color-container-general-disabled`。
 
+### Icon 尺寸（文字＋icon）
+
+- 用在 text button、下拉選單、ⓘ、› 等「文字旁的 icon」。icon 尺寸跟著**文字層級**，不寫死 px：
+
+  | 文字層級 | 手機（≤768px） | 電腦（>768px） | 文字與 icon 間距 |
+  |---|---|---|---|
+  | Caption | 16 | 16 | 4 |
+  | Body | 16 | 20 | 4 |
+  | Subtitle | 20 | 24 | 前置 icon 8、後置 icon（› ▼）4 |
+
+- 寫法：`<Icon name="…" level="caption|body|subtitle" />`；間距用 `.icon-text--{level}`（Subtitle 前置 icon 再加 `.icon-text--leading`），或在元件 CSS 用 `var(--icon-gap-*)`。token 在 `tokens.css`（`--icon-size-*`、`--icon-gap-*`）。
+- 已套用：InfoLabel（依 labelClass 自動判斷）、FilterPill、PickerField、TotalBar、CollapsibleCard、ServiceCardList、SheetOptions（chevron）、更多服務、首頁快捷功能「自訂」、資產卡。
+- 不適用：頁首 / 導覽列 icon、圓形捷徑 icon、插圖、列表展開箭頭等獨立 icon。
+
 ### 底部按鈕
 
 - **不固定的底部按鈕**一律用 `BottomActions`（FlowPage 的 `actions`、ResultPage 已內建）：

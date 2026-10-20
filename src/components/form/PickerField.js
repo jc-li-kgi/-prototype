@@ -27,7 +27,7 @@ export function PickerField({ label, value, options, onChange, placeholder = 'шл
       ${label && html`<p class="t-body-bold c-primary">${label}</p>`}
       <button class="field__picker" onClick=${() => setOpen(true)}>
         <span class=${'t-subtitle-regular ' + (selected ? 'c-primary' : 'c-tertiary')}>${selected?.label ?? placeholder}</span>
-        <span class="field__picker-icon"><${Icon} name="pull.svg" size=${16} /></span>
+        <${Icon} name="pull.svg" level="subtitle" />
       </button>
       <span class=${'field__line' + (error ? ' field__line--error' : '')} />
       ${error && html`<p class="t-caption-regular field__error">${error}</p>`}

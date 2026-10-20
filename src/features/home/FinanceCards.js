@@ -44,8 +44,10 @@ function FinanceCard({ card, accountId }) {
         <div class="finance-card__top">
           <button class="finance-card__account" onClick=${notAvailable}>
             <span class="finance-card__badge"><${Icon} name=${card.badge} size=${15} /></span>
-            <span class="n-subtitle-regular">${accountId}</span>
-            <${Icon} name="chevron-pull-white.svg" size=${16} />
+            <span class="icon-text--subtitle">
+              <span class="n-subtitle-regular">${accountId}</span>
+              <${Icon} name="chevron-pull-white.svg" level="subtitle" />
+            </span>
           </button>
           <button class="finance-card__expand" onClick=${notAvailable} aria-label="展開">
             <${Icon} name="expand.svg" />
@@ -77,9 +79,9 @@ function FinanceCard({ card, accountId }) {
       </div>
 
       <button class="finance-card__ad" onClick=${notAvailable}>
-        <${Icon} name="invest.svg" />
+        <${Icon} name="invest.svg" level="body" />
         <span class="t-body-regular c-primary">${card.ad}</span>
-        <${Icon} name="chevron-forward-24.svg" />
+        <${Icon} name="chevron-forward-24.svg" level="body" />
       </button>
     </article>
   `;
