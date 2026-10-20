@@ -210,6 +210,7 @@ export const COPY = {
       body: '預估可借總額 = 剩餘可匯入張數 × 每張可借金額，依今日收盤價計算，僅供參考。',
     },
     importBtn: '匯入',
+    typeLabel: { ratioOnly: '僅可提升維持率', ineligible: '無法作為擔保品' }, // 預估可借總額欄（非可借貸的庫存）
     empty: '目前沒有可匯入的庫存',
   },
 
@@ -251,11 +252,6 @@ export const COPY = {
       { key: 'unpledged', label: '未擔保' },
       { key: 'history', label: '歷史紀錄' },
     ],
-    unpledgedHint: '僅顯示可匯入擔保的庫存',
-    unpledgedHintSheet: {
-      title: '可匯入擔保的庫存',
-      body: '僅列出可借貸的庫存。處置股、流動性低等無法作為擔保品的股票不會顯示。',
-    },
     searchPlaceholder: '搜尋產品關鍵字或代碼',
     importCollateral: '匯入擔保品',
     colPledgedLots: '已擔保張數',

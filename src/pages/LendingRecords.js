@@ -5,7 +5,7 @@
 //   從帳務 › 授信管理進來時帶 back=/account
 // 頁面負責組合各功能模組（features 之間不互相 import）
 import { html, useState } from '../lib/preact.js';
-import { PageHeader, TextTabs, SegmentedTabs, SearchField, Button, InfoLabel, EmptyState } from '../components/index.js';
+import { PageHeader, TextTabs, SegmentedTabs, SearchField, Button, EmptyState } from '../components/index.js';
 import { useStore } from '../store.js';
 import { navigate } from '../router.js';
 import { startFlow } from '../flows/flows.js';
@@ -16,6 +16,12 @@ import { RepayMethodSheet } from '../features/repay/RepayMethodSheet.js';
 import { HoldingsTable } from '../features/collateral/HoldingsTable.js';
 import { PledgedList } from '../features/collateral/PledgedList.js';
 import { CollateralHistory } from '../features/collateral/CollateralHistory.js';
+
+// 未擔保：全部庫存，依可借貸 → 僅可提升維持率 → 無法作為擔保品排序
+const allHoldings = (account) => {
+  const g = groupHoldings(account);
+  return [...g.eligible, ...g.ratioOnly, ...g.ineligible];
+};
 
 const matches = (keyword) => (h) => !keyword || stockOf(h.code).name.includes(keyword) || h.code.includes(keyword);
 
@@ -57,11 +63,6 @@ export function LendingRecords({ query }) {
           <div class="records-section__controls">
             <${SegmentedTabs} tabs=${t.collateralTabs} active=${sub} onChange=${setSub} />
 
-            ${sub === 'unpledged' &&
-            html`
-              <${InfoLabel} class="c-secondary" label=${t.unpledgedHint} labelClass="t-caption-regular" info=${t.unpledgedHintSheet} />
-            `}
-
             ${sub !== 'history' &&
             html`
               <div class="records-search">
@@ -78,7 +79,7 @@ export function LendingRecords({ query }) {
           />`}
           ${sub === 'unpledged' &&
           html`<${HoldingsTable}
-            holdings=${groupHoldings(account).eligible.filter(matches(keyword))}
+            holdings=${allHoldings(account).filter(matches(keyword))}
             emptyText=${keyword ? t.emptySearch : COPY.holdings.empty}
           />`}
           ${sub === 'history' && html`<${CollateralHistory} records=${account.collateralRecords} />`}

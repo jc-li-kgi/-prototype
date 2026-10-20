@@ -684,6 +684,7 @@
 .list-table__main {
   display: grid;
   grid-template-columns: var(--list-cols);
+  justify-content: space-between; /* 欄寬都固定時，多出的寬度平均分到欄與欄之間，最右欄仍貼齊右邊 */
   align-items: center;
   gap: var(--spacing-4);
 }
@@ -708,6 +709,8 @@
 .list-table__footer--end { justify-content: flex-end; padding-right: calc(24px + var(--spacing-8)); } /* 與箭頭欄左緣對齊 */
 .list-table__footer--between { justify-content: space-between; }
 .sort-head { display: inline-flex; align-items: flex-end; gap: var(--spacing-4); color: inherit; text-align: left; }
+/* 排序 icon 與「最後一行文字」垂直置中：單行表頭置中，兩行表頭對齊第二行 */
+.sort-head__icon { display: inline-flex; align-items: center; height: calc(1em * var(--kgi-font-auto-caption-regular-tc-line-height)); }
 
 /* 小尺寸膠囊按鈕（列表內） */
 .btn-capsule--sm { padding: var(--spacing-4) var(--spacing-16); }
