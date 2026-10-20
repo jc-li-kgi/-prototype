@@ -143,7 +143,11 @@ export const COPY = {
     sortTitle: '選擇排序方式',
     groups: {
       eligible: { title: '可借貸' },
-      ratioOnly: { title: '僅可用於提升維持率', desc: '無法借款，借款後，可以匯入提高擔保品市值，提升維持率' },
+      ratioOnly: {
+        title: '僅可用於提升維持率',
+        desc: '無法借款，借款後，可以匯入提高擔保品市值，提升維持率', // 首次借款（不可勾選）
+        descImport: '可以匯入提高擔保品市值，提升維持率',            // 已借款，可勾選匯入
+      },
       ineligible: { title: '無法作為擔保品', desc: '非上市櫃、處置股、流動性低，無法轉為擔保品' },
     },
     availableLots: '可擔保張數',

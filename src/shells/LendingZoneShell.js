@@ -100,8 +100,6 @@ function ZoneIntro({ account }) {
     .sort((a, b) => b.loanable - a.loanable)
     .slice(0, PICKS_COUNT);
 
-  const borrow = (code) => startFlow('newAccountLoan', code ? { query: { code } } : undefined);
-
   return html`
     <div class="zone-intro">
       <${LoanIntroCard} />
@@ -121,7 +119,6 @@ function ZoneIntro({ account }) {
                 { label: t.pickLoanable, value: wan(p.loanable), unit: t.wan, highlight: true },
                 { label: t.introDailyInterest, value: num(dailyInterest(p.loanable)), unit: 'TWD' },
               ]}
-              onClick=${() => borrow(p.code)}
             />
           `
         )}
