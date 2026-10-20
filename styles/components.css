@@ -116,7 +116,7 @@
 
 /* ---------- BottomActions 頁面底部按鈕區（不固定） ----------
  * 與內容至少 32（padding-top）；內容不滿一屏時 margin-top: auto 把按鈕推到底
- * 頁尾：流程申請 48、資訊瀏覽 40（Guideline Level 1），含 iPhone 安全區
+ * 距離畫面底部 48（iPhone 安全區 34 包含在 48 內，取兩者較大值）
  * 父層必須是撐滿高度的直式 flex 容器，且不要再加 gap（距離由這裡負責）
  */
 .bottom-actions {
@@ -124,9 +124,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-16);
-  padding: var(--spacing-32) var(--spacing-16) calc(var(--spacing-48) + env(safe-area-inset-bottom));
+  padding: var(--spacing-32) var(--spacing-16) max(var(--spacing-48), env(safe-area-inset-bottom));
 }
-.bottom-actions--browse { padding-bottom: calc(var(--spacing-40) + env(safe-area-inset-bottom)); }
 
 /* ---------- Form：PickerField / AmountField（Guideline：標題與輸入框 8px） ---------- */
 .field { display: flex; flex-direction: column; gap: var(--spacing-8); }

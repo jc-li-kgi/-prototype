@@ -58,7 +58,7 @@ export function LendingZoneShell() {
 
       ${!account.opened &&
       html`
-        <${BottomActions} context="browse">
+        <${BottomActions}>
           <${Button} onClick=${() => startFlow('newAccountLoan')}>${t.borrowNow}<//>
         <//>
       `}
