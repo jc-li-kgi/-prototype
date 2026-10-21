@@ -85,7 +85,7 @@
 - **返回路徑**：股票借貸明細（`/records`）屬於專區，按返回一律回專區（包括從完成頁進來時，不會回到完成頁）；從帳務 › 授信管理進來時網址帶 `back=/account`，返回帳務。切換頁籤會保留 `back`。
 - **申請流程的按鈕狀態**：必填資訊沒完成時，下一步 / 送出按鈕一律 `disabled`，不採用「點擊後才跳錯誤訊息」。會影響能否送出的狀態（例如扣款帳戶餘額不足）直接顯示在欄位旁。
 - 認識股票借貸介紹頁：`features/intro/IntroSheet`（全螢幕從底部開啟，右上 ✕ 關閉回原頁，不是獨立路由）。未借款第一次進專區自動開啟一次（`store.introShown`，每個任務重新計算）；專區右上產品說明、帳務「認識股票借貸」也可開啟。本次測試不開放開戶：開戶相關按鈕顯示未開放。
-- 可借貸額度試算：專區「試算」頁籤（`features/simulate/SimulateForm`，草稿 `store.simDraft`；只剩一檔時「移除」停用）→ `/simulate/result`（返回帶 `?tab=simulate`）。公式在 `calc.js` 的 `simulate()`；追繳線 / 補足線在 `LOAN_RULES.callRatio / recoverRatio`。圖表（`RatioChart`）y 軸 120%～至少 160%、每 10% 一條線；x 軸右端 = 初始維持率跌到 120% 的跌幅（線落在右下角），刻度每 10%；左右拖拉圓點（每次 1%）查看維持率，預設停在起點（初始維持率）。表單下方「自選擔保品」直接開選擇標的彈窗（選完新增一列）、「使用庫存試算」本次測試不開放。結果頁「立即借貸」：未借款走 `newAccountLoan`（預先勾選有庫存的試算標的），已借款走 `existingLoan`。
+- 可借貸額度試算：專區「試算」頁籤（`features/simulate/SimulateForm`，草稿 `store.simDraft`；只剩一檔時「移除」停用）→ `/simulate/result`（返回帶 `?tab=simulate`）。公式在 `calc.js` 的 `simulate()`；追繳線 / 補足線在 `LOAN_RULES.callRatio / recoverRatio`。圖表（`RatioChart`）y 軸 120%～至少 160%、每 10% 一條線；x 軸右端 = 初始維持率跌到 120% 的跌幅（線落在右下角），刻度每 10%；左右拖拉圓點（每次 1%）查看維持率，手指在圖上時頁面不捲動（`touch-action: none`），預設停在起點（初始維持率）。表單下方「自選擔保品」直接開選擇標的彈窗（選完新增一列）、「使用庫存試算」本次測試不開放。結果頁「立即借貸」：未借款走 `newAccountLoan`（預先勾選有庫存的試算標的），已借款走 `existingLoan`。
 - 確認資料頁的送出按鈕一律用 `COPY.common.submit`（確認送出）。
 - 新頁面要在 `src/routes.js` 註冊。
 - 還款：借款紀錄到期前 `DUE_SOON_DAYS`（20）天顯示即將到期＋展延 / 還款；還款 → 選擇還款方式（`features/repay/RepayMethodSheet`，由專區 shell 與明細頁放置；專區快捷功能「還款」也會開啟）→ `cashRepay` 流程，送出 `repay()`；試算在 `calc.js` 的 `repayPlan`。
