@@ -1,0 +1,125 @@
+/* ===== 認識股票借貸（介紹頁）｜情境：資訊瀏覽（區塊間距 32）｜Figma 1804:138177 ===== */
+/* 全螢幕從底部往上開啟（蓋在專區 / 帳務上），內容自己捲動 */
+.intro-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* 內容多高就多高（不被拉成一屏高），白底與置頂標題才會跟著捲動 */
+  animation: slide-up 0.3s ease;
+}
+.intro-page {
+  width: 100%;
+  max-width: var(--app-max-width);
+  min-height: 100%;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding-top: env(safe-area-inset-top);
+  background: var(--color-surface-white);
+}
+/* 頁首：只有右側「關閉說明頁」，捲動時固定在上方（Figma：白底、PopOver 陰影、內距 16） */
+.intro-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  justify-content: flex-end;
+  padding: var(--spacing-16);
+  background: var(--color-surface-white);
+  box-shadow: var(--shadow-popover);
+}
+
+/* 版頭：文案 + 插圖 */
+.intro-banner { display: flex; flex-direction: column; align-items: center; padding-top: var(--spacing-28); text-align: center; }
+.intro-banner h1 { margin: 0; padding: 0 var(--spacing-16); }
+.intro-banner__image { width: 100%; height: auto; aspect-ratio: 375 / 148; object-fit: cover; object-position: top; } /* Figma 插圖框 375×148，超出部分裁掉 */
+
+/* 主頁籤（icon + 文字）：股票借貸 / 雙向借券 */
+.intro-tabs { display: flex; padding: 0 var(--spacing-16); } /* 緊接在插圖下方（Figma） */
+.intro-tabs__item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-4);
+  padding: var(--spacing-8);
+  border-bottom: 2px solid transparent;
+  color: var(--color-content-general-tertiary);
+}
+.intro-tabs__item--active { color: var(--color-content-general-active); border-bottom-color: var(--color-container-general-active-primary); }
+
+.intro-content { display: flex; flex-direction: column; gap: var(--spacing-32); padding: var(--spacing-24) var(--spacing-16) 0; }
+.intro-section { display: flex; flex-direction: column; gap: var(--spacing-16); }
+.intro-section h2 { margin: 0; }
+.intro-section__title { text-align: center; }
+.intro-cards { display: flex; flex-direction: column; gap: var(--spacing-16); }
+
+/* 白底上的卡片：PopOver 陰影；內距 24 × 16（Figma） */
+.intro-card {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-24);
+  padding: var(--spacing-24) var(--spacing-16);
+  box-shadow: var(--shadow-popover);
+}
+
+/* 股票借貸是什麼？（淺藍卡） */
+.intro-what { display: flex; flex-direction: column; gap: var(--spacing-24); padding: var(--spacing-24) var(--spacing-16); background: var(--color-container-card-blue); }
+.intro-what__item { display: flex; flex-direction: column; gap: var(--spacing-8); }
+.intro-what__title { display: flex; align-items: center; justify-content: center; gap: var(--spacing-4); }
+
+/* 投資人經驗：標籤 + 時間軸 */
+.intro-case { display: flex; flex-direction: column; align-items: flex-start; gap: var(--spacing-8); }
+.intro-timeline { position: relative; display: flex; flex-direction: column; gap: var(--spacing-24); margin: 0; padding: 0; list-style: none; width: 100%; }
+.intro-timeline::before { /* 直線：從第一個點到最後一個點，淡出 */
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 10px;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(var(--color-sky-blue-300), transparent);
+}
+.intro-timeline__item { position: relative; display: flex; flex-direction: column; gap: var(--spacing-4); }
+.intro-timeline__title { display: flex; align-items: center; gap: var(--spacing-16); }
+.intro-timeline__dot { flex-shrink: 0; margin: -2.4px -3.2px -4px; } /* 圓點 12px，svg 含陰影外擴（Figma inset） */
+.intro-timeline__desc { padding-left: var(--spacing-28); }
+.intro-entrance { display: flex; align-items: center; gap: var(--spacing-12); }
+.intro-case2__action { margin-top: var(--spacing-8); }
+.intro-case2__action img { position: absolute; right: 0; bottom: var(--spacing-4); } /* 疊在卡片右下（Figma） */
+
+/* 風險：圖表 + 說明 + 右下插圖 */
+.intro-risk { gap: var(--spacing-12); padding: var(--spacing-20) var(--spacing-16); } /* Figma 內距 20×16、間距 14（無此 token，用 12） */
+.intro-risk__chart { width: 100%; height: auto; margin-bottom: var(--spacing-4); }
+.intro-risk > p,
+.intro-risk__more { max-width: 262px; position: relative; z-index: 1; } /* 不壓到右下插圖（Figma 文字寬 262） */
+.intro-risk__more { display: flex; flex-direction: column; align-items: flex-start; }
+.intro-risk__image { position: absolute; right: 0; bottom: 0; }
+
+/* 三大輔助工具 */
+.intro-tools__title { display: flex; align-items: center; justify-content: center; gap: var(--spacing-8); }
+.intro-tools { display: flex; flex-direction: column; gap: var(--spacing-16); margin: 0; padding: 0; list-style: none; }
+.intro-tools__item { display: flex; align-items: flex-start; gap: var(--spacing-4); }
+.intro-tools__check { flex-shrink: 0; margin-top: var(--spacing-2); }
+.intro-tools__item > div { display: flex; flex-direction: column; gap: var(--spacing-4); }
+
+/* 文字中的連結（立即試算、前往申請） */
+.intro-link { display: inline-flex; color: var(--color-content-general-active); }
+
+/* 我要如何操作 */
+.intro-how { gap: var(--spacing-16); }
+.intro-how__image { align-self: center; }
+.intro-how__text { display: flex; flex-direction: column; gap: var(--spacing-4); }
+.intro-how__text > p:first-child { text-align: center; }
+.intro-how__hint { display: flex; align-items: center; gap: var(--spacing-4); }
+
+/* 常見問題 */
+.intro-faq { display: flex; flex-direction: column; }
+
+.intro-footer { text-align: center; }

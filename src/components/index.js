@@ -25,6 +25,7 @@ export { StockPickCard } from './ui/StockPickCard.js';
 export { ServiceCardList } from './ui/ServiceCardList.js';
 export { AccountPicker } from './ui/AccountPicker.js';
 export { CheckboxHeader } from './ui/CheckboxHeader.js';
+export { Accordion } from './ui/Accordion.js';
 export { Checkbox } from './ui/Checkbox.js';
 export { FilterPill } from './ui/FilterPill.js';
 export { Tag } from './ui/Tag.js';
