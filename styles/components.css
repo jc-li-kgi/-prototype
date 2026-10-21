@@ -669,15 +669,16 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-8);
-  height: 40px;
-  padding: 0 var(--spacing-16);
+  padding: var(--spacing-8) var(--spacing-16);
   border-radius: var(--radius-full);
-  background: var(--color-surface-white);
+  background: var(--color-container-general-option-selected-blue);
 }
+.search-field--on-surface { background: var(--color-surface-white); }
 .search-field input {
   flex: 1;
   width: 0;     /* 不用 input 預設寬度（約 20 個字），由 flex 分配 */
   min-width: 0;
+  padding: 0;
   border: 0;
   outline: 0;
   background: transparent;

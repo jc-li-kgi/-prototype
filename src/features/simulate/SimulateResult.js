@@ -64,6 +64,7 @@ export function SimulateResult() {
               <p class="t-body-regular c-warning">${t.callRepay(num(r.repayOnCall))[0]}<br />${t.callRepay(num(r.repayOnCall))[1]}</p>
             </div>
             <${RatioChart} ratio=${r.ratio} />
+            <p class="t-caption-regular c-tertiary">${t.chartHint}</p>
             <p class="t-body-regular c-secondary">${t.riskNote}</p>
           </div>
         <//>

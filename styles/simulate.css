@@ -5,7 +5,8 @@
 .sim-form__intro { padding: 0 var(--spacing-16); }
 .sim-item { display: flex; flex-direction: column; gap: var(--spacing-24); padding: var(--spacing-16); } /* 操作欄位間距 24 */
 .sim-item__head { display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-8); margin-bottom: calc(var(--spacing-8) - var(--spacing-24)); } /* 標題→選單 8 */
-.sim-form__add { display: flex; justify-content: center; }
+.sim-form__actions { display: flex; align-items: center; justify-content: center; gap: var(--spacing-12); } /* Figma Text button/Columns */
+.sim-form__divider { width: 1px; height: var(--spacing-16); background: var(--color-container-general-divider); }
 
 /* 選擇可擔保標的（底部彈窗） */
 .stock-picker__search { padding-bottom: var(--spacing-16); }
@@ -38,18 +39,14 @@
 .ratio-chart__label { fill: var(--color-content-general-secondary); }
 .ratio-chart__line { fill: none; stroke: var(--color-content-general-primary); stroke-width: 1.5; }
 .ratio-chart__line--danger { stroke: var(--color-content-semantic-warning); }
-.ratio-chart__point { cursor: pointer; outline: none; }
-.ratio-chart__hit { fill: transparent; }
-.ratio-chart__halo { fill: var(--color-content-general-primary); fill-opacity: 0; }
+.ratio-chart__svg { touch-action: pan-y; cursor: pointer; user-select: none; } /* 左右拖拉；上下仍可捲動頁面 */
 .ratio-chart__dot { fill: var(--color-surface-white); stroke: var(--color-content-general-primary); stroke-width: 1.5; }
-/* 130% 追繳點一直以橘色實心＋光暈標示（Figma） */
-.ratio-chart__point--danger .ratio-chart__dot { fill: var(--color-content-semantic-warning); stroke: var(--color-content-semantic-warning); }
-.ratio-chart__point--danger .ratio-chart__halo { fill: var(--color-content-semantic-warning); fill-opacity: 0.2; }
-.ratio-chart__point--active .ratio-chart__halo { fill-opacity: 0.2; }
-.ratio-chart__point--active .ratio-chart__dot { fill: var(--color-content-general-primary); }
-.ratio-chart__point--active.ratio-chart__point--danger .ratio-chart__halo,
-.ratio-chart__point--active.ratio-chart__point--danger .ratio-chart__dot { fill: var(--color-content-semantic-warning); }
-.ratio-chart__point:focus-visible .ratio-chart__halo { fill-opacity: 0.3; }
+.ratio-chart__handle { outline: none; cursor: grab; }
+.ratio-chart__halo { fill: var(--color-container-general-active-corporate); fill-opacity: 0.2; }
+.ratio-chart__knob { fill: var(--color-container-general-active-corporate); }
+.ratio-chart__handle--danger .ratio-chart__halo,
+.ratio-chart__handle--danger .ratio-chart__knob { fill: var(--color-content-semantic-warning); }
+.ratio-chart__handle:focus-visible .ratio-chart__halo { fill-opacity: 0.4; }
 .ratio-chart__call { position: absolute; left: var(--spacing-4); pointer-events: none; }
 /* 數值框：在點的右側（垂直置中）；靠右的點改放左側 */
 .ratio-chart__tip {

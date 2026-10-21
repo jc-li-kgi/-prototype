@@ -1,11 +1,13 @@
-// 維持率與市值關係圖（可點 4 個點查看）｜Figma 3139:188990 › 追繳評估圖表
-// 以 y 軸（維持率）為基準取點：起點（初始維持率）、160%、150%、140%、130%（追繳線）
-//   每個點顯示「維持率降到這裡時，股票市值跌了多少」，重點是 130% 追繳點
+// 維持率與市值關係圖（沿著線拖拉查看）｜Figma 3139:188990 › 追繳評估圖表
+// 在圖上左右拖拉（或點一下），圓點沿著線移動，每次 1% 市值跌幅，顯示該跌幅下的維持率
+//   預設停在 130% 追繳點；線上只標起點，中間不放節點
+//   鍵盤：圓點聚焦後用 ← → 移動
 // y 軸：下緣固定 120%，上緣至少 160%（Figma），起始維持率更高時往上延伸，每 10% 一條線
-//   兩軸都固定比例（每 10% 維持率 42px、每 10% 跌幅 40px），所以線是同一斜率的直線
-// x 軸：市值跌幅 0 ~ -40%，整數刻度；點落在刻度之間沒關係
+//   y 軸固定比例（每 10% 維持率 42px），所以線是同一斜率的直線
+// x 軸：市值跌幅 0 ~（初始維持率跌到 120% 的跌幅），線剛好落在右下角
+//   成數 60%、初始維持率 166% 時 = 0 ~ -28%；刻度每 10% 一個（整數），點落在刻度之間沒關係
 // 追繳線以下（< 130%）為橘色區，線條在追繳點之後改為橘色
-import { html, useState } from '../../lib/preact.js';
+import { html, useState, useRef } from '../../lib/preact.js';
 import { LOAN_RULES } from '../../lib/calc.js';
 import { COPY } from '../../content/copy.js';
 
@@ -14,9 +16,6 @@ const PLOT_W = 265;     // 格線寬，右側放百分比
 const ROW = 42;         // 每 10% 的高度（Figma）
 const PAD_TOP = 32;     // 起點在最上面一條線上方時的空間
 const X0 = 68;          // 市值 0% 的 x（左邊留給「市值(％)」）
-const X_PER_10 = 40;    // 每 -10% 的距離
-const TICKS = [0, 0.1, 0.2, 0.3, 0.4];
-const xOf = (drop) => X0 + drop * 10 * X_PER_10;
 const LEVELS = [160, 150, 140, 130]; // 起點之外可查看的維持率
 const MIN_TOP = 160;
 const BOTTOM = 120;
@@ -25,9 +24,38 @@ const BOTTOM = 120;
 export function RatioChart({ ratio }) {
   const t = COPY.simulate;
   const call = LOAN_RULES.callRatio;
+  // x 軸右端 = 維持率跌到 y 軸下緣（120%）時的市值跌幅 → 線對到右下角
+  const dropEnd = 1 - BOTTOM / ratio;
+  const xOf = (drop) => X0 + (drop / dropEnd) * (PLOT_W - X0);
+  const ticks = [];
+  for (let d = 0; d <= dropEnd + 1e-9; d += 0.1) ticks.push(d);
   // 點：起點 + 低於起點的 160 / 150 / 140 / 130%；drop = 維持率降到該值時的市值跌幅
   const points = [{ level: ratio, drop: 0 }, ...LEVELS.filter((v) => v < ratio).map((v) => ({ level: v, drop: 1 - v / ratio }))];
-  const [sel, setSel] = useState(0);
+  // 拖拉的位置：市值跌幅（整數 %），0 ~ maxPct
+  //   預設停在追繳點（130%），一打開就看到「跌多少會被追繳」；起始維持率已低於追繳線時停在起點
+  const maxPct = Math.floor(dropEnd * 100 + 1e-9);
+  const [pct, setPct] = useState(Math.max(0, Math.round((1 - call / ratio) * 100)));
+  const svgRef = useRef(null);
+  const dragging = useRef(false);
+  const clampPct = (v) => Math.min(maxPct, Math.max(0, v));
+  const pctFromEvent = (e) => {
+    const box = svgRef.current.getBoundingClientRect();
+    const x = ((e.clientX - box.left) / box.width) * W;
+    return clampPct(Math.round(((x - X0) / (PLOT_W - X0)) * dropEnd * 100));
+  };
+  const onDown = (e) => {
+    dragging.current = true;
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+    setPct(pctFromEvent(e));
+  };
+  const onMove = (e) => dragging.current && setPct(pctFromEvent(e));
+  const onUp = () => (dragging.current = false);
+  const onKey = (e) => {
+    const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+    if (!step) return;
+    e.preventDefault();
+    setPct((v) => clampPct(v + step));
+  };
 
   // 起點可以略高於最上面一條線（Figma：166% 在 160% 線上方），超過 7% 才多加一條
   const top = Math.max(MIN_TOP, Math.ceil((ratio - 7) / 10) * 10);
@@ -41,17 +69,28 @@ export function RatioChart({ ratio }) {
   const plotBottom = yOf(bottom);
   const H = plotBottom + 32;
 
-  // 線：經過各點到 130%，之後延伸到格線右端（橘色）
-  const endLevel = ratio * (1 - (PLOT_W - X0) / (10 * X_PER_10));
+  // 線：經過各點到 130%，之後延伸到右下角（橘色）
+  const endLevel = BOTTOM;
   const p = (level) => `${xAt(level)},${yAt(level)}`;
-  const selPoint = points[sel];
-  const selDrop = selPoint.drop;
-  const selRatio = Math.floor(selPoint.level); // 維持率一律無條件捨去（同 calc.maintenanceRatio）
+  const selLevel = ratio * (1 - pct / 100);
+  const selRatio = Math.floor(selLevel + 1e-9); // 維持率一律無條件捨去（同 calc.maintenanceRatio）；1e-9 避免 130 算成 129.999
   const danger = selRatio <= call;
+  const selX = xOf(pct / 100);
+  const selY = yOf(selLevel);
 
   return html`
     <div class="ratio-chart">
-      <svg viewBox=${`0 0 ${W} ${H}`} width="100%" role="img" aria-label="維持率與市值關係">
+      <svg
+        ref=${svgRef}
+        class="ratio-chart__svg"
+        viewBox=${`0 0 ${W} ${H}`}
+        width="100%"
+        aria-label="維持率與市值關係"
+        onPointerDown=${onDown}
+        onPointerMove=${onMove}
+        onPointerUp=${onUp}
+        onPointerCancel=${onUp}
+      >
         <defs>
           <clipPath id="ratio-chart-plot"><rect x="0" y="0" width=${PLOT_W} height=${plotBottom + 1} /></clipPath>
         </defs>
@@ -75,22 +114,24 @@ export function RatioChart({ ratio }) {
 
         <!-- x 軸 -->
         <text class="ratio-chart__label t-caption-regular" x="0" y=${plotBottom + 22}>${t.chartX}</text>
-        ${TICKS.map(
+        ${ticks.map(
           (d) => html`<text class="ratio-chart__label n-caption-regular" x=${xOf(d)} y=${plotBottom + 22} text-anchor="middle">${d ? `-${Math.round(d * 100)}` : '0'}</text>`
         )}
 
-        <!-- 可點的 4 個點（依維持率取點） -->
-        ${points.map(
-          ({ level, drop }, i) => html`
-            <g class=${'ratio-chart__point' + (i === sel ? ' ratio-chart__point--active' : '') + (level <= call ? ' ratio-chart__point--danger' : '')}
-              role="button" tabindex="0" aria-label=${`${t.tipDrop(Math.round(drop * 100))}，${t.tipRatio(Math.floor(level))}`}
-              onClick=${() => setSel(i)} onKeyDown=${(e) => (e.key === 'Enter' || e.key === ' ') && setSel(i)}>
-              <circle class="ratio-chart__hit" cx=${xAt(level)} cy=${yAt(level)} r="14" />
-              <circle class="ratio-chart__halo" cx=${xAt(level)} cy=${yAt(level)} r="7" />
-              <circle class="ratio-chart__dot" cx=${xAt(level)} cy=${yAt(level)} r="4" />
-            </g>
-          `
-        )}
+        <!-- 起點（中間不放節點） -->
+        <circle class="ratio-chart__dot" cx=${xAt(ratio)} cy=${yAt(ratio)} r="4" />
+
+        <!-- 拖拉的圓點｜Figma .Base/Line dots-Desktop/Mobile：外圈 r7 20%、內圈 r4 實心 -->
+        <g
+          class=${'ratio-chart__handle' + (danger ? ' ratio-chart__handle--danger' : '')}
+          role="slider" tabindex="0"
+          aria-valuemin="0" aria-valuemax=${maxPct} aria-valuenow=${pct}
+          aria-valuetext=${`${t.tipDrop(pct)}，${t.tipRatio(selRatio)}`}
+          onKeyDown=${onKey}
+        >
+          <circle class="ratio-chart__halo" cx=${selX} cy=${selY} r="7" />
+          <circle class="ratio-chart__knob" cx=${selX} cy=${selY} r="4" />
+        </g>
       </svg>
 
       <!-- 追繳說明（疊在橘色區上） -->
@@ -98,12 +139,12 @@ export function RatioChart({ ratio }) {
         ${t.chartCall(call, LOAN_RULES.recoverRatio)[0]}<br />${t.chartCall(call, LOAN_RULES.recoverRatio)[1]}
       </p>
 
-      <!-- 選中點的數值 -->
+      <!-- 圓點位置的數值 -->
       <div
-        class=${'ratio-chart__tip' + (xAt(selPoint.level) > W / 2 ? ' ratio-chart__tip--left' : '')}
-        style=${`left:${(xAt(selPoint.level) / W) * 100}%;top:${(yAt(selPoint.level) / H) * 100}%`}
+        class=${'ratio-chart__tip' + (selX > W / 2 ? ' ratio-chart__tip--left' : '')}
+        style=${`left:${(selX / W) * 100}%;top:${(selY / H) * 100}%`}
       >
-        <p class=${'t-caption-regular ' + (danger ? 'c-warning' : 'c-descend')}>${t.tipDrop(Math.round(selDrop * 100))}</p>
+        <p class=${'t-caption-regular ' + (danger ? 'c-warning' : 'c-descend')}>${t.tipDrop(pct)}</p>
         <p class="t-caption-regular c-primary">${t.tipRatio(selRatio)}</p>
       </div>
     </div>

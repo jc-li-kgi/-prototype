@@ -66,7 +66,7 @@ export function LendingRecords({ query }) {
             ${sub !== 'history' &&
             html`
               <div class="records-search">
-                <${SearchField} value=${keyword} onChange=${setKeyword} placeholder=${t.searchPlaceholder} />
+                <${SearchField} value=${keyword} onChange=${setKeyword} placeholder=${t.searchPlaceholder} onSurface />
                 <${Button} variant="text" class="nowrap" onClick=${() => startFlow('collateralIn')}>${t.importCollateral}<//>
               </div>
             `}
