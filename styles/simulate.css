@@ -37,7 +37,7 @@
 .ratio-chart__label { fill: var(--color-content-general-secondary); }
 .ratio-chart__line { fill: none; stroke: var(--color-content-general-primary); stroke-width: 1.5; }
 .ratio-chart__line--danger { stroke: var(--color-content-semantic-warning); }
-.ratio-chart__svg { touch-action: pan-y; cursor: pointer; user-select: none; } /* 左右拖拉；上下仍可捲動頁面 */
+.ratio-chart__svg { touch-action: none; cursor: pointer; user-select: none; -webkit-user-select: none; } /* 在圖上只拖拉、不捲動頁面（線是斜的，允許上下捲動會讓拖拉時頁面跟著跑） */
 .ratio-chart__dot { fill: var(--color-surface-white); stroke: var(--color-content-general-primary); stroke-width: 1.5; }
 .ratio-chart__handle { outline: none; cursor: grab; }
 .ratio-chart__halo { fill: var(--color-container-general-active-corporate); fill-opacity: 0.2; }
