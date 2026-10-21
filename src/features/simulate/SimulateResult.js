@@ -56,16 +56,15 @@ export function SimulateResult() {
               <p class="n-display-s c-primary">${Math.floor(r.ratio)}%</p>
             </div>
             <div class="sim-risk__call">
-              <p class="t-subtitle-bold c-primary">${t.callTitle}</p>
-              <p class="sim-risk__row">
-                <span class="t-body-regular c-secondary">${t.callDrop}</span>
-                <span class="n-body-regular c-descend">${twd(r.callDropValue)}( -${Math.round(r.callDrop * 100)}% )</span>
+              <p class="t-caption-regular c-secondary">
+                ${t.callDrop} <span class="c-descend nowrap">${twd(r.callDropValue)}( -${Math.round(r.callDrop * 100)}% )</span>
               </p>
-              <p class="t-body-regular c-warning">${t.callRepay(num(r.repayOnCall))[0]}<br />${t.callRepay(num(r.repayOnCall))[1]}</p>
+              <p class="t-caption-regular c-warning">
+                ${t.callRepay} <span class="nowrap">${twd(r.repayOnCall)}</span>
+              </p>
             </div>
             <${RatioChart} ratio=${r.ratio} />
-            <p class="t-caption-regular c-tertiary">${t.chartHint}</p>
-            <p class="t-body-regular c-secondary">${t.riskNote}</p>
+            <p class="t-caption-regular c-secondary">${t.riskNote}</p>
           </div>
         <//>
 

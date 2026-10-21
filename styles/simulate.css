@@ -25,10 +25,8 @@
 
 /* 追繳風險評估 */
 .sim-risk { display: flex; flex-direction: column; gap: var(--spacing-24); }
-.sim-risk__ratio { display: flex; flex-direction: column; align-items: center; gap: var(--spacing-8); }
 .sim-risk__call { display: flex; flex-direction: column; gap: var(--spacing-4); }
-.sim-risk__call > p:first-child { margin-bottom: var(--spacing-8); } /* 標題→內容 12 */
-.sim-risk__row { display: flex; flex-wrap: wrap; gap: var(--spacing-4); }
+.sim-risk__ratio { display: flex; flex-direction: column; align-items: center; gap: var(--spacing-8); }
 
 /* 維持率圖表 */
 .ratio-chart { position: relative; }

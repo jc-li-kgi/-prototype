@@ -1,6 +1,6 @@
 // 維持率與市值關係圖（沿著線拖拉查看）｜Figma 3139:188990 › 追繳評估圖表
 // 在圖上左右拖拉（或點一下），圓點沿著線移動，每次 1% 市值跌幅，顯示該跌幅下的維持率
-//   預設停在 130% 追繳點；線上只標起點，中間不放節點
+//   預設停在起點（初始維持率）；線上只標起點，中間不放節點
 //   鍵盤：圓點聚焦後用 ← → 移動
 // y 軸：下緣固定 120%，上緣至少 160%（Figma），起始維持率更高時往上延伸，每 10% 一條線
 //   y 軸固定比例（每 10% 維持率 42px），所以線是同一斜率的直線
@@ -32,9 +32,9 @@ export function RatioChart({ ratio }) {
   // 點：起點 + 低於起點的 160 / 150 / 140 / 130%；drop = 維持率降到該值時的市值跌幅
   const points = [{ level: ratio, drop: 0 }, ...LEVELS.filter((v) => v < ratio).map((v) => ({ level: v, drop: 1 - v / ratio }))];
   // 拖拉的位置：市值跌幅（整數 %），0 ~ maxPct
-  //   預設停在追繳點（130%），一打開就看到「跌多少會被追繳」；起始維持率已低於追繳線時停在起點
+  //   預設停在起點（初始維持率，市值下降 0%）
   const maxPct = Math.floor(dropEnd * 100 + 1e-9);
-  const [pct, setPct] = useState(Math.max(0, Math.round((1 - call / ratio) * 100)));
+  const [pct, setPct] = useState(0);
   const svgRef = useRef(null);
   const dragging = useRef(false);
   const clampPct = (v) => Math.min(maxPct, Math.max(0, v));
