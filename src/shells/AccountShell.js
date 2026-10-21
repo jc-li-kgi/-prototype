@@ -1,7 +1,7 @@
 // 入口一：證券主頁 → 帳務 →「授信管理」頁籤
 //   已借款：摘要卡 + 更多服務
 //   尚未借款（account.opened = false）：方案卡 + 認識並開立借貸戶
-import { html, useRef, useEffect } from '../lib/preact.js';
+import { html, useRef, useEffect, useState } from '../lib/preact.js';
 import { Icon, BottomNav, AccountPicker, TextTabs, SectionHeader, ServiceCardList } from '../components/index.js';
 import { useStore, showToast } from '../store.js';
 import { navigate } from '../router.js';
@@ -11,6 +11,7 @@ import { COPY } from '../content/copy.js';
 import { LendingSummaryCard } from '../features/hub/LendingSummaryCard.js';
 import { MoreServices } from '../features/hub/MoreServices.js';
 import { LoanIntroCard } from '../features/hub/LoanIntroCard.js';
+import { IntroSheet } from '../features/intro/IntroSheet.js';
 
 /** 長按標題 1.5 秒 → 主持人頁（受測者不會誤觸） */
 function useLongPress(onLongPress, ms = 1500) {
@@ -85,15 +86,17 @@ export function AccountShell() {
 function IntroServices() {
   const t = COPY.hub;
   const [learn, borrow] = t.introServices;
+  const [introOpen, setIntroOpen] = useState(false);
   return html`
     <section class="account-intro-services">
       <${SectionHeader} title=${t.introSection} />
       <${ServiceCardList}
         items=${[
-          { icon: 'service-learn.png', ...learn, onClick: () => navigate('/lending-zone') },
+          { icon: 'service-learn.png', ...learn, onClick: () => setIntroOpen(true) },
           { icon: 'service-borrow.png', ...borrow, onClick: () => startFlow('newAccountLoan') },
         ]}
       />
+      <${IntroSheet} open=${introOpen} onClose=${() => setIntroOpen(false)} />
     </section>
   `;
 }

@@ -399,6 +399,8 @@
   white-space: nowrap;
 }
 .text-tabs__item--active { color: var(--color-content-general-active); padding-bottom: 0; }
+.text-tabs--flush { padding-left: 0; padding-right: 0; }
+.text-tabs--center { justify-content: center; }
 .text-tabs__item--active i { display: block; height: 2px; background: var(--color-container-general-active-primary); }
 
 /* ---------- SegmentedTabs 膠囊型頁籤（Guideline：未選 filter-active-blue、已選 light-active） ---------- */
@@ -434,6 +436,20 @@
 .checkbox__check { position: absolute; left: -0.5px; top: -0.5px; }
 .checkbox--disabled { cursor: default; }
 .checkbox--disabled .checkbox__box { border-color: var(--color-content-general-disabled); background: none; }
+
+/* ---------- Accordion 收合問答｜Figma：aFAQ（CollapseBtn 上 16 下 12、Answer 上 12 下 24） ---------- */
+.accordion { display: flex; flex-direction: column; }
+.accordion__item { border-bottom: 1px solid var(--color-container-general-divider); }
+.accordion__head {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--icon-gap-subtitle-trailing);
+  padding: var(--spacing-16) var(--spacing-4) var(--spacing-12) 0;
+  text-align: left;
+}
+.accordion__head > span { flex: 1; }
+.accordion__body { padding: var(--spacing-12) 0 var(--spacing-24); }
 
 /* ---------- CheckboxHeader 勾選標題：標題與補充說明對齊，勾選框與標題第一行置中 ---------- */
 .checkbox-header { display: flex; align-items: flex-start; gap: var(--spacing-8); } /* 與 SelectableItem 相同間距，勾選框上下對齊 */
@@ -497,6 +513,7 @@
 }
 .tag--default { background: var(--color-container-general-active-secondary); color: var(--color-content-general-active); }
 .tag--warning { border: 1px solid var(--color-content-tag-warning); color: var(--color-content-tag-warning); }
+.tag--info { border: 1px solid var(--color-sky-blue-300); color: var(--color-sky-blue-500); } /* Guideline 無對應語意 token，用 Graphic Blue 色票 */
 
 /* ---------- SearchIcon ---------- */
 .search-icon { position: relative; display: inline-block; flex-shrink: 0; }

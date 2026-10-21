@@ -2,11 +2,11 @@
 // 證券主頁 › 快捷功能「股票借貸」→ 股票借貸專區（返回回到主頁）；或 帳務 › 授信管理 ›「前往專區」
 //   尚未借款（account.opened = false）→ 專區初始頁：可借額度試算 + 庫存精選擔保品 + 馬上借貸一筆
 //   已借款                          → 專區總覽：摘要卡 + 快捷功能 + 尚可匯入擔保品
-import { html, useState } from '../lib/preact.js';
+import { html, useState, useEffect } from '../lib/preact.js';
 import {
   Icon, SegmentedTabs, SectionHeader, Carousel, StockPickCard, Button, BottomActions,
 } from '../components/index.js';
-import { useStore, showToast } from '../store.js';
+import { useStore, showToast, markIntroShown } from '../store.js';
 import { navigate } from '../router.js';
 import { startFlow } from '../flows/flows.js';
 import { groupHoldings, importablePotential, perLotLoan, stockOf, dailyInterest } from '../lib/calc.js';
@@ -16,6 +16,7 @@ import { LendingSummaryCard } from '../features/hub/LendingSummaryCard.js';
 import { LoanIntroCard } from '../features/hub/LoanIntroCard.js';
 import { QuickActions } from '../features/hub/QuickActions.js';
 import { RepayMethodSheet } from '../features/repay/RepayMethodSheet.js';
+import { IntroSheet } from '../features/intro/IntroSheet.js';
 import { HoldingsTable } from '../features/collateral/HoldingsTable.js';
 
 // 庫存精選擔保品：取可借金額最高的前幾檔
@@ -28,13 +29,23 @@ export function LendingZoneShell() {
   const notAvailable = () => showToast(COPY.common.notAvailable);
   const switchTab = (key) => (key === 'overview' ? setTab(key) : notAvailable());
 
+  // 介紹頁：未借款第一次進專區自動從底部開啟；右上「產品說明」也可以打開
+  const introShown = useStore((s) => s.introShown);
+  const [introOpen, setIntroOpen] = useState(false);
+  useEffect(() => {
+    if (!account.opened && !introShown) {
+      setIntroOpen(true);
+      markIntroShown();
+    }
+  }, []);
+
   return html`
     <div class=${'page zone-page' + (account.opened ? '' : ' zone-page--with-actions')}>
       <header class="zone-header">
         <button class="icon-btn page-header__slot" onClick=${() => navigate('/home')} aria-label="返回">
           <${Icon} name="chevron-back.svg" />
         </button>
-        <button class="icon-btn page-header__slot" onClick=${notAvailable} aria-label="產品說明">
+        <button class="icon-btn page-header__slot" onClick=${() => setIntroOpen(true)} aria-label="產品說明">
           <${Icon} name="book-info.svg" />
         </button>
       </header>
@@ -62,6 +73,7 @@ export function LendingZoneShell() {
           <${Button} onClick=${() => startFlow('newAccountLoan')}>${t.borrowNow}<//>
         <//>
       `}
+      <${IntroSheet} open=${introOpen} onClose=${() => setIntroOpen(false)} />
     </div>
   `;
 }

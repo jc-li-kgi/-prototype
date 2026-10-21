@@ -17,7 +17,7 @@ function load() {
 }
 
 function emptyState() {
-  return { taskId: null, entry: null, flow: null, flowReturn: null, account: null, draft: {}, collateralDraft: {}, repayDraft: {}, toast: null };
+  return { taskId: null, entry: null, flow: null, flowReturn: null, account: null, draft: {}, collateralDraft: {}, repayDraft: {}, introShown: false, toast: null };
 }
 
 function save() {
@@ -203,4 +203,10 @@ export function repay({ loanId, principal }) {
     repayDraft: {},
   }));
   return record;
+}
+
+/* ---------- 介紹頁：未借款進專區時只自動開一次（每個任務重新計算） ---------- */
+
+export function markIntroShown() {
+  setState({ introShown: true });
 }
