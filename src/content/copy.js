@@ -15,7 +15,7 @@ export const COPY = {
     intro: '根據你的擔保標的，幫你計算「可借貸額度」，以及「可能被追繳的跌幅」，讓你隨時安心借款',
     itemLabel: (n) => `擔保品 ${n}`,
     remove: '移除',
-    pickPlaceholder: '請選擇標的',
+    pickPlaceholder: '選擇擔保標的',
     holdingHint: (price, lots) => (lots ? `收盤價 ${price}，庫存 ${lots} 張` : `收盤價 ${price}`),
     lotsLabel: '擔保張數',
     lotsPlaceholder: '請輸入數字',

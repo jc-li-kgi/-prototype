@@ -257,6 +257,7 @@
   gap: var(--spacing-8);
   padding: var(--spacing-32) var(--spacing-16) var(--spacing-8);
 }
+.sheet--full-height { height: 90vh; } /* 搜尋類：固定高度，不隨結果數量變矮 */
 .sheet__title { flex: 1; }
 .sheet__content { padding: var(--spacing-8) var(--spacing-16) 0; }
 .sheet__options { display: flex; flex-direction: column; }

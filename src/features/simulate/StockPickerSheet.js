@@ -26,7 +26,7 @@ export function StockPickerSheet({ open, exclude = [], onSelect, onClose }) {
   };
 
   return html`
-    <${Sheet} open=${open} title=${t.sheetTitle} onClose=${close}>
+    <${Sheet} open=${open} title=${t.sheetTitle} fullHeight onClose=${close}>
       <div class="sheet__content stock-picker__search">
         <${SearchField} value=${keyword} onChange=${setKeyword} placeholder=${t.searchPlaceholder} />
       </div>
@@ -44,7 +44,7 @@ export function StockPickerSheet({ open, exclude = [], onSelect, onClose }) {
                     <span class="stock-picker__metrics">
                       <span><span class="t-caption-regular c-secondary">${t.price}</span> <span class="n-body-regular c-primary">${num(s.price)}</span></span>
                       ${held(code) > 0 &&
-                      html`<span><span class="t-caption-regular c-secondary">${t.holding}</span> <span class="t-body-regular c-primary">${num(held(code))} 張</span></span>`}
+                      html`<span><span class="t-caption-regular c-secondary">${t.holding}</span> <span class="t-caption-regular c-primary">${num(held(code))} 張</span></span>`}
                     </span>
                   </button>
                 `

@@ -70,7 +70,7 @@
   - ui：Button、Icon、InfoLabel（文字＋ⓘ）、DetailRow、DetailCard（確認資料卡）、DetailPanel（列表展開明細卡）、SummaryCard（摘要卡，overview / flow）、FeeCard、AmountHero（確認頁大金額）、AmountCell（列表金額欄）、StockName（股票名稱＋代碼）、SectionHeader（區塊標題＋連結＋說明）、CollapsibleCard、ExpandToggle、IconAction（圓形圖示捷徑）、EmptyState、StatGroup（並排大數字）、NoticeBar（淡黃提示條）、StockPickCard（精選擔保品卡）、ServiceCardList（圖示＋標題＋說明的服務清單）、AccountPicker、Checkbox、CheckboxHeader（勾選框＋標題＋補充說明，說明與標題對齊；全選用）、Accordion（收合問答，FAQ）、FilterPill、Tag、SearchIcon
   - form：PickerField（`onOpen` + `displayValue` = 自訂選擇畫面；`hint` 底線下說明）、NumberField（整數輸入＋單位）、AmountField（金額；`disabled` 鎖定；`value=null` + `placeholder` = 未填狀態，tertiary 色）、RadioGroup（單選，橫排平分）、QtyStepper（張數）、SelectableItem（勾選項目）、SearchField（Figma Atom_SearchBar_Mobile；預設淡藍底放白底上，藍底頁面加 `onSurface` 改白底）
   - layout：FlowPage（流程頁框架，流程每一步都用）、PageHeader、StepBar、BottomNav、TextTabs、SegmentedTabs、ListTable／ListRow（列表；ListRow 的 `detail` 自動包在 DetailPanel 白色明細卡裡）、Carousel（橫向滑動卡片）、StickyFooter（固定置底；plain = 只有按鈕時）、BottomActions（頁面底部按鈕區，見下方「底部按鈕」）、TotalBar（置底總計；`expanded` + `onToggle` + children = 在置底區內向上展開明細，最高 90%）、ResultPage（完成頁）
-  - overlay：Dialog / InfoDialog（置中對話框：ⓘ、注意事項說明、確認提示）、Sheet（底部彈窗：選單、明細；非選單內容包 `.sheet__content`）、SheetOptions（彈窗選項，選中項淡藍底；`chevron` = 前往型選單，例如選擇還款方式）、Toast
+  - overlay：Dialog / InfoDialog（置中對話框：ⓘ、注意事項說明、確認提示）、Sheet（底部彈窗：選單、明細；非選單內容包 `.sheet__content`；搜尋類加 `fullHeight` 固定 90% 高，不隨結果數量變矮）、SheetOptions（彈窗選項，選中項淡藍底；`chevron` = 前往型選單，例如選擇還款方式）、Toast
   - 2 個以上地方會用到的畫面才抽成新元件，放進對應資料夾並在 `index.js` 匯出，檔頭註明對應的 Figma 元件名稱與用法範例。
 - `Button` 用 `variant`（primary / text / capsule）與 `typo`（換文字層級）；需要換色的 icon 用 `<Icon tint />`。
 - 新功能放 `src/features/<功能>/`；功能之間不互相 import，只透過 `store.js` 讀寫資料。需要組合多個功能的頁面放 `src/shells/`（入口頁）或 `src/pages/`（例如股票借貸明細）。
