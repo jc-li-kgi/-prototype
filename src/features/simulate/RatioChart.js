@@ -144,8 +144,8 @@ export function RatioChart({ ratio }) {
         class=${'ratio-chart__tip' + (selX > W / 2 ? ' ratio-chart__tip--left' : '')}
         style=${`left:${(selX / W) * 100}%;top:${(selY / H) * 100}%`}
       >
-        <p class=${'t-caption-regular ' + (danger ? 'c-warning' : 'c-descend')}>${t.tipDrop(pct)}</p>
-        <p class="t-caption-regular c-primary">${t.tipRatio(selRatio)}</p>
+        <p class=${'t-body-regular ' + (danger ? 'c-warning' : 'c-descend')}>${t.tipDrop(pct)}</p>
+        <p class="t-body-regular c-primary">${t.tipRatio(selRatio)}</p>
       </div>
     </div>
   `;
