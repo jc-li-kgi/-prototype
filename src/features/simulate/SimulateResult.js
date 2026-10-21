@@ -56,10 +56,10 @@ export function SimulateResult() {
               <p class="n-display-s c-primary">${Math.floor(r.ratio)}%</p>
             </div>
             <div class="sim-risk__call">
-              <p class="t-caption-regular c-secondary">
+              <p class="t-body-regular c-secondary">
                 ${t.callDrop} <span class="c-descend nowrap">${twd(r.callDropValue)}( -${Math.round(r.callDrop * 100)}% )</span>
               </p>
-              <p class="t-caption-regular c-warning">
+              <p class="t-body-regular c-warning">
                 ${t.callRepay} <span class="nowrap">${twd(r.repayOnCall)}</span>
               </p>
             </div>
