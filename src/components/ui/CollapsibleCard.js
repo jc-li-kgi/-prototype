@@ -4,11 +4,12 @@ import { Icon } from './Icon.js';
 
 /**
  * <CollapsibleCard title="擔保品匯入明細" defaultOpen>…內容…</CollapsibleCard>
+ *   variant  'flow'（預設，流程申請：內距 24）| 'overview'（資訊瀏覽：內距 16）
  */
-export function CollapsibleCard({ title, defaultOpen = true, children }) {
+export function CollapsibleCard({ title, defaultOpen = true, variant = 'flow', children }) {
   const [open, setOpen] = useState(defaultOpen);
   return html`
-    <section class="card collapsible">
+    <section class=${`card collapsible collapsible--${variant}`}>
       <button class="collapsible__head" aria-expanded=${open} onClick=${() => setOpen(!open)}>
         <span class="t-subtitle-bold c-primary">${title}</span>
         <span class=${'collapsible__chevron' + (open ? '' : ' collapsible__chevron--closed')}>

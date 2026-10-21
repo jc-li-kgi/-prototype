@@ -9,6 +9,9 @@ export const LOAN_RULES = {
   rate: 0.028,         // 參考年利率
   fee: 2,              // 借款手續費（每筆）
   termMonths: 6,       // 借款期間
+  maxTermMonths: 18,   // 最長借款期限（含展延）
+  callRatio: 130,      // 維持率低於此值被追繳（%）
+  recoverRatio: 166,   // 追繳後需補足至此維持率（%）
 };
 
 /* 還款規則（現金還款） */
@@ -179,4 +182,29 @@ export function addMonths(isoDate, months) {
   const d = new Date(isoDate);
   d.setMonth(d.getMonth() + months);
   return d.toISOString().slice(0, 10);
+}
+
+/* ---------- 可借貸額度試算 ---------- */
+
+/** 試算結果：items = [{ code, lots }]，以最高可借額度計算 */
+export function simulate(items) {
+  const marketValue = marketValueOf(items);
+  const loan = loanableOf(items);
+  const ratio = loan > 0 ? (marketValue / loan) * 100 : null; // 初始借款維持率（%）
+  // 市值跌到維持率 = 追繳線時的跌幅
+  const callDrop = ratio ? Math.max(0, 1 - LOAN_RULES.callRatio / ratio) : 0;
+  // 遭追繳時（市值剩 loan × 1.3），需還款到維持率 166%
+  const callMarketValue = (loan * LOAN_RULES.callRatio) / 100;
+  const repayOnCall = Math.max(0, Math.round(loan - (callMarketValue * 100) / LOAN_RULES.recoverRatio));
+  return {
+    marketValue,
+    loan,
+    ratio,
+    dailyInterest: dailyInterest(loan),
+    callDrop,                                        // 可承受市值跌幅（比例）
+    callDropValue: Math.round(marketValue * callDrop), // 可承受市值跌幅（金額）
+    repayOnCall,
+    /** 市值下跌 drop（0.1 = 10%）後的維持率 */
+    ratioAt: (drop) => (ratio ? ratio * (1 - drop) : null),
+  };
 }

@@ -150,6 +150,9 @@
   text-align: left;
 }
 .field__picker > span:first-child { flex: 1; }
+/* NumberField：輸入框沿用下拉選單的版面（文字＋右側單位） */
+.number-field input { flex: 1; min-width: 0; width: 0; border: 0; outline: 0; padding: 0; background: transparent; color: var(--color-content-general-primary); }
+.number-field input::placeholder { color: var(--color-content-general-tertiary); opacity: 1; }
 .field__line {
   display: block;
   height: 1px;
@@ -531,6 +534,7 @@
 
 /* ---------- CollapsibleCard 可收合卡片（流程申請 詳情卡 24×24；標題→內容 24；條列 20） ---------- */
 .collapsible { display: flex; flex-direction: column; padding: var(--spacing-24); gap: var(--spacing-24); }
+.collapsible--overview { padding: var(--spacing-16); } /* 資訊瀏覽 詳情卡 16×16 */
 .collapsible__head { display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-24); text-align: left; }
 .collapsible__chevron { display: inline-flex; transition: transform 0.2s ease; }
 .collapsible__chevron--closed { transform: rotate(180deg); }

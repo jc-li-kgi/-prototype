@@ -210,3 +210,9 @@ export function repay({ loanId, principal }) {
 export function markIntroShown() {
   setState({ introShown: true });
 }
+
+/* ---------- 可借貸額度試算：{ items: [{ code, lots }] }（code / lots 可為 null = 未填） ---------- */
+
+export function updateSimDraft(patch) {
+  setState((s) => ({ simDraft: { ...(s.simDraft || {}), ...patch } }));
+}

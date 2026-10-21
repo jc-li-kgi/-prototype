@@ -36,6 +36,7 @@ export { PickerField } from './form/PickerField.js';
 export { AmountField } from './form/AmountField.js';
 export { QtyStepper } from './form/QtyStepper.js';
 export { SelectableItem } from './form/SelectableItem.js';
+export { NumberField } from './form/NumberField.js';
 export { RadioGroup } from './form/RadioGroup.js';
 export { SearchField } from './form/SearchField.js';
 
