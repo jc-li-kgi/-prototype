@@ -17,17 +17,21 @@ import { LoanIntroCard } from '../features/hub/LoanIntroCard.js';
 import { QuickActions } from '../features/hub/QuickActions.js';
 import { RepayMethodSheet } from '../features/repay/RepayMethodSheet.js';
 import { IntroSheet } from '../features/intro/IntroSheet.js';
+import { SimulateForm, simItems, canSimulate } from '../features/simulate/SimulateForm.js';
 import { HoldingsTable } from '../features/collateral/HoldingsTable.js';
 
 // 庫存精選擔保品：取可借金額最高的前幾檔
 const PICKS_COUNT = 3;
 
-export function LendingZoneShell() {
+export function LendingZoneShell({ query }) {
   const account = useStore((s) => s.account);
+  const simDraft = useStore((s) => s.simDraft);
   const t = COPY.zone;
-  const [tab, setTab] = useState('overview');
+  // 頁籤：總覽 / 試算（試算結果頁返回時帶 ?tab=simulate）
+  const [tab, setTab] = useState(query.tab === 'simulate' ? 'simulate' : 'overview');
   const notAvailable = () => showToast(COPY.common.notAvailable);
-  const switchTab = (key) => (key === 'overview' ? setTab(key) : notAvailable());
+  const simulating = tab === 'simulate';
+  const showActions = simulating || !account.opened;
 
   // 介紹頁：未借款第一次進專區自動從底部開啟；右上「產品說明」也可以打開
   const introShown = useStore((s) => s.introShown);
@@ -40,7 +44,7 @@ export function LendingZoneShell() {
   }, []);
 
   return html`
-    <div class=${'page zone-page' + (account.opened ? '' : ' zone-page--with-actions')}>
+    <div class=${'page zone-page' + (showActions ? ' zone-page--with-actions' : '')}>
       <header class="zone-header">
         <button class="icon-btn page-header__slot" onClick=${() => navigate('/home')} aria-label="返回">
           <${Icon} name="chevron-back.svg" />
@@ -60,14 +64,25 @@ export function LendingZoneShell() {
             <img class="zone-hero__image" src="assets/illustrations/lending-hero.png" width="80" height="80" alt="" />
           </section>
           <div class="zone-tabs">
-            <${SegmentedTabs} tabs=${t.tabs} active=${tab} onChange=${switchTab} />
+            <${SegmentedTabs} tabs=${t.tabs} active=${tab} onChange=${setTab} />
           </div>
         </div>
 
-        ${account.opened ? html`<${ZoneOverview} account=${account} />` : html`<${ZoneIntro} account=${account} />`}
+        ${simulating
+          ? html`<${SimulateForm} />`
+          : account.opened
+          ? html`<${ZoneOverview} account=${account} />`
+          : html`<${ZoneIntro} account=${account} />`}
       </div>
 
-      ${!account.opened &&
+      ${simulating &&
+      html`
+        <${BottomActions}>
+          <${Button} disabled=${!canSimulate(simItems(simDraft))} onClick=${() => navigate('/simulate/result')}>${COPY.simulate.submit}<//>
+        <//>
+      `}
+      ${!simulating &&
+      !account.opened &&
       html`
         <${BottomActions}>
           <${Button} onClick=${() => startFlow('newAccountLoan')}>${t.borrowNow}<//>

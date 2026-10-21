@@ -1,0 +1,61 @@
+/* ===== 可借貸額度試算 ===== */
+
+/* ---------- 輸入（專區「試算」頁籤）｜Figma 3131:188036：說明→卡片 16、卡片之間 16 ---------- */
+.sim-form { display: flex; flex-direction: column; gap: var(--spacing-16); }
+.sim-form__intro { padding: 0 var(--spacing-16); }
+.sim-item { display: flex; flex-direction: column; gap: var(--spacing-24); padding: var(--spacing-16); } /* 操作欄位間距 24 */
+.sim-item__head { display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-8); margin-bottom: calc(var(--spacing-8) - var(--spacing-24)); } /* 標題→選單 8 */
+.sim-form__actions { display: flex; align-items: center; justify-content: center; gap: var(--spacing-12); } /* Figma Text button/Columns */
+.sim-form__divider { width: 1px; height: var(--spacing-16); background: var(--color-container-general-divider); }
+
+/* 選擇可擔保標的（底部彈窗） */
+.stock-picker__search { padding-bottom: var(--spacing-16); }
+.stock-picker { display: flex; flex-direction: column; }
+.stock-picker__item { display: flex; flex-direction: column; gap: var(--spacing-4); padding: var(--spacing-16); text-align: left; }
+.stock-picker__item:active { background: var(--color-container-general-option-selected-blue); }
+.stock-picker__name { display: flex; align-items: baseline; gap: var(--spacing-8); }
+.stock-picker__metrics { display: flex; gap: var(--spacing-24); }
+
+/* ---------- 結果頁｜情境：資訊瀏覽（詳情卡 16×16、卡片組 24、頁尾 48） ---------- */
+.sim-result { display: flex; flex-direction: column; }
+.sim-result__content { display: flex; flex-direction: column; gap: var(--spacing-24); padding: var(--spacing-16) var(--spacing-16) 0; }
+.sim-summary { display: flex; flex-direction: column; gap: var(--spacing-16); padding: var(--spacing-16); }
+.sim-result .collapsible { box-shadow: var(--shadow-basic); }
+.sim-result__note { margin-top: calc(var(--spacing-16) - var(--spacing-24)); }
+
+/* 追繳風險評估 */
+.sim-risk { display: flex; flex-direction: column; gap: var(--spacing-24); }
+.sim-risk__call { display: flex; flex-direction: column; gap: var(--spacing-4); }
+.sim-risk__ratio { display: flex; flex-direction: column; align-items: center; gap: var(--spacing-8); }
+
+/* 維持率圖表 */
+.ratio-chart { position: relative; }
+.ratio-chart svg { display: block; overflow: visible; }
+.ratio-chart__grid { stroke: var(--color-container-general-divider); stroke-width: 1; }
+.ratio-chart__grid--call { stroke: var(--color-content-semantic-warning); stroke-dasharray: 3 3; }
+.ratio-chart__zone { fill: var(--color-content-semantic-warning); fill-opacity: 0.2; }
+.ratio-chart__label { fill: var(--color-content-general-secondary); }
+.ratio-chart__line { fill: none; stroke: var(--color-content-general-primary); stroke-width: 1.5; }
+.ratio-chart__line--danger { stroke: var(--color-content-semantic-warning); }
+.ratio-chart__svg { touch-action: pan-y; cursor: pointer; user-select: none; } /* 左右拖拉；上下仍可捲動頁面 */
+.ratio-chart__dot { fill: var(--color-surface-white); stroke: var(--color-content-general-primary); stroke-width: 1.5; }
+.ratio-chart__handle { outline: none; cursor: grab; }
+.ratio-chart__halo { fill: var(--color-container-general-active-corporate); fill-opacity: 0.2; }
+.ratio-chart__knob { fill: var(--color-container-general-active-corporate); }
+.ratio-chart__handle--danger .ratio-chart__halo,
+.ratio-chart__handle--danger .ratio-chart__knob { fill: var(--color-content-semantic-warning); }
+.ratio-chart__handle:focus-visible .ratio-chart__halo { fill-opacity: 0.4; }
+.ratio-chart__call { position: absolute; left: var(--spacing-4); pointer-events: none; }
+/* 數值框：在點的右側（垂直置中）；靠右的點改放左側 */
+.ratio-chart__tip {
+  position: absolute;
+  transform: translate(var(--spacing-12), -50%);
+  padding: var(--spacing-4) var(--spacing-8);
+  border: 1px solid var(--color-container-general-active-secondary);
+  border-radius: var(--radius-small);
+  background: var(--color-surface-white);
+  box-shadow: var(--shadow-popover);
+  white-space: nowrap;
+  pointer-events: none;
+}
+.ratio-chart__tip--left { transform: translate(calc(-100% - var(--spacing-12)), -50%); }

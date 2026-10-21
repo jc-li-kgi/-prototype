@@ -10,6 +10,47 @@ export const COPY = {
     resetDone: '已清除所有測試資料',
   },
 
+  // 可借貸額度試算｜Figma 3131:188036（輸入）、2565:50221（選擇標的）、2631:58837（結果）
+  simulate: {
+    intro: '根據你的擔保標的，幫你計算「可借貸額度」，以及「可能被追繳的跌幅」，讓你隨時安心借款',
+    itemLabel: (n) => `擔保品 ${n}`,
+    remove: '移除',
+    pickPlaceholder: '選擇擔保標的',
+    holdingHint: (price, lots) => (lots ? `收盤價 ${price}，庫存 ${lots} 張` : `收盤價 ${price}`),
+    lotsLabel: '擔保張數',
+    lotsPlaceholder: '請輸入數字',
+    lotUnit: '張',
+    customPick: '自選擔保品',
+    useHoldings: '使用庫存試算', // 本次測試不開放
+    submit: '試算',
+    sheetTitle: '選擇可擔保標的',
+    searchPlaceholder: '搜尋產品關鍵字或代碼',
+    price: '收盤價',
+    holding: '庫存',
+    emptySearch: '查無符合的股票',
+    // 結果頁
+    resultTitle: '可借貸額度試算',
+    loanable: '預估可借款金額',
+    loanableSheet: { title: '預估可借款金額', body: '預估可借款金額 = Σ 擔保張數 × 每張市值 × 可借貸成數，依今日收盤價計算，僅供參考。' },
+    currencyName: '台幣',
+    maxTerm: '最長借款期限',
+    maxTermValue: (m) => `${m} 個月`,
+    dailyInterest: '預估每日利息',
+    dailyInterestSheet: { title: '預估每日利息', body: '預估每日利息 = 預估可借款金額 × 參考年利率 2.8% ÷ 365。' },
+    riskTitle: '追繳風險評估',
+    initialRatio: '初始借款維持率',
+    callDrop: '可承受市值跌幅',
+    callRepay: '若追繳，需還款至少',
+    chartX: '市值(％)',
+    chartCall: (call, recover) => [`維持率低於 ${call}% 將被追繳，`, `需於兩日內補款至 ${recover}% 以解除。`],
+    tipDrop: (d) => `市值下降 ${d}%`,
+    tipRatio: (r) => `維持率 ${r}%`,
+    riskNote: '拖曳圓點，可查看市值下跌時的維持率。本試算以最高可借額度計算，實際借款金額越低，維持率越高。',
+    itemsTitle: '預期匯入擔保品',
+    note: '以上借款金額與收費，依實際申請計算為準',
+    borrow: '立即借貸',
+  },
+
   // 認識股票借貸（介紹頁）｜Figma 1804:138177
   intro: {
     title: '認識股票借貸',
