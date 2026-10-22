@@ -1,0 +1,21 @@
+/* ===== 借新還舊｜情境：流程申請（區塊間距 24、標題→內容 12） ===== */
+
+/* ---------- 第 1 步：選取借款契約｜Figma 1804:117905 ---------- */
+.refi-select { display: flex; flex-direction: column; gap: var(--spacing-24); }
+.refi-group { display: flex; flex-direction: column; gap: var(--spacing-12); }
+.refi-group__head { display: flex; flex-direction: column; gap: var(--spacing-8); padding: 0 var(--spacing-16); }
+.refi-group__title { display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-8); }
+.refi-all { display: inline-flex; align-items: center; gap: var(--spacing-8); flex-shrink: 0; cursor: pointer; } /* 勾選框 + 全選 */
+.refi-list { display: flex; flex-direction: column; gap: var(--spacing-12); }
+
+/* 借款卡：勾選框右側依序為 金額 / 到期日 → 資料列 → （展開明細）→ 展開明細按鈕 */
+.refi-card { padding: var(--spacing-16); }
+.refi-card .selectable-item__body { gap: var(--spacing-12); }
+.refi-card__title { display: flex; flex-direction: column; gap: var(--spacing-4); }
+.refi-card__rows { display: flex; flex-direction: column; gap: var(--spacing-12); }
+.refi-card__toggle { align-self: center; display: inline-flex; align-items: center; margin-top: calc(var(--spacing-20) - var(--spacing-12)); } /* 資料列→按鈕 20 */
+
+/* ---------- 第 2 步：確認資料｜Figma 1804:118296 ---------- */
+.refi-confirm { display: flex; flex-direction: column; gap: var(--spacing-24); }
+.refi-section { display: flex; flex-direction: column; gap: var(--spacing-12); }
+.refi-section__head { padding: 0 var(--spacing-16); }

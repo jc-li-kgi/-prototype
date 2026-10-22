@@ -55,6 +55,7 @@ export function LendingRecords({ query }) {
         initialSub=${query.sub === 'repay' ? 'repay' : 'borrow'}
         initialOpen=${query.open}
         onRepay=${setRepayLoan}
+        onRefinance=${(l) => startFlow('refinance', { query: { loan: l.id } })}
       />`}
 
       ${tab === 'collateral' &&

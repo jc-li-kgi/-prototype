@@ -690,6 +690,7 @@
 /* ---------- TotalBar 置底總計列 ---------- */
 .total-bar { display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-8); padding: var(--spacing-12) 0; }
 .total-bar__value { display: inline-flex; align-items: center; }
+.total-bar__label { display: flex; flex-direction: column; }
 .total-bar__value:disabled { cursor: default; }
 /* 展開明細：在置底區內向上推開；置底區最高 90%，明細區自己捲動（Figma：標題→內容 12、條列 12） */
 .total-bar__detail {
@@ -737,6 +738,7 @@
 .list-table__detail { display: flex; flex-direction: column; }
 /* DetailPanel 列表展開明細：白色卡片，內距 16×16、資料列 12（Figma 3089:63010） */
 .detail-panel { display: flex; flex-direction: column; gap: var(--spacing-12); padding: var(--spacing-16); }
+.detail-panel--blue { background: var(--color-container-general-option-selected-blue); }
 .list-table__footer { display: flex; align-items: center; gap: var(--spacing-8); }
 .list-table__footer--end { justify-content: flex-end; padding-right: calc(24px + var(--spacing-8)); } /* 與箭頭欄左緣對齊 */
 .list-table__footer--between { justify-content: space-between; }

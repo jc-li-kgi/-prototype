@@ -1,9 +1,9 @@
 // 假資料庫：所有功能都透過這裡讀寫，功能之間不互相 import
 // 存在 localStorage，受測者重新整理不會遺失進度
 import { useReducer, useEffect } from './lib/preact.js';
-import { LOAN_RULES, addMonths, today, repayPlan } from './lib/calc.js';
+import { LOAN_RULES, addMonths, today, repayPlan, refinancePlan } from './lib/calc.js';
 
-const KEY = 'lending-proto-state-v3'; // 資料結構改版時遞增，避免讀到舊格式
+const KEY = 'lending-proto-state-v4'; // 資料結構改版時遞增，避免讀到舊格式
 const listeners = new Set();
 
 let state = load();
@@ -17,7 +17,7 @@ function load() {
 }
 
 function emptyState() {
-  return { taskId: null, entry: null, flow: null, flowReturn: null, account: null, draft: {}, collateralDraft: {}, repayDraft: {}, introShown: false, toast: null };
+  return { taskId: null, entry: null, flow: null, flowReturn: null, account: null, draft: {}, collateralDraft: {}, repayDraft: {}, refiDraft: {}, introShown: false, toast: null };
 }
 
 function save() {
@@ -153,6 +153,10 @@ export function borrow({ amount, purpose }) {
     startDate: date,
     dueDate: addMonths(date, LOAN_RULES.termMonths),
     status: '撥款中',
+    extensions: 0,
+    fee: LOAN_RULES.fee,
+    appliedAt: new Date().toISOString(),
+    channel: 'APP',
   };
   setState((s) => ({
     account: { ...s.account, loans: [loan, ...s.account.loans] },
@@ -215,4 +219,43 @@ export function markIntroShown() {
 
 export function updateSimDraft(patch) {
   setState((s) => ({ simDraft: { ...(s.simDraft || {}), ...patch } }));
+}
+
+/* ---------- 借新還舊草稿：{ loanIds } ---------- */
+
+export function updateRefiDraft(patch) {
+  setState((s) => ({ refiDraft: { ...(s.refiDraft || {}), ...patch } }));
+}
+
+/** 借新還舊：選取的舊借款還清，整併成一筆新借款（回傳新借款，完成頁用來展開這一筆） */
+export function refinance({ loanIds }) {
+  const plan = refinancePlan(state.account, loanIds);
+  const n = plan.newLoan;
+  const loan = {
+    id: 'L' + Date.now().toString().slice(-6),
+    amount: n.amount,
+    balance: n.amount,
+    purpose: n.purpose,
+    rate: n.rate,
+    applyDate: n.startDate,
+    startDate: n.startDate,
+    dueDate: n.dueDate,
+    status: '撥款中',
+    extensions: 0,
+    fee: n.fee,
+    appliedAt: new Date().toISOString(),
+    channel: 'APP',
+    refinancedFrom: loanIds,
+  };
+  setState((s) => ({
+    account: {
+      ...s.account,
+      loans: [
+        loan,
+        ...s.account.loans.map((l) => (loanIds.includes(l.id) ? { ...l, balance: 0, status: '已還清' } : l)),
+      ],
+    },
+    refiDraft: {},
+  }));
+  return loan;
 }

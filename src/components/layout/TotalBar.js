@@ -13,11 +13,15 @@ import { Icon } from '../ui/Icon.js';
  *   </TotalBar>
  *   置底區最高為畫面 90%，明細太多時只有明細區可以捲動
  *   不給 onToggle 就不顯示 ^
+ *   note  標題下方補充，例如「(已選取 1 筆)」
  */
-export function TotalBar({ label, info, value, expanded = false, onToggle, children }) {
+export function TotalBar({ label, note, info, value, expanded = false, onToggle, children }) {
   return html`
     <div class="total-bar">
-      <${InfoLabel} class="c-secondary" label=${label} info=${info} />
+      <div class="total-bar__label">
+        <${InfoLabel} class="c-secondary" label=${label} info=${info} />
+        ${note && html`<p class="t-body-regular c-secondary">${note}</p>`}
+      </div>
       <button class="total-bar__value icon-text--subtitle" onClick=${onToggle} disabled=${!onToggle} aria-expanded=${onToggle ? expanded : undefined} aria-label=${label + '明細'}>
         <span class="n-subtitle-bold c-primary">${value}</span>
         ${onToggle && html`<${Icon} name=${expanded ? 'chevron-down.svg' : 'chevron-up.svg'} level="subtitle" />`}

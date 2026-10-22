@@ -11,6 +11,8 @@
 .records-filters { display: flex; gap: var(--spacing-8); flex-wrap: wrap; }
 .records-search { display: flex; align-items: center; gap: var(--spacing-16); }
 .records-row-buttons { display: flex; gap: var(--spacing-8); }
+/* 借款展開明細下方：還款紀錄 / 展延紀錄（平分寬度）｜Figma 3167:192520；資料列→按鈕 24 */
+.records-detail-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-12); margin-top: calc(var(--spacing-24) - var(--spacing-12)); }
 
 /* 擔保品歷史紀錄（暫用版面） */
 .history-list { display: flex; flex-direction: column; gap: var(--spacing-12); padding: 0 var(--spacing-16); }

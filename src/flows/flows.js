@@ -42,6 +42,16 @@ export const FLOWS = {
     ],
     done: '/repay/result',
   },
+
+  // 借新還舊：從股票借貸明細 › 借款紀錄「借新還舊」（即將到期、展延次數已滿）→ 選取借款契約 → 確認資料
+  refinance: {
+    title: '申請借新還舊',
+    steps: [
+      { path: '/refinance/select', label: '選取借款契約' },
+      { path: '/refinance/confirm', label: '確認資料' },
+    ],
+    done: '/refinance/result',
+  },
 };
 
 /** 目前是否在某個流程中 */
@@ -72,7 +82,7 @@ export function entryHome() {
 export function startFlow(flowId, { query, returnTo } = {}) {
   const from = returnTo || location.hash.slice(1) || entryHome();
   // 每次開始流程都從空白草稿開始，避免帶到上次沒完成的資料
-  setState({ flow: flowId, flowReturn: from, draft: {}, collateralDraft: {}, repayDraft: {} });
+  setState({ flow: flowId, flowReturn: from, draft: {}, collateralDraft: {}, repayDraft: {}, refiDraft: {} });
   const qs = query ? '?' + new URLSearchParams(query) : '';
   navigate(FLOWS[flowId].steps[0].path + qs);
 }

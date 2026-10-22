@@ -8,7 +8,8 @@ import { html } from '../../lib/preact.js';
  *   <DetailRow label="還款本金" value="TWD 20,000" />
  * </DetailPanel>
  * 白底圓角卡（6）、內距 16×16（資訊瀏覽）、資料列間距 12（Figma）
+ * 放在白色卡片裡時加 tone="blue"，改淡藍底（Figma 1804:117906 借新還舊展開明細）
  */
-export function DetailPanel({ children }) {
-  return html`<div class="card detail-panel">${children}</div>`;
+export function DetailPanel({ tone = 'white', children }) {
+  return html`<div class=${'card detail-panel' + (tone === 'blue' ? ' detail-panel--blue' : '')}>${children}</div>`;
 }
