@@ -11,6 +11,7 @@ import { COPY } from '../content/copy.js';
 import { LendingSummaryCard } from '../features/hub/LendingSummaryCard.js';
 import { MoreServices } from '../features/hub/MoreServices.js';
 import { LoanIntroCard } from '../features/hub/LoanIntroCard.js';
+import { DueSoonNotice } from '../features/hub/DueSoonNotice.js';
 import { IntroSheet } from '../features/intro/IntroSheet.js';
 
 /** 長按標題 1.5 秒 → 主持人頁（受測者不會誤觸） */
@@ -72,6 +73,8 @@ export function AccountShell() {
           <div class="account-overview__card">
             ${account.opened ? html`<${LendingSummaryCard} />` : html`<${LoanIntroCard} />`}
           </div>
+
+          ${account.opened && html`<div class="account-overview__card"><${DueSoonNotice} back="/account" /></div>`}
         </div>
 
         ${account.opened ? html`<${MoreServices} />` : html`<${IntroServices} />`}

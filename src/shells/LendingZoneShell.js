@@ -15,6 +15,7 @@ import { COPY } from '../content/copy.js';
 import { LendingSummaryCard } from '../features/hub/LendingSummaryCard.js';
 import { LoanIntroCard } from '../features/hub/LoanIntroCard.js';
 import { QuickActions } from '../features/hub/QuickActions.js';
+import { DueSoonNotice } from '../features/hub/DueSoonNotice.js';
 import { RepayMethodSheet } from '../features/repay/RepayMethodSheet.js';
 import { IntroSheet } from '../features/intro/IntroSheet.js';
 import { SimulateForm, simItems, canSimulate } from '../features/simulate/SimulateForm.js';
@@ -101,6 +102,7 @@ function ZoneOverview({ account }) {
     <div class="zone-overview">
       <p class="t-caption-regular c-secondary">${COPY.account.updatedAt} ${dateTime()}</p>
       <${LendingSummaryCard} variant="zone" />
+      <div class="zone-overview__notice"><${DueSoonNotice} /></div>
     </div>
 
     <${QuickActions} onRepay=${() => setRepayOpen(true)} />

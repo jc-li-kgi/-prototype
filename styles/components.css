@@ -42,6 +42,10 @@
 }
 .card--shadow { box-shadow: var(--shadow-basic); }
 
+/* NoticeCard 公告卡｜Figma wk25/card/3：內距 16、icon 與文字 16 */
+.notice-card { display: flex; align-items: center; gap: var(--spacing-16); width: 100%; padding: var(--spacing-16); text-align: left; }
+.notice-card__text { flex: 1; min-width: 0; }
+
 /* ---------- FeeCard（流程申請 › 詳情概覽卡：內距 24×24；標題→內容 12；詳情條列 20） ---------- */
 .fee-card {
   display: flex;

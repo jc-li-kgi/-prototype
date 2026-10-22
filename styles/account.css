@@ -40,6 +40,7 @@
 .account-overview__picker,
 .account-overview__time { padding: 0 var(--spacing-16); }
 .account-overview__card { padding: 0 var(--spacing-16); }
+.account-overview__card:empty { display: none; } /* 沒有到期通知時不佔間距 */
 
 /* 更多服務（Level 3：標題與內容 12；產品選單卡 16×16） */
 .more-services { display: flex; flex-direction: column; gap: var(--spacing-12); padding: 0 var(--spacing-16); }

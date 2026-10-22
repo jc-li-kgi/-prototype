@@ -29,8 +29,9 @@ export function scenarioLoan({ id, amount, purpose, dueIn, extensions = 0, feePa
   };
 }
 
+// 共用的借款都還沒到期（不會出現到期通知）；需要即將到期的任務（T4、T5）自己覆寫 loans
 const loans = [
-  scenarioLoan({ id: 'L000123', amount: 1000000, purpose: '資金周轉', dueIn: 6 }),  // 即將到期（現金還款任務用）
+  scenarioLoan({ id: 'L000123', amount: 1000000, purpose: '資金周轉', dueIn: 40 }),
   scenarioLoan({ id: 'L000098', amount: 1000000, purpose: '投資理財', dueIn: 85 }),
 ];
 export const BASE_ACCOUNT = {
