@@ -4,7 +4,7 @@ import { html, useState } from '../../lib/preact.js';
 import { Sheet, SearchField, EmptyState } from '../../components/index.js';
 import { useStore } from '../../store.js';
 import { STOCKS } from '../../mock/stocks.js';
-import { num } from '../../lib/format.js';
+import { num, price } from '../../lib/format.js';
 import { COPY } from '../../content/copy.js';
 
 /** <StockPickerSheet open=${open} exclude=${['0056']} onSelect=${(code) => …} onClose=${close} /> */
@@ -42,7 +42,7 @@ export function StockPickerSheet({ open, exclude = [], onSelect, onClose }) {
                       <span class="n-subtitle-regular c-secondary">${code}</span>
                     </span>
                     <span class="stock-picker__metrics">
-                      <span><span class="t-caption-regular c-secondary">${t.price}</span> <span class="n-body-regular c-primary">${num(s.price)}</span></span>
+                      <span><span class="t-caption-regular c-secondary">${t.price}</span> <span class="n-body-regular c-primary">${price(s.price)}</span></span>
                       ${held(code) > 0 &&
                       html`<span><span class="t-caption-regular c-secondary">${t.holding}</span> <span class="t-caption-regular c-primary">${num(held(code))} 張</span></span>`}
                     </span>
