@@ -52,12 +52,12 @@ export function LoanRecordList({ loans = [], repayments = [], initialSub = 'borr
   `;
 }
 
-/** 借款紀錄：最近到期的在最上面 */
+/** 借款紀錄：到期日最遠的在最上面 */
 function BorrowList({ loans, open, setOpen, onRepay, onRefinance, onRepayRecords }) {
   const t = COPY.records;
   const d = t.borrowDetail;
   const notAvailable = () => showToast(COPY.common.notAvailable);
-  const rows = [...loans].sort((a, b) => a.dueDate.localeCompare(b.dueDate));
+  const rows = [...loans].sort((a, b) => b.dueDate.localeCompare(a.dueDate));
 
   return html`
     <${ListTable}
