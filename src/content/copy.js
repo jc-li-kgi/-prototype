@@ -244,6 +244,53 @@ export const COPY = {
     viewRecords: '查看借款紀錄',
   },
 
+  // 借新還舊｜Figma 1804:117905（選取借款）、1804:117906（展開明細）、1804:118296（確認資料）、1804:117210（完成）
+  refinance: {
+    title: '申請借新還舊',
+    refRate: '當前參考利率',
+    listTitle: '選取要續借的借款',
+    selectAll: '全選',
+    listDesc: '近 20 天內到期的借款，可以同時申請借新還舊', // 清單只列展延次數已滿的借款
+    due: (d) => `${d} 到期`,
+    extensions: '展延次數',
+    interest: '應還利息',
+    interestAndFee: '應還利息與借款手續費',
+    expand: '展開明細',
+    collapse: '收闔明細',
+    detail: {
+      amount: '初始借款金額',
+      startDate: '起息日',
+      accrued: '累積利息',
+      serial: '借款序號',
+      applyDate: '申請日',
+      channel: '申請管道',
+    },
+    total: '扣款總額',
+    selectedCount: (n) => `(已選取 ${n} 筆)`,
+    breakdownTitle: '扣款明細',
+    totalInterest: '應還利息',
+    totalFee: '借款手續費',
+    // 確認資料
+    payTitle: '扣款資訊',
+    bankAccount: '扣款帳號',
+    bankBalance: '扣款帳戶餘額',
+    balanceError: '扣款帳戶餘額不足，請先存入款項',
+    applyDate: '申請日',
+    newTitle: '新借款契約',
+    newDesc: '依據選取的舊借款，將會整合成一筆，方便您管理',
+    amount: '借款金額',
+    rate: '利率',
+    estInterest: '預估利息',
+    estFee: '預估借款手續費',
+    startDate: '起息日',
+    dueDate: '到期日',
+    purpose: '借款目的',
+    // 完成頁
+    resultTitle: '成功送出申請',
+    resultDesc: '系統將在營業日內完成扣款',
+    viewRecords: '查看借款紀錄',
+  },
+
   repay: {
     methodTitle: '選擇還款方式',
     // available: false → 點了顯示未開放
@@ -389,7 +436,22 @@ export const COPY = {
     },
     dueSoon: '即將到期',
     extend: '展延',
+    refinance: '借新還舊', // 展延次數已滿時取代「展延」
     repay: '還款',
+    // 借款展開明細｜Figma 3167:192520
+    borrowDetail: {
+      startDate: '起息日',
+      amount: '初始借款金額',
+      rate: '利率',
+      interest: '預估利息',
+      fee: '借款手續費',
+      extensions: '展延次數',
+      applyDate: '申請日',
+      serial: '借款序號',
+      channel: '申請管道',
+    },
+    repayRecords: '還款紀錄',
+    extendRecords: '展延紀錄',
     empty: '目前沒有借款紀錄',
     emptyRepay: '目前沒有還款紀錄',
     // 擔保品

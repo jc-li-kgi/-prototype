@@ -10,6 +10,7 @@ export const LOAN_RULES = {
   fee: 2,              // 借款手續費（每筆）
   termMonths: 6,       // 借款期間
   maxTermMonths: 18,   // 最長借款期限（含展延）
+  maxExtensions: 2,    // 最多展延次數（6 個月 × 3 期 = 18 個月）；展延滿 2 次只能還款或借新還舊
   callRatio: 130,      // 維持率低於此值被追繳（%）
   recoverRatio: 166,   // 追繳後需補足至此維持率（%）
 };
@@ -169,6 +170,79 @@ export function repayPlan(account, principal) {
   return { principal, interest, fee, total: principal + interest + fee, allocations };
 }
 
+/* ---------- 借新還舊 ---------- */
+
+/** 本期起算日：每期 termMonths 個月，展延後從上一期到期日起算 */
+function periodStart(loan) {
+  const start = addMonths(loan.dueDate, -LOAN_RULES.termMonths);
+  return start > loan.startDate ? start : loan.startDate;
+}
+
+/** 利息（按日計）：from ~ to */
+function interestBetween(balance, rate, from, to) {
+  const days = Math.max(0, Math.round((new Date(to) - new Date(from)) / 86400000));
+  return Math.round((balance * rate * days) / 365);
+}
+
+/** 本期累積到今天的利息 */
+export function accruedInterest(loan) {
+  return interestBetween(loan.balance, loan.rate, periodStart(loan), today());
+}
+
+/** 預估利息：本期到到期日的利息 */
+export function periodInterest(loan) {
+  return interestBetween(loan.balance, loan.rate, periodStart(loan), loan.dueDate);
+}
+
+/** 展延次數已滿（到期時只能還款或借新還舊） */
+export function extensionsUsed(loan) {
+  return (loan.extensions ?? 0) >= LOAN_RULES.maxExtensions;
+}
+
+/** 借款紀錄是否顯示「借新還舊」：即將到期、且展延次數已滿 */
+export function canRefinance(loan) {
+  return isDueSoon(loan) && extensionsUsed(loan);
+}
+
+/** 可借新還舊的借款：近 DUE_SOON_DAYS 天內到期、且展延次數已滿 */
+export function refinanceCandidates(account) {
+  return account.loans.filter(canRefinance).sort((a, b) => a.dueDate.localeCompare(b.dueDate));
+}
+
+/**
+ * 單筆舊借款借新還舊時要付的錢：本期應還利息 + 借款手續費（尚未收過才收，費率同還款）
+ * 本金由新借款償還，不需扣款
+ */
+export function refinanceDue(loan) {
+  const interest = periodInterest(loan);
+  const fee = loan.feePaid ? 0 : Math.round(loan.balance * REPAY_RULES.feeRate);
+  return { interest, fee, total: interest + fee };
+}
+
+/** 借新還舊試算：選取的舊借款整併成一筆新借款 */
+export function refinancePlan(account, loanIds) {
+  const loans = account.loans.filter((l) => loanIds.includes(l.id));
+  const dues = loans.map(refinanceDue);
+  const sum = (key) => dues.reduce((s, d) => s + d[key], 0);
+  const amount = loans.reduce((s, l) => s + l.balance, 0);
+  const start = today();
+  return {
+    loans,
+    interest: sum('interest'),
+    fee: sum('fee'),
+    total: sum('total'), // 扣款總額
+    newLoan: {
+      amount,
+      rate: LOAN_RULES.rate,
+      interest: interestBetween(amount, LOAN_RULES.rate, start, addMonths(start, LOAN_RULES.termMonths)), // 與借款紀錄的預估利息同算法（按日計）
+      fee: LOAN_RULES.fee,
+      startDate: start,
+      dueDate: addMonths(start, LOAN_RULES.termMonths),
+      purpose: loans[0]?.purpose,
+    },
+  };
+}
+
 /** 部分還款的範圍：最少一個級距，最多為全部借款餘額 */
 export function repayRange(account) {
   return { min: REPAY_RULES.step, max: loanBalance(account), step: REPAY_RULES.step };
@@ -176,6 +250,12 @@ export function repayRange(account) {
 
 export function today() {
   return new Date().toISOString().slice(0, 10);
+}
+
+export function addDays(isoDate, days) {
+  const d = new Date(isoDate);
+  d.setDate(d.getDate() + days);
+  return d.toISOString().slice(0, 10);
 }
 
 export function addMonths(isoDate, months) {

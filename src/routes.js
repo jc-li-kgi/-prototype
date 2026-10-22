@@ -11,6 +11,9 @@ import { CollateralResult } from './features/collateral/CollateralResult.js';
 import { RepayAmount } from './features/repay/RepayAmount.js';
 import { RepayConfirm } from './features/repay/RepayConfirm.js';
 import { RepayResult } from './features/repay/RepayResult.js';
+import { RefinanceSelect } from './features/refinance/RefinanceSelect.js';
+import { RefinanceConfirm } from './features/refinance/RefinanceConfirm.js';
+import { RefinanceResult } from './features/refinance/RefinanceResult.js';
 import { SimulateResult } from './features/simulate/SimulateResult.js';
 import { LendingRecords } from './pages/LendingRecords.js';
 import { TaskStart } from './pages/TaskStart.js';
@@ -39,6 +42,11 @@ export const ROUTES = {
   '/repay/amount': RepayAmount,
   '/repay/confirm': RepayConfirm,
   '/repay/result': RepayResult,
+
+  // 借新還舊
+  '/refinance/select': RefinanceSelect,
+  '/refinance/confirm': RefinanceConfirm,
+  '/refinance/result': RefinanceResult,
 
   // 可借貸額度試算結果（輸入在專區「試算」頁籤）
   '/simulate/result': SimulateResult,
