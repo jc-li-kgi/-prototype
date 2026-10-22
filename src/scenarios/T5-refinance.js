@@ -3,30 +3,7 @@
 //   L000123  6 天後到期、展延 2/2 → 借款紀錄顯示「借新還舊」
 //   L000131  15 天後到期、展延 2/2、尚未收借款手續費 → 也可借新還舊，可一併勾選
 //   L000098  90 天後到期 → 不在借新還舊清單
-import { BASE_ACCOUNT } from './base-account.js';
-import { addDays, addMonths, today } from '../lib/calc.js';
-
-const t = today();
-const loan = ({ id, amount, purpose, dueIn, extensions, feePaid }) => {
-  const dueDate = addDays(t, dueIn);
-  const startDate = addMonths(dueDate, -6 * (extensions + 1));
-  return {
-    id,
-    amount,
-    balance: amount,
-    purpose,
-    rate: 0.028,
-    applyDate: startDate,
-    startDate,
-    dueDate,
-    status: '已撥款',
-    extensions,
-    feePaid,
-    fee: 2,
-    appliedAt: `${startDate}T10:15:30`,
-    channel: 'APP',
-  };
-};
+import { BASE_ACCOUNT, scenarioLoan as loan } from './base-account.js';
 
 export default {
   id: 'T5',

@@ -75,7 +75,7 @@
 - `Button` 用 `variant`（primary / text / capsule）與 `typo`（換文字層級）；需要換色的 icon 用 `<Icon tint />`。
 - 新功能放 `src/features/<功能>/`；功能之間不互相 import，只透過 `store.js` 讀寫資料。需要組合多個功能的頁面放 `src/shells/`（入口頁）或 `src/pages/`（例如股票借貸明細）。
 - 步驟順序寫在 `src/flows/flows.js`；頁面用 `flowPosition` / `nextStep` / `prevStep`，不要寫死下一頁。
-- 測試情境放 `src/scenarios/`（一個任務一個檔，並在 `index.js` 註冊）；已開戶客戶共用 `base-account.js`。資料結構改版時，遞增 `store.js` 的 `KEY` 版本。
+- 測試情境放 `src/scenarios/`（一個任務一個檔，並在 `index.js` 註冊）；已開戶客戶共用 `base-account.js`。借款日期不寫死，一律用 `scenarioLoan({ dueIn })` 依當天計算（任何一天測試，即將到期等狀態都一樣）。資料結構改版時，遞增 `store.js` 的 `KEY` 版本。
 - 股票數量一律用「張」（`lots`）；股價、成數、擔保資格（eligible / ratioOnly / ineligible）在 `src/mock/stocks.js`。可借貸股票成數一律 60%（用戶最多可借市值 60%，初始維持率 166%）；維持率顯示一律無條件捨去。
 - 開始流程用 `startFlow(flowId, { query, returnTo })`，結束或第 1 步返回會回到進入流程前的頁面。
 - 同一頁可出現在多個流程（例如匯入擔保品第 1 步也是首次借款第 1 步）：頁首標題用 `flowTitle()`、依流程調整行為用 `isFlow()`；送出動作放在流程最後一步。
@@ -89,7 +89,7 @@
 - 確認資料頁的送出按鈕一律用 `COPY.common.submit`（確認送出）。
 - 新頁面要在 `src/routes.js` 註冊。
 - 還款：借款紀錄到期前 `DUE_SOON_DAYS`（20）天顯示即將到期＋展延 / 還款；還款 → 選擇還款方式（`features/repay/RepayMethodSheet`，由專區 shell 與明細頁放置；專區快捷功能「還款」也會開啟）→ `cashRepay` 流程，送出 `repay()`；試算在 `calc.js` 的 `repayPlan`。
-- 借新還舊：借款展延次數上限 `LOAN_RULES.maxExtensions`（2）。即將到期且展延已滿的借款，借款紀錄的「展延」改為「借新還舊」→ `refinance` 流程（`features/refinance/`：選取借款契約 → 確認資料，送出 `refinance()`）。第 1 步預設勾選點選的那筆，其他近 20 天內到期、且展延 2 次的借款可一併勾選（展延未滿的不列出）；扣款總額 = 應還利息（本期）＋ 尚未收取的借款手續費；選取的舊借款整併成一筆新借款，完成頁「查看借款紀錄」展開新借款。規則在 `calc.js` 的 `refinanceDue` / `refinancePlan`。測試任務 T5 的借款日期依當天計算。
+- 借新還舊：借款展延次數上限 `LOAN_RULES.maxExtensions`（2）。即將到期且展延已滿的借款，借款紀錄的「展延」改為「借新還舊」→ `refinance` 流程（`features/refinance/`：選取借款契約 → 確認資料，送出 `refinance()`）。第 1 步預設勾選點選的那筆，其他近 20 天內到期、且展延 2 次的借款可一併勾選（展延未滿的不列出）；扣款總額 = 應還利息（本期）＋ 尚未收取的借款手續費；選取的舊借款整併成一筆新借款，完成頁「查看借款紀錄」展開新借款。規則在 `calc.js` 的 `refinanceDue` / `refinancePlan`。
 - 未實作的按鈕呼叫 `showToast(COPY.common.notAvailable)`。
 - 不安裝建置工具或 npm 套件（電腦沒有 Node.js）。
 
