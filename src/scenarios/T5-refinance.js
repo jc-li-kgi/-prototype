@@ -14,9 +14,9 @@ export default {
   account: {
     ...BASE_ACCOUNT,
     loans: [
-      loan({ id: 'L000123', amount: 1000000, purpose: '資金周轉', dueIn: 6, extensions: 2, feePaid: true }),
-      loan({ id: 'L000131', amount: 500000, purpose: '投資理財', dueIn: 15, extensions: 2, feePaid: false }),
-      loan({ id: 'L000098', amount: 1000000, purpose: '投資理財', dueIn: 90, extensions: 0, feePaid: false }),
+      loan({ id: 'L000123', amount: 300000, purpose: '資金周轉', dueIn: 6, extensions: 2, feePaid: true }),
+      loan({ id: 'L000131', amount: 150000, purpose: '投資理財', dueIn: 15, extensions: 2, feePaid: false }),
+      loan({ id: 'L000098', amount: 200000, purpose: '投資理財', dueIn: 90, extensions: 0, feePaid: false }),
     ],
   },
 };

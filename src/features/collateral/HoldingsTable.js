@@ -7,7 +7,7 @@ import { html, useState } from '../../lib/preact.js';
 import { ListTable, ListRow, StockName, AmountCell, DetailRow, Button } from '../../components/index.js';
 import { useStore } from '../../store.js';
 import { stockOf, perLotLoan } from '../../lib/calc.js';
-import { num } from '../../lib/format.js';
+import { num, price } from '../../lib/format.js';
 import { startFlow } from '../../flows/flows.js';
 import { COPY } from '../../content/copy.js';
 
@@ -63,7 +63,7 @@ export function HoldingsTable({ holdings, limit, emptyText = COPY.holdings.empty
             detail=${html`
               <${DetailRow} label=${t.detail.name} value=${stock.name} valueClass="t-body-regular" />
               ${importable && html`<${DetailRow} label=${t.detail.pledgedLots} value=${num(pledgedLots(h.code))} />`}
-              <${DetailRow} label=${t.detail.price} value=${num(stock.price)} />
+              <${DetailRow} label=${t.detail.price} value=${price(stock.price)} />
               ${eligible && html`<${DetailRow} label=${tc.perLot} value=${num(perLotLoan(h.code))} />`}
               <${DetailRow} label=${tc.ratio} value=${eligible ? `${Math.round(stock.ratio * 100)}%` : '-'} />
             `}

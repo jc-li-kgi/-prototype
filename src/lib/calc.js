@@ -32,7 +32,8 @@ export function stockOf(code) {
 
 /** 每張市值 */
 export function lotValue(code) {
-  return stockOf(code).price * LOT_SIZE;
+  // 股價有小數（例如 15.93），用 round 避免浮點誤差（15.93 × 1000 = 15930.000000000002）
+  return Math.round(stockOf(code).price * LOT_SIZE);
 }
 
 /** 每張可借金額 = 每張市值 × 成數 */

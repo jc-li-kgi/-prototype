@@ -5,7 +5,7 @@ import { html, useState } from '../../lib/preact.js';
 import { PickerField, NumberField, Button } from '../../components/index.js';
 import { useStore, updateSimDraft, showToast } from '../../store.js';
 import { stockOf } from '../../lib/calc.js';
-import { num } from '../../lib/format.js';
+import { num, price } from '../../lib/format.js';
 import { COPY } from '../../content/copy.js';
 import { StockPickerSheet } from './StockPickerSheet.js';
 
@@ -56,7 +56,7 @@ export function SimulateForm() {
               displayValue=${stock && `${stock.name} ${it.code}`}
               placeholder=${t.pickPlaceholder}
               onOpen=${() => setPicking(i)}
-              hint=${stock && t.holdingHint(num(stock.price), held(it.code) ? num(held(it.code)) : null)}
+              hint=${stock && t.holdingHint(price(stock.price), held(it.code) ? num(held(it.code)) : null)}
             />
             <${NumberField}
               label=${t.lotsLabel}

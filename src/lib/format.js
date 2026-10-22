@@ -3,6 +3,9 @@ export const num = (n) => Number(n).toLocaleString('en-US');
 
 export const twd = (n) => `TWD ${num(n)}`;
 
+/** 收盤價：固定兩位小數，例如 106.90 */
+export const price = (n) => Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
 /** 以「萬」為單位（無條件捨去），例如 1,260,000 → 126 */
 export const wan = (n) => num(Math.floor(n / 10000));
 
