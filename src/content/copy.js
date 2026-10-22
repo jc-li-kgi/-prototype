@@ -183,6 +183,7 @@ export const COPY = {
   },
 
   hub: {
+    dueSoonNotice: (n) => `有 ${n} 筆借款，即將到期`, // 到期通知｜Figma 3177:194338、2720:159497
     ratio: '整戶維持率',
     collateralValue: '擔保品市值',
     borrowed: '已借款金額',

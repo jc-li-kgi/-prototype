@@ -27,6 +27,8 @@
 
 /* ---------- 已借款：總覽 ---------- */
 .zone-overview { display: flex; flex-direction: column; gap: var(--spacing-12); padding: 0 var(--spacing-16); }
+.zone-overview__notice { margin-top: calc(var(--spacing-16) - var(--spacing-12)); } /* 卡片→到期通知 16（Figma） */
+.zone-overview__notice:empty { display: none; }
 
 /* 快捷功能（IconAction × 4） */
 .quick-actions { display: flex; justify-content: space-between; padding: 0 var(--spacing-16); }

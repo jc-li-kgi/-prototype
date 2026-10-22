@@ -39,6 +39,7 @@
 - 寫法：`<Icon name="…" level="caption|body|subtitle" />`；間距用 `.icon-text--{level}`（Subtitle 前置 icon 再加 `.icon-text--leading`），或在元件 CSS 用 `var(--icon-gap-*)`。token 在 `tokens.css`（`--icon-size-*`、`--icon-gap-*`）。
 - 已套用：InfoLabel（依 labelClass 自動判斷）、FilterPill、PickerField、TotalBar、CollapsibleCard（`variant="overview"` = 內距 16）、ServiceCardList、SheetOptions（chevron）、更多服務、首頁快捷功能「自訂」、資產卡。
 - 不適用：頁首 / 導覽列 icon、圓形捷徑 icon、插圖、列表展開箭頭等獨立 icon。
+- 例外：通知條 `NoticeCard` 的 icon（公告、›）一律 24px，不跟文字層級。
 
 ### 底部按鈕
 
@@ -67,7 +68,7 @@
 ## 程式結構規則
 
 - **優先用現有元件**（`src/components/index.js` 統一 import；元件負責樣式，內容由參數帶入）：
-  - ui：Button、Icon、InfoLabel（文字＋ⓘ）、DetailRow、DetailCard（確認資料卡）、DetailPanel（列表展開明細卡；放在白卡裡加 `tone="blue"`）、SummaryCard（摘要卡，overview / flow）、FeeCard、AmountHero（確認頁大金額）、AmountCell（列表金額欄）、StockName（股票名稱＋代碼）、SectionHeader（區塊標題＋連結＋說明）、CollapsibleCard、ExpandToggle、IconAction（圓形圖示捷徑）、EmptyState、StatGroup（並排大數字）、NoticeBar（淡黃提示條）、StockPickCard（精選擔保品卡）、ServiceCardList（圖示＋標題＋說明的服務清單）、AccountPicker、Checkbox、CheckboxHeader（勾選框＋標題＋補充說明，說明與標題對齊；全選用）、Accordion（收合問答，FAQ）、FilterPill、Tag、SearchIcon
+  - ui：Button、Icon、InfoLabel（文字＋ⓘ）、DetailRow、DetailCard（確認資料卡）、DetailPanel（列表展開明細卡；放在白卡裡加 `tone="blue"`）、SummaryCard（摘要卡，overview / flow）、FeeCard、AmountHero（確認頁大金額）、AmountCell（列表金額欄）、StockName（股票名稱＋代碼）、SectionHeader（區塊標題＋連結＋說明）、CollapsibleCard、ExpandToggle、IconAction（圓形圖示捷徑）、EmptyState、StatGroup（並排大數字）、NoticeBar（淡黃提示條）、NoticeCard（通知條：公告 icon＋一行訊息＋›，整張可點；icon 一律 24px）、StockPickCard（精選擔保品卡）、ServiceCardList（圖示＋標題＋說明的服務清單）、AccountPicker、Checkbox、CheckboxHeader（勾選框＋標題＋補充說明，說明與標題對齊；全選用）、Accordion（收合問答，FAQ）、FilterPill、Tag、SearchIcon
   - form：PickerField（`onOpen` + `displayValue` = 自訂選擇畫面；`hint` 底線下說明）、NumberField（整數輸入＋單位）、AmountField（金額；`disabled` 鎖定；`value=null` + `placeholder` = 未填狀態，tertiary 色）、RadioGroup（單選，橫排平分）、QtyStepper（張數）、SelectableItem（勾選項目）、SearchField（Figma Atom_SearchBar_Mobile；預設淡藍底放白底上，藍底頁面加 `onSurface` 改白底）
   - layout：FlowPage（流程頁框架，流程每一步都用）、PageHeader、StepBar、BottomNav、TextTabs、SegmentedTabs、ListTable／ListRow（列表；ListRow 的 `detail` 自動包在 DetailPanel 白色明細卡裡）、Carousel（橫向滑動卡片）、StickyFooter（固定置底；plain = 只有按鈕時）、BottomActions（頁面底部按鈕區，見下方「底部按鈕」）、TotalBar（置底總計；`note` = 標題下方補充，例如已選取筆數；`expanded` + `onToggle` + children = 在置底區內向上展開明細，最高 90%）、ResultPage（完成頁）
   - overlay：Dialog / InfoDialog（置中對話框：ⓘ、注意事項說明、確認提示）、Sheet（底部彈窗：選單、明細；非選單內容包 `.sheet__content`；搜尋類加 `fullHeight` 固定 90% 高，不隨結果數量變矮）、SheetOptions（彈窗選項，選中項淡藍底；`chevron` = 前往型選單，例如選擇還款方式）、Toast
@@ -90,6 +91,7 @@
 - 新頁面要在 `src/routes.js` 註冊。
 - 還款：借款紀錄到期前 `DUE_SOON_DAYS`（20）天顯示即將到期＋展延 / 還款；還款 → 選擇還款方式（`features/repay/RepayMethodSheet`，由專區 shell 與明細頁放置；專區快捷功能「還款」也會開啟）→ `cashRepay` 流程，送出 `repay()`；試算在 `calc.js` 的 `repayPlan`。
 - 借新還舊：借款展延次數上限 `LOAN_RULES.maxExtensions`（2）。即將到期且展延已滿的借款，借款紀錄的「展延」改為「借新還舊」→ `refinance` 流程（`features/refinance/`：選取借款契約 → 確認資料，送出 `refinance()`）。第 1 步預設勾選點選的那筆，其他近 20 天內到期、且展延 2 次的借款可一併勾選（展延未滿的不列出）；扣款總額 = 應還利息（本期）＋ 尚未收取的借款手續費；選取的舊借款整併成一筆新借款，完成頁「查看借款紀錄」展開新借款。規則在 `calc.js` 的 `refinanceDue` / `refinancePlan`。
+- 到期通知：有即將到期（`DUE_SOON_DAYS` 天內）的借款時，專區總覽、帳務 › 授信管理的摘要卡下方顯示「有 N 筆借款，即將到期」（`features/hub/DueSoonNotice`），點擊 → 股票借貸明細 › 借款（帳務帶 `back=/account`）。共用基本資料的借款都還沒到期；需要即將到期的任務（T4 現金還款、T5 借新還舊）自己覆寫 `loans`。
 - 未實作的按鈕呼叫 `showToast(COPY.common.notAvailable)`。
 - 不安裝建置工具或 npm 套件（電腦沒有 Node.js）。
 

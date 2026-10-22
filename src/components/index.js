@@ -21,6 +21,7 @@ export { IconAction } from './ui/IconAction.js';
 export { EmptyState } from './ui/EmptyState.js';
 export { StatGroup } from './ui/StatGroup.js';
 export { NoticeBar } from './ui/NoticeBar.js';
+export { NoticeCard } from './ui/NoticeCard.js';
 export { StockPickCard } from './ui/StockPickCard.js';
 export { ServiceCardList } from './ui/ServiceCardList.js';
 export { AccountPicker } from './ui/AccountPicker.js';
