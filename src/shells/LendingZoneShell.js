@@ -89,7 +89,11 @@ export function LendingZoneShell({ query }) {
           <${Button} onClick=${() => startFlow('newAccountLoan')}>${t.borrowNow}<//>
         <//>
       `}
-      <${IntroSheet} open=${introOpen} onClose=${() => setIntroOpen(false)} />
+      <${IntroSheet}
+        open=${introOpen}
+        onClose=${() => setIntroOpen(false)}
+        onSimulate=${() => { setIntroOpen(false); setTab('simulate'); scrollTo(0, 0); }}
+      />
     </div>
   `;
 }
