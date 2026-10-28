@@ -15,3 +15,4 @@
 .c-disabled  { color: var(--color-content-general-disabled); }
 
 .nowrap { white-space: nowrap; }
+.text-wrap { white-space: normal; overflow-wrap: anywhere; } /* 覆蓋元件預設的不換行（例如明細裡的完整商品名稱） */
