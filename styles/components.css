@@ -212,6 +212,9 @@
   z-index: 10;
 }
 .bottom-nav__item {
+  -webkit-touch-callout: none; /* 長按「更多」不跳出系統選單 */
+  -webkit-user-select: none;
+  user-select: none;
   width: 32px;
   display: flex;
   flex-direction: column;

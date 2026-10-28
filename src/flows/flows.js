@@ -80,6 +80,11 @@ export function entryHome() {
  *   returnTo  指定結束後回到哪一頁（預設 = 目前頁面）
  */
 export function startFlow(flowId, { query, returnTo } = {}) {
+  // 任務設定了 completeOnFlows（例如瀏覽專區任務按下借款）：不進流程，改顯示「任務完成」（app.js）
+  if (getState().completeOnFlows?.includes(flowId)) {
+    setState({ taskDone: true });
+    return;
+  }
   const from = returnTo || location.hash.slice(1) || entryHome();
   // 每次開始流程都從空白草稿開始，避免帶到上次沒完成的資料
   setState({ flow: flowId, flowReturn: from, draft: {}, collateralDraft: {}, repayDraft: {}, refiDraft: {} });

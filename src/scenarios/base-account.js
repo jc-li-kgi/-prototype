@@ -29,16 +29,16 @@ export function scenarioLoan({ id, amount, purpose, dueIn, extensions = 0, feePa
   };
 }
 
-// 已開戶任務（T2～T5）的已借款總額一律 TWD 200,000
-// 共用的借款都還沒到期（不會出現到期通知）；需要即將到期的任務（T4、T5）自己覆寫 loans
-/** 擔保品異動紀錄：daysBefore = 幾天前申請（要早於借款起息日，T5 的借款約 18 個月前起息） */
+// 已開戶任務（T4～T7）的已借款總額一律 TWD 400,000（T5 另有一筆已還清的借款）
+// 共用的借款都還沒到期（不會出現到期通知）；需要即將到期的任務（T6、T7）自己覆寫 loans
+/** 擔保品異動紀錄：daysBefore = 幾天前申請（要早於借款起息日，T7 的借款約 18 個月前起息） */
 function collateralRecord({ id, type, code, lots, status, daysBefore, time }) {
   return { id, type, code, lots, status, appliedAt: `${addDays(today(), -daysBefore)}T${time}`, channel: 'APP' };
 }
 
 const loans = [
-  scenarioLoan({ id: 'L000123', amount: 120000, purpose: '資金周轉', dueIn: 40 }),
-  scenarioLoan({ id: 'L000098', amount: 80000, purpose: '投資理財', dueIn: 85 }),
+  scenarioLoan({ id: 'L000123', amount: 240000, purpose: '資金周轉', dueIn: 40 }),
+  scenarioLoan({ id: 'L000098', amount: 160000, purpose: '投資理財', dueIn: 85 }),
 ];
 export const BASE_ACCOUNT = {
   opened: true,
@@ -59,7 +59,7 @@ export const BASE_ACCOUNT = {
   // 證券庫存中，尚未匯入的股票（全部匯入約可再借 94 萬）
   holdings: [
     { code: '0050', lots: 3 },
-    { code: '2883', lots: 15 }, // T3 要匯入的標的，放前面（專區只列前 4 筆）
+    { code: '2883', lots: 15 }, // 匯入擔保品任務要匯入的標的，放前面（專區只列前 4 筆）
     { code: '0056', lots: 5 },
     { code: '00915', lots: 10 },
     { code: '009816', lots: 10 },

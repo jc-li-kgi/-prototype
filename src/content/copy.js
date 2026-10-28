@@ -1,5 +1,13 @@
 // 所有文案集中管理：改字只改這裡
 export const COPY = {
+  // 任務完成通知（主持人用，見 app.js）
+  task: {
+    doneTitle: '任務完成',
+    doneBody: (title) => `已完成「${title}」，謝謝你的協助！`,
+    backToList: '回到任務列表',
+    label: (no, title) => `任務${no}　${title}`, // no 來自情境（例如「一＆二」）
+  },
+
   common: {
     notAvailable: '此功能未開放於本次測試',
     next: '下一步',

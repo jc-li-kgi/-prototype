@@ -17,7 +17,7 @@ function load() {
 }
 
 function emptyState() {
-  return { taskId: null, entry: null, flow: null, flowReturn: null, account: null, draft: {}, collateralDraft: {}, repayDraft: {}, refiDraft: {}, introShown: false, toast: null };
+  return { taskId: null, entry: null, flow: null, flowReturn: null, account: null, draft: {}, collateralDraft: {}, repayDraft: {}, refiDraft: {}, introShown: false, completeOnFlows: null, taskDone: false, toast: null };
 }
 
 function save() {
@@ -55,6 +55,7 @@ export function loadScenario(scenario) {
     taskId: scenario.id,
     entry: scenario.entry,
     startPath: scenario.startPath,
+    completeOnFlows: scenario.completeOnFlows || null, // 開始這些流程時任務完成（見 flows.js startFlow）
     account: structuredClone(scenario.account),
   };
   save();

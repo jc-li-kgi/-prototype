@@ -1,10 +1,12 @@
 // 底部導覽｜Figma：B_Navi
 // 「我的」→ 證券主頁、「帳務」→ 帳務 › 授信管理，其他未開放
+// 隱藏入口：長按「更多」2 秒 → 主持人頁（任務列表），受測者不會誤觸
 // icon 一律用 tint，顏色跟著文字：選取 = content active，未選取 = primary 透明度 40%
 import { html } from '../../lib/preact.js';
 import { Icon } from '../ui/Icon.js';
 import { showToast } from '../../store.js';
 import { navigate } from '../../router.js';
+import { useLongPress } from '../../lib/useLongPress.js';
 import { COPY } from '../../content/copy.js';
 
 const FundIcon = () => html`
@@ -26,13 +28,19 @@ const ITEMS = [
 ];
 
 export function BottomNav({ active = 'account' }) {
+  const moderator = useLongPress(() => navigate('/moderator'), 2000);
+  const go = (item) => {
+    if (item.key === 'more' && moderator.fired()) return; // 長按已觸發，不再顯示未開放
+    if (item.key !== active) item.to ? navigate(item.to) : showToast(COPY.common.notAvailable);
+  };
   return html`
     <nav class="bottom-nav">
       ${ITEMS.map(
         (item) => html`
           <button
             class=${'bottom-nav__item ' + (item.key === active ? 'bottom-nav__item--active t-body-bold' : 't-body-regular')}
-            onClick=${() => item.key !== active && (item.to ? navigate(item.to) : showToast(COPY.common.notAvailable))}
+            onClick=${() => go(item)}
+            ...${item.key === 'more' ? moderator.handlers : {}}
           >
             <span class="bottom-nav__icon">${item.icon}</span>
             <span>${item.label}</span>
