@@ -11,8 +11,8 @@ export default {
     ...BASE_ACCOUNT,
     // 一筆 6 天後到期 → 專區、帳務顯示到期通知，借款紀錄顯示「即將到期」
     loans: [
-      scenarioLoan({ id: 'L000123', amount: 300000, purpose: '資金周轉', dueIn: 6 }),
-      scenarioLoan({ id: 'L000098', amount: 200000, purpose: '投資理財', dueIn: 85 }),
+      scenarioLoan({ id: 'L000123', amount: 120000, purpose: '資金周轉', dueIn: 6 }),
+      scenarioLoan({ id: 'L000098', amount: 80000, purpose: '投資理財', dueIn: 85 }),
     ],
   },
 };

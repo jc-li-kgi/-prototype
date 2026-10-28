@@ -5,7 +5,7 @@ import { addDays, addMonths, today } from '../lib/calc.js';
 
 /**
  * 情境用的借款：dueIn = 幾天後到期；每期 6 個月，展延幾次就往前推幾期作為起息日
- *   scenarioLoan({ id: 'L000123', amount: 300000, purpose: '資金周轉', dueIn: 6 })
+ *   scenarioLoan({ id: 'L000123', amount: 120000, purpose: '資金周轉', dueIn: 6 })
  *   extensions  已展延次數（預設 0）；feePaid  借款手續費是否已收（預設 false）
  */
 export function scenarioLoan({ id, amount, purpose, dueIn, extensions = 0, feePaid = false }) {
@@ -29,10 +29,11 @@ export function scenarioLoan({ id, amount, purpose, dueIn, extensions = 0, feePa
   };
 }
 
+// 已開戶任務（T2～T5）的已借款總額一律 TWD 200,000
 // 共用的借款都還沒到期（不會出現到期通知）；需要即將到期的任務（T4、T5）自己覆寫 loans
 const loans = [
-  scenarioLoan({ id: 'L000123', amount: 300000, purpose: '資金周轉', dueIn: 40 }),
-  scenarioLoan({ id: 'L000098', amount: 200000, purpose: '投資理財', dueIn: 85 }),
+  scenarioLoan({ id: 'L000123', amount: 120000, purpose: '資金周轉', dueIn: 40 }),
+  scenarioLoan({ id: 'L000098', amount: 80000, purpose: '投資理財', dueIn: 85 }),
 ];
 export const BASE_ACCOUNT = {
   opened: true,

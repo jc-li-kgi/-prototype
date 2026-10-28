@@ -77,7 +77,7 @@
 - 新功能放 `src/features/<功能>/`；功能之間不互相 import，只透過 `store.js` 讀寫資料。需要組合多個功能的頁面放 `src/shells/`（入口頁）或 `src/pages/`（例如股票借貸明細）。
 - 步驟順序寫在 `src/flows/flows.js`；頁面用 `flowPosition` / `nextStep` / `prevStep`，不要寫死下一頁。
 - 測試情境放 `src/scenarios/`（一個任務一個檔，並在 `index.js` 註冊）；已開戶客戶共用 `base-account.js`。借款日期不寫死，一律用 `scenarioLoan({ dueIn })` 依當天計算（任何一天測試，即將到期等狀態都一樣）。資料結構改版時，遞增 `store.js` 的 `KEY` 版本。
-- 股票數量一律用「張」（`lots`）；股價、成數、擔保資格（eligible / ratioOnly / ineligible）在 `src/mock/stocks.js`。全站標的見 `產品資料.md`，各任務可借金額抓在約 100 萬。可借貸股票成數一律 60%（用戶最多可借市值 60%，初始維持率 166%）；維持率顯示一律無條件捨去。
+- 股票數量一律用「張」（`lots`）；股價、成數、擔保資格（eligible / ratioOnly / ineligible）在 `src/mock/stocks.js`。全站標的見 `產品資料.md`，各任務可借金額抓在約 100 萬；已開戶任務（T2～T5）的已借款總額一律 TWD 200,000。可借貸股票成數一律 60%（用戶最多可借市值 60%，初始維持率 166%）；維持率顯示一律無條件捨去。
 - 開始流程用 `startFlow(flowId, { query, returnTo })`，結束或第 1 步返回會回到進入流程前的頁面。
 - 同一頁可出現在多個流程（例如匯入擔保品第 1 步也是首次借款第 1 步）：頁首標題用 `flowTitle()`、依流程調整行為用 `isFlow()`；送出動作放在流程最後一步。
 - 帳戶 `opened = false` 代表尚未借款（未開戶）：專區顯示初始頁、帳務 › 授信管理顯示方案卡（`features/hub/LoanIntroCard`）＋認識並開立借貸戶，借款走 `newAccountLoan`（匯入擔保品 → 填寫借款金額 → 確認資料，最後一次送出 `firstLoan`）。
