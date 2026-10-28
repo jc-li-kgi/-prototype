@@ -99,7 +99,11 @@ function IntroServices() {
           { icon: 'service-borrow.png', ...borrow, onClick: () => startFlow('newAccountLoan') },
         ]}
       />
-      <${IntroSheet} open=${introOpen} onClose=${() => setIntroOpen(false)} />
+      <${IntroSheet}
+        open=${introOpen}
+        onClose=${() => setIntroOpen(false)}
+        onSimulate=${() => { setIntroOpen(false); navigate('/lending-zone?tab=simulate'); }}
+      />
     </section>
   `;
 }

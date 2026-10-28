@@ -14,13 +14,15 @@ export default {
     loans: [],
     repayments: [],
     collateralRecords: [],
-    // 庫存全部匯入約可借 100 萬
+    // 庫存全部匯入約可借 106 萬（0050 總共 5 張）
     holdings: [
-      { code: '0050', lots: 4 },
+      { code: '0050', lots: 5 },
       { code: '2883', lots: 15 },
       { code: '0056', lots: 5 },
       { code: '00915', lots: 10 },
       { code: '009816', lots: 10 },
+      { code: '2882', lots: 5 },  // 僅可提升維持率
+      { code: '3481', lots: 5 },  // 無法作為擔保品
     ],
   },
 };

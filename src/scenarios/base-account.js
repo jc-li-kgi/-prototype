@@ -5,7 +5,7 @@ import { addDays, addMonths, today } from '../lib/calc.js';
 
 /**
  * 情境用的借款：dueIn = 幾天後到期；每期 6 個月，展延幾次就往前推幾期作為起息日
- *   scenarioLoan({ id: 'L000123', amount: 300000, purpose: '資金周轉', dueIn: 6 })
+ *   scenarioLoan({ id: 'L000123', amount: 120000, purpose: '資金周轉', dueIn: 6 })
  *   extensions  已展延次數（預設 0）；feePaid  借款手續費是否已收（預設 false）
  */
 export function scenarioLoan({ id, amount, purpose, dueIn, extensions = 0, feePaid = false }) {
@@ -29,10 +29,11 @@ export function scenarioLoan({ id, amount, purpose, dueIn, extensions = 0, feePa
   };
 }
 
+// 已開戶任務（T2～T5）的已借款總額一律 TWD 200,000
 // 共用的借款都還沒到期（不會出現到期通知）；需要即將到期的任務（T4、T5）自己覆寫 loans
 const loans = [
-  scenarioLoan({ id: 'L000123', amount: 300000, purpose: '資金周轉', dueIn: 40 }),
-  scenarioLoan({ id: 'L000098', amount: 200000, purpose: '投資理財', dueIn: 85 }),
+  scenarioLoan({ id: 'L000123', amount: 120000, purpose: '資金周轉', dueIn: 40 }),
+  scenarioLoan({ id: 'L000098', amount: 80000, purpose: '投資理財', dueIn: 85 }),
 ];
 export const BASE_ACCOUNT = {
   opened: true,
@@ -42,19 +43,22 @@ export const BASE_ACCOUNT = {
   bankBalance: 30000000,                                     // 扣款帳戶餘額
 
   // 已擔保（已匯入專區）的股票
-  // 已擔保市值 TWD 1,632,000 → 可借總額度約 98 萬
+  // 已擔保市值 TWD 1,621,300 → 可借總額度約 97 萬
+  // 0050 總共只有 5 張：已擔保 2 張 + 庫存 3 張
   collateral: [
-    { code: '0050', lots: 10 },
-    { code: '0056', lots: 10 },
+    { code: '0050', lots: 2 },
+    { code: '0056', lots: 25 },
   ],
 
-  // 證券庫存中，尚未匯入的股票（全部匯入約可再借 100 萬）
+  // 證券庫存中，尚未匯入的股票（全部匯入約可再借 94 萬）
   holdings: [
-    { code: '0050', lots: 4 },
+    { code: '0050', lots: 3 },
     { code: '2883', lots: 15 }, // T3 要匯入的標的，放前面（專區只列前 4 筆）
     { code: '0056', lots: 5 },
     { code: '00915', lots: 10 },
     { code: '009816', lots: 10 },
+    { code: '2882', lots: 5 },  // 僅可提升維持率
+    { code: '3481', lots: 5 },  // 無法作為擔保品
   ],
 
   // 借款
@@ -63,6 +67,6 @@ export const BASE_ACCOUNT = {
 
   // 擔保品匯入 / 取回紀錄
   collateralRecords: [
-    { id: 'C000045', type: '匯入', date: addDays(loans[0].startDate, -1), items: [{ code: '0050', lots: 10 }, { code: '0056', lots: 10 }], status: '已完成' },
+    { id: 'C000045', type: '匯入', date: addDays(loans[0].startDate, -1), items: [{ code: '0050', lots: 2 }, { code: '0056', lots: 25 }], status: '已完成' },
   ],
 };

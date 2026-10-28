@@ -1,6 +1,7 @@
 // 匯入擔保品 第 1 步：從庫存選擇要匯入的股票與張數
-// 網址可帶 ?code=2330，預先勾選該檔
-//   匯入擔保品流程（collateralIn）帶 code：只顯示這一檔（明細 / 專區列表的「匯入」按鈕）
+// 網址可帶 ?code=0050，預先勾選該檔
+//   匯入擔保品流程（collateralIn）帶 code：只顯示這一檔（明細 / 專區列表的「匯入」按鈕），預設 1 張
+//   首次借款（newAccountLoan）帶 code：點專區的精選擔保品進來，列出全部庫存、預先勾選該檔全部張數（與精選卡的可借款一致）
 //   首次借款（newAccountLoan）：「僅可用於提升維持率」不能勾選（還沒有借款，匯入無法提升維持率）
 import { html, useState } from '../../lib/preact.js';
 import {
@@ -16,9 +17,9 @@ import { COPY } from '../../content/copy.js';
 const PATH = '/collateral-in/select';
 
 function initialSelection(draft, query, importable) {
-  // 從列表的「匯入」進來：重新開始，只勾這一檔
+  // 帶 code 進來：重新開始，只勾這一檔（首次借款帶全部張數，匯入擔保品帶 1 張）
   const h = importable.find((x) => x.code === query.code);
-  if (h) return { [h.code]: 1 };
+  if (h) return { [h.code]: isFlow('newAccountLoan') ? h.lots : 1 };
   return draft.selected || {};
 }
 

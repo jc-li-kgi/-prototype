@@ -89,7 +89,11 @@ export function LendingZoneShell({ query }) {
           <${Button} onClick=${() => startFlow('newAccountLoan')}>${t.borrowNow}<//>
         <//>
       `}
-      <${IntroSheet} open=${introOpen} onClose=${() => setIntroOpen(false)} />
+      <${IntroSheet}
+        open=${introOpen}
+        onClose=${() => setIntroOpen(false)}
+        onSimulate=${() => { setIntroOpen(false); setTab('simulate'); scrollTo(0, 0); }}
+      />
     </div>
   `;
 }
@@ -144,6 +148,7 @@ function ZoneIntro({ account }) {
             <${StockPickCard}
               name=${stockOf(p.code).name}
               code=${p.code}
+              onClick=${() => startFlow('newAccountLoan', { query: { code: p.code } })}
               stats=${[
                 { label: t.pickLoanable, value: wan(p.loanable), unit: t.wan, highlight: true },
                 { label: t.introDailyInterest, value: num(dailyInterest(p.loanable)), unit: 'TWD' },

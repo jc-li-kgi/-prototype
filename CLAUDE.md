@@ -77,16 +77,16 @@
 - 新功能放 `src/features/<功能>/`；功能之間不互相 import，只透過 `store.js` 讀寫資料。需要組合多個功能的頁面放 `src/shells/`（入口頁）或 `src/pages/`（例如股票借貸明細）。
 - 步驟順序寫在 `src/flows/flows.js`；頁面用 `flowPosition` / `nextStep` / `prevStep`，不要寫死下一頁。
 - 測試情境放 `src/scenarios/`（一個任務一個檔，並在 `index.js` 註冊）；已開戶客戶共用 `base-account.js`。借款日期不寫死，一律用 `scenarioLoan({ dueIn })` 依當天計算（任何一天測試，即將到期等狀態都一樣）。資料結構改版時，遞增 `store.js` 的 `KEY` 版本。
-- 股票數量一律用「張」（`lots`）；股價、成數、擔保資格（eligible / ratioOnly / ineligible）在 `src/mock/stocks.js`。全站標的見 `產品資料.md`，各任務可借金額抓在約 100 萬。可借貸股票成數一律 60%（用戶最多可借市值 60%，初始維持率 166%）；維持率顯示一律無條件捨去。
+- 股票數量一律用「張」（`lots`）；股價、成數、擔保資格（eligible / ratioOnly / ineligible）在 `src/mock/stocks.js`。全站標的見 `產品資料.md`，各任務可借金額抓在約 100 萬；已開戶任務（T2～T5）的已借款總額一律 TWD 200,000。可借貸股票成數一律 60%（用戶最多可借市值 60%，初始維持率 166%）；維持率顯示一律無條件捨去。
 - 開始流程用 `startFlow(flowId, { query, returnTo })`，結束或第 1 步返回會回到進入流程前的頁面。
 - 同一頁可出現在多個流程（例如匯入擔保品第 1 步也是首次借款第 1 步）：頁首標題用 `flowTitle()`、依流程調整行為用 `isFlow()`；送出動作放在流程最後一步。
-- 帳戶 `opened = false` 代表尚未借款（未開戶）：專區顯示初始頁、帳務 › 授信管理顯示方案卡（`features/hub/LoanIntroCard`）＋認識並開立借貸戶，借款走 `newAccountLoan`（匯入擔保品 → 填寫借款金額 → 確認資料，最後一次送出 `firstLoan`）。
+- 帳戶 `opened = false` 代表尚未借款（未開戶）：專區顯示初始頁、帳務 › 授信管理顯示方案卡（`features/hub/LoanIntroCard`）＋認識並開立借貸戶，借款走 `newAccountLoan`（匯入擔保品 → 填寫借款金額 → 確認資料，最後一次送出 `firstLoan`）。專區初始頁的精選擔保品卡可點，進 `newAccountLoan` 並預先勾選該檔全部張數（`?code=`）。
 - 文案放 `src/content/copy.js`；公式與業務規則放 `src/lib/calc.js`；股價放 `src/mock/stocks.js`。
 - **產品資料以根目錄 `產品資料.md` 為準**（標的、收盤價、成數、利率、手續費、展延、維持率規則）。使用者說「依產品資料.md 更新」時：讀 md → 同步到 `stocks.js`、`calc.js` → 檢查測試任務金額（約 100 萬）與 `copy.js` 裡寫死的利率 / 手續費 / 成數 → 驗證畫面。程式改了這些數值時也要回寫 md。股票只能整張擔保（`lots`，1 張 = 1,000 股）；收盤價顯示兩位小數（`format.js` 的 `price`）。
 - 所有任務都從證券主頁「我的」（`/home`，`shells/HomeShell.js`）開始：快捷功能「股票借貸」→ 專區，底部導覽「帳務」→ 授信管理。
 - **返回路徑**：股票借貸明細（`/records`）屬於專區，按返回一律回專區（包括從完成頁進來時，不會回到完成頁）；從帳務 › 授信管理進來時網址帶 `back=/account`，返回帳務。切換頁籤會保留 `back`。
 - **申請流程的按鈕狀態**：必填資訊沒完成時，下一步 / 送出按鈕一律 `disabled`，不採用「點擊後才跳錯誤訊息」。會影響能否送出的狀態（例如扣款帳戶餘額不足）直接顯示在欄位旁。
-- 認識股票借貸介紹頁：`features/intro/IntroSheet`（全螢幕從底部開啟，右上 ✕ 關閉回原頁，不是獨立路由）。未借款第一次進專區自動開啟一次（`store.introShown`，每個任務重新計算）；專區右上產品說明、帳務「認識股票借貸」也可開啟。本次測試不開放開戶：開戶相關按鈕顯示未開放。
+- 認識股票借貸介紹頁：`features/intro/IntroSheet`（全螢幕從底部開啟，右上 ✕ 關閉回原頁，不是獨立路由）。未借款第一次進專區自動開啟一次（`store.introShown`，每個任務重新計算）；專區右上產品說明、帳務「認識股票借貸」也可開啟。本次測試不開放開戶：開戶相關按鈕顯示未開放。「追繳風險評估 › 立即試算」與案例的「試算可借金額」關閉介紹頁並切到專區「試算」頁籤（從帳務開啟時前往 `/lending-zone?tab=simulate`）。
 - 可借貸額度試算：專區「試算」頁籤（`features/simulate/SimulateForm`，草稿 `store.simDraft`；只剩一檔時「移除」停用）→ `/simulate/result`（返回帶 `?tab=simulate`）。公式在 `calc.js` 的 `simulate()`；追繳線 / 補足線在 `LOAN_RULES.callRatio / recoverRatio`。圖表（`RatioChart`）y 軸 120%～至少 160%、每 10% 一條線；x 軸右端 = 初始維持率跌到 120% 的跌幅（線落在右下角），刻度每 10%；左右拖拉圓點（每次 1%）查看維持率，手指在圖上時頁面不捲動（`touch-action: none`），預設停在起點（初始維持率）。表單下方「自選擔保品」直接開選擇標的彈窗（選完新增一列）、「使用庫存試算」本次測試不開放。結果頁「立即借貸」：未借款走 `newAccountLoan`（預先勾選有庫存的試算標的），已借款走 `existingLoan`。
 - 確認資料頁的送出按鈕一律用 `COPY.common.submit`（確認送出）。
 - 新頁面要在 `src/routes.js` 註冊。

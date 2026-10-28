@@ -9,8 +9,11 @@ import { Portal } from '../../components/overlay/Portal.js';
 import { useStore, showToast } from '../../store.js';
 import { COPY } from '../../content/copy.js';
 
-/** <IntroSheet open=${open} onClose=${close} /> */
-export function IntroSheet({ open, onClose }) {
+/**
+ * <IntroSheet open=${open} onClose=${close} onSimulate=${goSimulate} />
+ *   onSimulate  「立即試算」、案例的「試算可借金額」：關閉介紹頁並前往專區「試算」頁籤（由放置的頁面決定怎麼切換）
+ */
+export function IntroSheet({ open, onClose, onSimulate }) {
   // 開啟時鎖住背後頁面捲動
   useEffect(() => {
     if (!open) return;
@@ -18,14 +21,16 @@ export function IntroSheet({ open, onClose }) {
     return () => (document.body.style.overflow = '');
   }, [open]);
   if (!open) return null;
-  return html`<${Portal}><${IntroContent} onClose=${onClose} /><//>`;
+  return html`<${Portal}><${IntroContent} onClose=${onClose} onSimulate=${onSimulate} /><//>`;
 }
 
-function IntroContent({ onClose }) {
+function IntroContent({ onClose, onSimulate }) {
   const opened = useStore((s) => s.account.opened);
   const t = COPY.intro;
   const faqRef = useRef();
   const notAvailable = () => showToast(COPY.common.notAvailable);
+  // 「立即試算」、案例的「試算可借金額」→ 專區「試算」頁籤
+  const goSimulate = onSimulate || notAvailable;
   // 開戶功能本次不開放；已開戶時「馬上線上申請」直接關閉回專區
   const apply = () => (opened ? onClose() : notAvailable());
 
@@ -100,7 +105,7 @@ function IntroContent({ onClose }) {
               html`
                 <div class="intro-entrance">
                   <p class="t-body-bold c-primary">${t.case1.ask}</p>
-                  <${Button} variant="capsule" onClick=${notAvailable}>${t.case1.cta}<//>
+                  <${Button} variant="capsule" onClick=${goSimulate}>${t.case1.cta}<//>
                 </div>
               `}
             </div>
@@ -113,7 +118,7 @@ function IntroContent({ onClose }) {
                   <p class="t-body-regular c-secondary">${t.case2.desc}</p>
                 </div>
                 <div class="intro-case2__action">
-                  <${Button} variant="capsule" onClick=${notAvailable}>${t.case2.cta}<//>
+                  <${Button} variant="capsule" onClick=${goSimulate}>${t.case2.cta}<//>
                   <img src="assets/illustrations/intro-coin-hand.png" width="58" height="84" alt="" />
                 </div>
               </div>
@@ -147,7 +152,7 @@ function IntroContent({ onClose }) {
                       <div>
                         <p class="t-body-bold c-primary">${tool.title}</p>
                         <p class="t-body-regular c-secondary">
-                          ${tool.desc}${tool.link && html` <button class="intro-link c-active" onClick=${notAvailable}>${tool.link}</button>`}
+                          ${tool.desc}${tool.link && html` <button class="intro-link c-active" onClick=${tool.action === 'simulate' ? goSimulate : notAvailable}>${tool.link}</button>`}
                         </p>
                       </div>
                     </li>
