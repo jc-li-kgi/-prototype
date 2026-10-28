@@ -56,6 +56,7 @@ export function loadScenario(scenario) {
     entry: scenario.entry,
     startPath: scenario.startPath,
     completeOnFlows: scenario.completeOnFlows || null, // 開始這些流程時任務完成（見 flows.js startFlow）
+    introShown: !!scenario.introSeen, // 前一個任務已看過介紹頁 → 進專區不再自動開啟
     account: structuredClone(scenario.account),
   };
   save();

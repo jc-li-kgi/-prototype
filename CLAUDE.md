@@ -89,7 +89,7 @@
 - 擔保品紀錄：`account.collateralRecords` 每檔一筆 `{ id, type: 匯入|匯出, code, lots, status: 成功|失敗, appliedAt, channel }`（匯入沒有處理中，新匯入直接是成功）；情境資料要和 `collateral` 對得上。明細 › 擔保品：歷史紀錄（`CollateralHistory`，篩選未開放、可依代碼排序）；已擔保上方是排序「可借款金額高到低」＋搜尋 icon（都未開放，固定依可借款金額排序），每列有「賣股還款」（未開放），展開明細的「查看異動明細」→ `/records/collateral-changes?code=`（`CollateralChanges`，返回回已擔保）。
 - **返回路徑**：股票借貸明細（`/records`）屬於專區，按返回一律回專區（包括從完成頁進來時，不會回到完成頁）；從帳務 › 授信管理進來時網址帶 `back=/account`，返回帳務。切換頁籤會保留 `back`。
 - **申請流程的按鈕狀態**：必填資訊沒完成時，下一步 / 送出按鈕一律 `disabled`，不採用「點擊後才跳錯誤訊息」。會影響能否送出的狀態（例如扣款帳戶餘額不足）直接顯示在欄位旁。
-- 認識股票借貸介紹頁：`features/intro/IntroSheet`（全螢幕從底部開啟，右上 ✕ 關閉回原頁，不是獨立路由）。未借款第一次進專區自動開啟一次（`store.introShown`，每個任務重新計算）；專區右上產品說明、帳務「認識股票借貸」也可開啟。本次測試不開放開戶：開戶相關按鈕顯示未開放。「追繳風險評估 › 立即試算」與案例的「試算可借金額」關閉介紹頁並切到專區「試算」頁籤（從帳務開啟時前往 `/lending-zone?tab=simulate`）。
+- 認識股票借貸介紹頁：`features/intro/IntroSheet`（全螢幕從底部開啟，右上 ✕ 關閉回原頁，不是獨立路由）。未借款第一次進專區自動開啟一次（`store.introShown`，每個任務重新計算；情境設 `introSeen: true` 則不自動開啟，例如 T3 首次借款，因為任務一＆二已看過）；專區右上產品說明、帳務「認識股票借貸」也可開啟。本次測試不開放開戶：開戶相關按鈕顯示未開放。「追繳風險評估 › 立即試算」與案例的「試算可借金額」關閉介紹頁並切到專區「試算」頁籤（從帳務開啟時前往 `/lending-zone?tab=simulate`）。
 - 可借貸額度試算：專區「試算」頁籤（`features/simulate/SimulateForm`，草稿 `store.simDraft`；只剩一檔時「移除」停用）→ `/simulate/result`（返回帶 `?tab=simulate`）。公式在 `calc.js` 的 `simulate()`；追繳線 / 補足線在 `LOAN_RULES.callRatio / recoverRatio`。圖表（`RatioChart`）y 軸 120%～至少 160%、每 10% 一條線；x 軸右端 = 初始維持率跌到 120% 的跌幅（線落在右下角），刻度每 10%；左右拖拉圓點（每次 1%）查看維持率，手指在圖上時頁面不捲動（`touch-action: none`），預設停在起點（初始維持率）。表單下方「自選擔保品」直接開選擇標的彈窗（選完新增一列）、「使用庫存試算」本次測試不開放。結果頁「立即借貸」：未借款走 `newAccountLoan`（預先勾選有庫存的試算標的），已借款走 `existingLoan`。
 - 確認資料頁的送出按鈕一律用 `COPY.common.submit`（確認送出）。
 - 新頁面要在 `src/routes.js` 註冊。

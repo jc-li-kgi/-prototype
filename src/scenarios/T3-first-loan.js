@@ -4,6 +4,7 @@ import { BASE_ACCOUNT } from './base-account.js';
 export default {
   id: 'T3',
   no: '三',
+  introSeen: true, // 任務一＆二已看過介紹頁，進專區不再自動開啟
   title: '首次借款',
   instruction: '你還沒有使用過股票借貸，想用手上的股票借 10 萬元做資金周轉，請從股票借貸專區完成申請。',
   entry: 'lendingZone',
