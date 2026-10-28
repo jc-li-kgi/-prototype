@@ -55,6 +55,8 @@ export const BASE_ACCOUNT = {
     { code: '0056', lots: 5 },
     { code: '00915', lots: 10 },
     { code: '009816', lots: 10 },
+    { code: '2882', lots: 5 },  // 僅可提升維持率
+    { code: '8299', lots: 1 },  // 無法作為擔保品
   ],
 
   // 借款
