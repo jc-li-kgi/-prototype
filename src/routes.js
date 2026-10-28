@@ -16,6 +16,7 @@ import { RefinanceConfirm } from './features/refinance/RefinanceConfirm.js';
 import { RefinanceResult } from './features/refinance/RefinanceResult.js';
 import { SimulateResult } from './features/simulate/SimulateResult.js';
 import { LendingRecords } from './pages/LendingRecords.js';
+import { CollateralChanges } from './features/collateral/CollateralChanges.js';
 import { TaskStart } from './pages/TaskStart.js';
 import { Moderator } from './pages/Moderator.js';
 
@@ -53,6 +54,7 @@ export const ROUTES = {
 
   // 股票借貸明細（?tab=loans|collateral|statement）
   '/records': LendingRecords,
+  '/records/collateral-changes': CollateralChanges, // 單檔擔保品異動明細（?code=）
 };
 
 // 不需要情境資料就能開的頁面
