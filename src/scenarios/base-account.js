@@ -43,21 +43,22 @@ export const BASE_ACCOUNT = {
   bankBalance: 30000000,                                     // 扣款帳戶餘額
 
   // 已擔保（已匯入專區）的股票
-  // 已擔保市值 TWD 1,632,000 → 可借總額度約 98 萬
+  // 已擔保市值 TWD 1,621,300 → 可借總額度約 97 萬
+  // 0050 總共只有 5 張：已擔保 2 張 + 庫存 3 張
   collateral: [
-    { code: '0050', lots: 10 },
-    { code: '0056', lots: 10 },
+    { code: '0050', lots: 2 },
+    { code: '0056', lots: 25 },
   ],
 
-  // 證券庫存中，尚未匯入的股票（全部匯入約可再借 100 萬）
+  // 證券庫存中，尚未匯入的股票（全部匯入約可再借 94 萬）
   holdings: [
-    { code: '0050', lots: 4 },
+    { code: '0050', lots: 3 },
     { code: '2883', lots: 15 }, // T3 要匯入的標的，放前面（專區只列前 4 筆）
     { code: '0056', lots: 5 },
     { code: '00915', lots: 10 },
     { code: '009816', lots: 10 },
     { code: '2882', lots: 5 },  // 僅可提升維持率
-    { code: '8299', lots: 1 },  // 無法作為擔保品
+    { code: '3481', lots: 5 },  // 無法作為擔保品
   ],
 
   // 借款
@@ -66,6 +67,6 @@ export const BASE_ACCOUNT = {
 
   // 擔保品匯入 / 取回紀錄
   collateralRecords: [
-    { id: 'C000045', type: '匯入', date: addDays(loans[0].startDate, -1), items: [{ code: '0050', lots: 10 }, { code: '0056', lots: 10 }], status: '已完成' },
+    { id: 'C000045', type: '匯入', date: addDays(loans[0].startDate, -1), items: [{ code: '0050', lots: 2 }, { code: '0056', lots: 25 }], status: '已完成' },
   ],
 };

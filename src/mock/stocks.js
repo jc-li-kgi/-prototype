@@ -14,5 +14,5 @@ export const STOCKS = {
   '009816': { name: '凱基台灣TOP50', price: 15.93, ratio: 0.6, type: 'eligible' },
   '2883': { name: '凱基金', price: 37.75, ratio: 0.6, type: 'eligible' },
   '2882': { name: '國泰金', price: 60, ratio: 0, type: 'ratioOnly' },                              // 收盤價待確認
-  '8299': { name: '群聯', price: 600, ratio: 0, type: 'ineligible', reason: '流動性低' },             // 收盤價待確認
+  '3481': { name: '群創', price: 18, ratio: 0, type: 'ineligible', reason: '目前被列為處置股' },        // 收盤價待確認
 };
