@@ -80,7 +80,7 @@
 - 股票數量一律用「張」（`lots`）；股價、成數、擔保資格（eligible / ratioOnly / ineligible）在 `src/mock/stocks.js`。全站標的見 `產品資料.md`，各任務可借金額抓在約 100 萬；已開戶任務（T2～T5）的已借款總額一律 TWD 200,000。可借貸股票成數一律 60%（用戶最多可借市值 60%，初始維持率 166%）；維持率顯示一律無條件捨去。
 - 開始流程用 `startFlow(flowId, { query, returnTo })`，結束或第 1 步返回會回到進入流程前的頁面。
 - 同一頁可出現在多個流程（例如匯入擔保品第 1 步也是首次借款第 1 步）：頁首標題用 `flowTitle()`、依流程調整行為用 `isFlow()`；送出動作放在流程最後一步。
-- 帳戶 `opened = false` 代表尚未借款（未開戶）：專區顯示初始頁、帳務 › 授信管理顯示方案卡（`features/hub/LoanIntroCard`）＋認識並開立借貸戶，借款走 `newAccountLoan`（匯入擔保品 → 填寫借款金額 → 確認資料，最後一次送出 `firstLoan`）。
+- 帳戶 `opened = false` 代表尚未借款（未開戶）：專區顯示初始頁、帳務 › 授信管理顯示方案卡（`features/hub/LoanIntroCard`）＋認識並開立借貸戶，借款走 `newAccountLoan`（匯入擔保品 → 填寫借款金額 → 確認資料，最後一次送出 `firstLoan`）。專區初始頁的精選擔保品卡可點，進 `newAccountLoan` 並預先勾選該檔全部張數（`?code=`）。
 - 文案放 `src/content/copy.js`；公式與業務規則放 `src/lib/calc.js`；股價放 `src/mock/stocks.js`。
 - **產品資料以根目錄 `產品資料.md` 為準**（標的、收盤價、成數、利率、手續費、展延、維持率規則）。使用者說「依產品資料.md 更新」時：讀 md → 同步到 `stocks.js`、`calc.js` → 檢查測試任務金額（約 100 萬）與 `copy.js` 裡寫死的利率 / 手續費 / 成數 → 驗證畫面。程式改了這些數值時也要回寫 md。股票只能整張擔保（`lots`，1 張 = 1,000 股）；收盤價顯示兩位小數（`format.js` 的 `price`）。
 - 所有任務都從證券主頁「我的」（`/home`，`shells/HomeShell.js`）開始：快捷功能「股票借貸」→ 專區，底部導覽「帳務」→ 授信管理。
