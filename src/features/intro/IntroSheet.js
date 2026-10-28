@@ -193,7 +193,7 @@ function HowTo({ onApply, opened }) {
       <h2 class="intro-section__title t-title c-primary">${t.howTitle}</h2>
       <div class="card intro-card intro-how">
         <${TextTabs} class="text-tabs--flush text-tabs--center" tabs=${t.how} active=${tab} onChange=${setTab} />
-        ${step.image && html`<img class="intro-how__image" src=${`assets/illustrations/${step.image}`} width="136" height="275" alt="" />`}
+        ${step.image && html`<img class="intro-how__image" src=${`assets/illustrations/${step.image}`} width=${step.imageSize[0]} height=${step.imageSize[1]} alt="" />`}
         <div class="intro-how__text">
           <p class="t-subtitle-bold c-primary">${step.title}</p>
           <p class="t-body-regular c-secondary">${step.desc}</p>

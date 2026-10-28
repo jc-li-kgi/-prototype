@@ -105,14 +105,15 @@ export const COPY = {
     howTitle: '我要如何操作呢?',
     how: [
       {
-        key: 'open', label: '1. 開戶', image: 'intro-app-screen.png',
+        // image：assets/illustrations/ 的畫面截圖；imageSize = 顯示寬高（高度一律 275，寬度依原圖比例）
+        key: 'open', label: '1. 開戶', image: 'intro-app-screen.png', imageSize: [136, 275],
         title: '前往「快e開」開立借貸款項業務',
         desc: '需為年滿 20 歲（含）以上之凱基證券客戶，且已於凱基或其他券商完成開戶滿 3 個月，且非凱基證券內部員工。',
         hint: '尚未開立嗎？', link: '前往申請',
       },
-      // 以下兩頁 Figma 尚無內容（自行補）
-      { key: 'borrow', label: '2. 借款', title: '匯入擔保品，填寫借款金額', desc: '在股票借貸專區選擇要擔保的庫存股票，確認可借額度後填寫借款金額，最快 1 小時撥款。' },
-      { key: 'repay', label: '3. 還款', title: '隨時還款，方式多元', desc: '可選擇現金還款、借新還舊或賣股還款；借款到期前 20 天會提醒您。' },
+      // 以下兩頁文字 Figma 尚無內容（自行補）；截圖由設計提供（介紹頁畫面截圖/）
+      { key: 'borrow', label: '2. 借款', image: 'intro-how-borrow.png', imageSize: [193, 275], title: '匯入擔保品，填寫借款金額', desc: '在股票借貸專區選擇要擔保的庫存股票，確認可借額度後填寫借款金額，最快 1 小時撥款。' },
+      { key: 'repay', label: '3. 還款', image: 'intro-how-repay.png', imageSize: [185, 275], title: '隨時還款，方式多元', desc: '可選擇現金還款、借新還舊或賣股還款；借款到期前 20 天會提醒您。' },
     ],
     faqTitle: '常見問題',
     // 只有「開戶」第 1 題有 Figma 內容，其他自行補
