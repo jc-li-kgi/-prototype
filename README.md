@@ -14,12 +14,17 @@ python3 -m http.server 8080
 
 | 任務 | 網址 |
 |---|---|
-| T1 首次借款（匯入擔保品 + 借款） | `#/start?task=T1` |
-| T2 舊戶再借一筆 | `#/start?task=T2` |
-| T3 匯入擔保品 | `#/start?task=T3` |
+| 任務一＆二 瀏覽借貸專區＋試算（按下借款即完成） | `#/start?task=T1` |
+| 任務三 首次借款（匯入擔保品 + 借款） | `#/start?task=T3` |
+| 任務四 再借一筆 | `#/start?task=T4` |
+| 任務五 瀏覽借貸明細 | `#/start?task=T5` |
+| 任務六 部分還款 | `#/start?task=T6` |
+| 任務七 借新還舊 | `#/start?task=T7` |
+
+（匯入擔保品任務目前不列入測試，檔案保留在 `src/scenarios/extra-import-collateral.js`）
 
 - 開啟任務網址會**重置資料**並跳到起始頁
-- 主持人頁：`#/moderator`，或在帳務頁**長按「帳務」標題 1.5 秒**
+- 主持人頁：`#/moderator`，或**長按底部導覽「更多」2 秒**（證券主頁、帳務頁都有）
 - 未實作的按鈕會跳「此功能未開放於本次測試」提示
 
 ## 設計規範：One KGI Design Guideline
@@ -95,4 +100,4 @@ src/
 
 1. 將整個資料夾推到 GitHub repo
 2. Settings → Pages → Source 選 `Deploy from a branch`，Branch 選 `main` / `root`
-3. 網址為 `https://<帳號>.github.io/<repo>/#/start?task=T2`
+3. 網址為 `https://<帳號>.github.io/<repo>/#/start?task=T4`

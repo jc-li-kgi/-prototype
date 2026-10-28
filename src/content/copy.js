@@ -1,5 +1,13 @@
 // 所有文案集中管理：改字只改這裡
 export const COPY = {
+  // 任務完成通知（主持人用，見 app.js）
+  task: {
+    doneTitle: '任務完成',
+    doneBody: (title) => `已完成「${title}」，謝謝你的協助！`,
+    backToList: '回到任務列表',
+    label: (no, title) => `任務${no}　${title}`, // no 來自情境（例如「一＆二」）
+  },
+
   common: {
     notAvailable: '此功能未開放於本次測試',
     next: '下一步',
@@ -463,10 +471,40 @@ export const COPY = {
     ],
     searchPlaceholder: '搜尋產品關鍵字或代碼',
     importCollateral: '匯入擔保品',
-    colPledgedLots: '已擔保張數',
-    colPledgedLoan: '可借金額',
+    // 已擔保｜Figma 3061:69619
+    colPledgedLots: '已匯入張數',
+    colPledgedLoan: '可借總金額',
+    pledgedLoanSheet: { title: '可借總金額', body: '可借總金額 = 已匯入張數 × 每張可借金額，依今日收盤價計算，僅供參考。' },
+    pledgedSort: '可借款金額高到低', // 已擔保預設排序（切換排序、搜尋本次測試不開放）
+    sellRepay: '賣股還款', // 本次測試不開放
+    pledgedDetail: {
+      name: '商品名稱',
+      approval: '核准狀況',
+      price: '收盤價',
+      serial: '存入序號',
+      category: '類別',
+    },
+    approvalLabel: { eligible: '可借款', ratioOnly: '僅可提升維持率' },
+    categoryValue: '融通擔保品',
+    viewChanges: '查看異動明細',
     emptyPledged: '目前沒有擔保品',
+    // 歷史紀錄｜Figma 3060:66168（每檔一筆）
+    historyFilters: ['近一月', '全部類型'],
+    colHistoryName: ['商品名稱', '代碼'],
+    colHistoryStatus: '狀態',
+    colHistoryType: ['異動類型', '張數'],
+    historyDetail: { name: '商品名稱', appliedAt: '申請時間', serial: '申請序號', channel: '申請管道' },
+    lots: (n) => `${n} 張`,
     emptyHistory: '目前沒有擔保品紀錄',
+    // 單檔擔保品異動明細｜Figma 1786:98330
+    changes: {
+      title: '擔保品異動明細',
+      colDate: ['異動日', '狀態'],
+      colType: ['動作類別', '張數'],
+      status: (r) => (r.status === '成功' ? '交易成功' : r.status === '失敗' ? `${r.type}失敗` : r.status),
+      detail: { applyDate: '申請日', applyTime: '申請時間', serial: '申請序號', channel: '申請管道' },
+      empty: '目前沒有異動紀錄',
+    },
     emptySearch: '查無符合的股票',
     // 對帳單
     statementNotAvailable: '對帳單未開放於本次測試',

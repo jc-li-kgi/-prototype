@@ -3,7 +3,7 @@
 import { useReducer, useEffect } from './lib/preact.js';
 import { LOAN_RULES, addMonths, today, repayPlan, refinancePlan } from './lib/calc.js';
 
-const KEY = 'lending-proto-state-v4'; // 資料結構改版時遞增，避免讀到舊格式
+const KEY = 'lending-proto-state-v5'; // 資料結構改版時遞增，避免讀到舊格式
 const listeners = new Set();
 
 let state = load();
@@ -17,7 +17,7 @@ function load() {
 }
 
 function emptyState() {
-  return { taskId: null, entry: null, flow: null, flowReturn: null, account: null, draft: {}, collateralDraft: {}, repayDraft: {}, refiDraft: {}, introShown: false, toast: null };
+  return { taskId: null, entry: null, flow: null, flowReturn: null, account: null, draft: {}, collateralDraft: {}, repayDraft: {}, refiDraft: {}, introShown: false, completeOnFlows: null, taskDone: false, toast: null };
 }
 
 function save() {
@@ -55,6 +55,7 @@ export function loadScenario(scenario) {
     taskId: scenario.id,
     entry: scenario.entry,
     startPath: scenario.startPath,
+    completeOnFlows: scenario.completeOnFlows || null, // 開始這些流程時任務完成（見 flows.js startFlow）
     account: structuredClone(scenario.account),
   };
   save();
@@ -100,19 +101,25 @@ export function clearCollateralDraft() {
 
 /** 匯入擔保品：庫存 → 擔保品，並新增一筆紀錄 */
 export function pledgeCollateral(items) {
-  const record = {
-    id: 'C' + Date.now().toString().slice(-6),
+  // 異動紀錄每檔一筆（歷史紀錄、單檔異動明細用）
+  const now = new Date();
+  const base = Date.now().toString().slice(-4);
+  const records = items.map(({ code, lots }, i) => ({
+    id: `M${base}${i}`,
     type: '匯入',
-    date: today(),
-    items,
-    status: '處理中',
-  };
+    code,
+    lots,
+    status: '成功', // 匯入不會有處理中的狀態
+    appliedAt: now.toISOString(),
+    channel: 'APP',
+  }));
   setState((s) => {
     const a = s.account;
     const take = (list, code, lots, sign) => {
       const found = list.find((x) => x.code === code);
       if (found) return list.map((x) => (x.code === code ? { ...x, lots: x.lots + sign * lots } : x));
-      return sign > 0 ? [...list, { code, lots }] : list;
+      // 新擔保的股票給一個存入序號
+      return sign > 0 ? [...list, { code, lots, serial: '82' + Date.now().toString().slice(-5) }] : list;
     };
     let holdings = a.holdings;
     let collateral = a.collateral;
@@ -125,12 +132,12 @@ export function pledgeCollateral(items) {
         ...a,
         holdings: holdings.filter((h) => h.lots > 0),
         collateral,
-        collateralRecords: [record, ...(a.collateralRecords || [])],
+        collateralRecords: [...records, ...(a.collateralRecords || [])],
       },
       collateralDraft: {},
     };
   });
-  return record;
+  return records;
 }
 
 /** 首次借款：匯入擔保品 + 開戶 + 借款，一次送出 */

@@ -131,8 +131,9 @@ function RepayList({ repayments, open, setOpen }) {
   return html`
     <${ListTable}
       columns=${[
-        { label: html`${t.colRepay[0]}<br />${t.colRepay[1]}` },
-        { label: t.colMethod, width: 'auto', align: 'center' },
+        // 欄寬比照擔保品列表：全部固定寬，多出的寬度平均分到欄與欄之間；第 1 欄靠左、其餘靠右（表頭與內容右緣對齊）
+        { label: html`${t.colRepay[0]}<br />${t.colRepay[1]}`, width: 'minmax(0, 120px)' },
+        { label: t.colMethod, width: '72px', align: 'right' },
         { label: t.colAppliedAt, width: '97px', align: 'right' },
       ]}
       expandable
@@ -143,7 +144,7 @@ function RepayList({ repayments, open, setOpen }) {
         const [day, time] = dateTime(new Date(r.appliedAt)).split(' ');
         return html`
           <${ListRow}
-            align=${['left', 'center', 'right']}
+            align=${['left', 'right', 'right']}
             cells=${[
               html`
                 <p class="n-body-regular c-primary">${twd(r.total)}</p>

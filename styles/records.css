@@ -7,12 +7,16 @@
 }
 
 .records-section { display: flex; flex-direction: column; gap: var(--spacing-16); }
+/* 單檔擔保品異動明細：股票名稱（Figma 1786:98330） */
+.changes-title { padding: 0 var(--spacing-16); }
 .records-section__controls { display: flex; flex-direction: column; gap: var(--spacing-12); padding: 0 var(--spacing-16); }
 .records-filters { display: flex; gap: var(--spacing-8); flex-wrap: wrap; }
 .records-search { display: flex; align-items: center; gap: var(--spacing-16); }
+.records-toolbar { display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-12); } /* 已擔保：排序 + 搜尋 icon */
 .records-row-buttons { display: flex; gap: var(--spacing-8); }
 /* 借款展開明細下方：還款紀錄 / 展延紀錄（平分寬度）｜Figma 3167:192520；資料列→按鈕 24 */
 .records-detail-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-12); margin-top: calc(var(--spacing-24) - var(--spacing-12)); }
+.records-detail-buttons--single { grid-template-columns: 1fr; } /* 已擔保：查看異動明細 */
 
 /* 擔保品歷史紀錄（暫用版面） */
 .history-list { display: flex; flex-direction: column; gap: var(--spacing-12); padding: 0 var(--spacing-16); }

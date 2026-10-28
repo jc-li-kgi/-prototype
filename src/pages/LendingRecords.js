@@ -5,8 +5,8 @@
 //   從帳務 › 授信管理進來時帶 back=/account
 // 頁面負責組合各功能模組（features 之間不互相 import）
 import { html, useState } from '../lib/preact.js';
-import { PageHeader, TextTabs, SegmentedTabs, SearchField, Button, EmptyState } from '../components/index.js';
-import { useStore } from '../store.js';
+import { PageHeader, TextTabs, SegmentedTabs, SearchField, Button, EmptyState, FilterPill, SearchIcon } from '../components/index.js';
+import { useStore, showToast } from '../store.js';
 import { navigate } from '../router.js';
 import { startFlow } from '../flows/flows.js';
 import { groupHoldings, stockOf } from '../lib/calc.js';
@@ -31,6 +31,7 @@ export function LendingRecords({ query }) {
   const tab = t.tabs.some((x) => x.key === query.tab) ? query.tab : 'loans';
   const [keyword, setKeyword] = useState('');
   const [repayLoan, setRepayLoan] = useState(null); // 正在選擇還款方式的借款
+  const notAvailable = () => showToast(COPY.common.notAvailable);
 
   const parent = query.back || '/lending-zone';
   const back = () => navigate(parent, { replace: true });
@@ -64,7 +65,15 @@ export function LendingRecords({ query }) {
           <div class="records-section__controls">
             <${SegmentedTabs} tabs=${t.collateralTabs} active=${sub} onChange=${setSub} />
 
-            ${sub !== 'history' &&
+            <!-- 已擔保｜Figma 3061:69619：排序 + 搜尋 icon（本次測試不開放，固定依可借款金額高到低） -->
+            ${sub === 'pledged' &&
+            html`
+              <div class="records-toolbar">
+                <${FilterPill} label=${t.pledgedSort} onClick=${notAvailable} />
+                <button class="icon-btn" onClick=${notAvailable} aria-label="搜尋"><${SearchIcon} /></button>
+              </div>
+            `}
+            ${sub === 'unpledged' &&
             html`
               <div class="records-search">
                 <${SearchField} value=${keyword} onChange=${setKeyword} placeholder=${t.searchPlaceholder} onSurface />
@@ -75,8 +84,9 @@ export function LendingRecords({ query }) {
 
           ${sub === 'pledged' &&
           html`<${PledgedList}
-            collateral=${account.collateral.filter(matches(keyword))}
-            emptyText=${keyword ? t.emptySearch : t.emptyPledged}
+            collateral=${account.collateral}
+            emptyText=${t.emptyPledged}
+            onViewChanges=${(code) => navigate(`/records/collateral-changes?code=${code}${backQs}`)}
           />`}
           ${sub === 'unpledged' &&
           html`<${HoldingsTable}

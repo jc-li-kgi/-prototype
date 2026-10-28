@@ -1,4 +1,4 @@
-// #/start?task=T2 → 重置資料、載入情境、跳到起始頁
+// #/start?task=T3 → 重置資料、載入情境、跳到起始頁
 import { html, useEffect } from '../lib/preact.js';
 import { loadScenario } from '../store.js';
 import { navigate } from '../router.js';

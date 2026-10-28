@@ -14,19 +14,10 @@ import { LoanIntroCard } from '../features/hub/LoanIntroCard.js';
 import { DueSoonNotice } from '../features/hub/DueSoonNotice.js';
 import { IntroSheet } from '../features/intro/IntroSheet.js';
 
-/** 長按標題 1.5 秒 → 主持人頁（受測者不會誤觸） */
-function useLongPress(onLongPress, ms = 1500) {
-  const timer = useRef();
-  const start = () => (timer.current = setTimeout(onLongPress, ms));
-  const cancel = () => clearTimeout(timer.current);
-  return { onTouchStart: start, onTouchEnd: cancel, onTouchMove: cancel, onMouseDown: start, onMouseUp: cancel, onMouseLeave: cancel };
-}
-
 export function AccountShell() {
   const account = useStore((s) => s.account);
   const t = COPY.account;
   const tabsRef = useRef();
-  const longPress = useLongPress(() => navigate('/moderator'));
   const notAvailable = () => showToast(COPY.common.notAvailable);
 
   // 產品頁籤捲到最右邊，讓「授信管理」露出（同 Figma）
@@ -39,7 +30,7 @@ export function AccountShell() {
     <div class="page account-page">
       <div>
         <header class="account-header">
-          <p class="t-headline c-primary account-header__title" ...${longPress}>${t.title}</p>
+          <p class="t-headline c-primary account-header__title">${t.title}</p>
           <button class="icon-btn" onClick=${notAvailable} aria-label="帳戶資訊"><${Icon} name="account-info.svg" /></button>
           <button class="icon-btn" onClick=${notAvailable} aria-label="客服"><${Icon} name="customer-service.svg" /></button>
         </header>
