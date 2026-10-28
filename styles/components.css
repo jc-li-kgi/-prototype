@@ -732,6 +732,15 @@
 .list-table__cell--left { justify-self: start; text-align: left; }
 .list-table__cell--center { justify-self: center; text-align: center; }
 .list-table__cell--right { justify-self: end; text-align: right; }
+/* 列表欄位每段文字最多 2 行，超出顯示「…」；完整內容放在展開明細（例如商品名稱） */
+.list-table__main .list-table__cell { min-width: 0; max-width: 100%; }
+.list-table__main .list-table__cell p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
 .list-table__row {
   display: flex;
   flex-direction: column;

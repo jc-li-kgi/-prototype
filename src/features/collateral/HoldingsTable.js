@@ -61,7 +61,7 @@ export function HoldingsTable({ holdings, limit, emptyText = COPY.holdings.empty
             expanded=${open === h.code}
             onToggle=${() => setOpen(open === h.code ? null : h.code)}
             detail=${html`
-              <${DetailRow} label=${t.detail.name} value=${stock.name} valueClass="t-body-regular" />
+              <${DetailRow} label=${t.detail.name} value=${stock.name} valueClass="t-body-regular text-wrap" />
               ${importable && html`<${DetailRow} label=${t.detail.pledgedLots} value=${num(pledgedLots(h.code))} />`}
               <${DetailRow} label=${t.detail.price} value=${price(stock.price)} />
               ${eligible && html`<${DetailRow} label=${tc.perLot} value=${num(perLotLoan(h.code))} />`}
