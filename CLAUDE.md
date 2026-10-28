@@ -93,8 +93,9 @@
 - 可借貸額度試算：專區「試算」頁籤（`features/simulate/SimulateForm`，草稿 `store.simDraft`；只剩一檔時「移除」停用）→ `/simulate/result`（返回帶 `?tab=simulate`）。公式在 `calc.js` 的 `simulate()`；追繳線 / 補足線在 `LOAN_RULES.callRatio / recoverRatio`。圖表（`RatioChart`）y 軸 120%～至少 160%、每 10% 一條線；x 軸右端 = 初始維持率跌到 120% 的跌幅（線落在右下角），刻度每 10%；左右拖拉圓點（每次 1%）查看維持率，手指在圖上時頁面不捲動（`touch-action: none`），預設停在起點（初始維持率）。表單下方「自選擔保品」直接開選擇標的彈窗（選完新增一列）、「使用庫存試算」本次測試不開放。結果頁「立即借貸」：未借款走 `newAccountLoan`（預先勾選有庫存的試算標的），已借款走 `existingLoan`。
 - 確認資料頁的送出按鈕一律用 `COPY.common.submit`（確認送出）。
 - 新頁面要在 `src/routes.js` 註冊。
+- 選擇還款方式的「借新還舊」：只有展延 2 次的借款才顯示（沒指定借款時，有任何一筆即將到期且展延已滿才顯示），選了進 `refinance` 流程。
 - 還款：借款紀錄到期前 `DUE_SOON_DAYS`（20）天顯示即將到期＋展延 / 還款；還款 → 選擇還款方式（`features/repay/RepayMethodSheet`，由專區 shell 與明細頁放置；專區快捷功能「還款」也會開啟）→ `cashRepay` 流程，送出 `repay()`；試算在 `calc.js` 的 `repayPlan`。
-- 借新還舊：借款展延次數上限 `LOAN_RULES.maxExtensions`（2）。即將到期且展延已滿的借款，借款紀錄的「展延」改為「借新還舊」→ `refinance` 流程（`features/refinance/`：選取借款契約 → 確認資料，送出 `refinance()`）。第 1 步預設勾選點選的那筆，其他近 20 天內到期、且展延 2 次的借款可一併勾選（展延未滿的不列出）；扣款總額 = 應還利息（本期）＋ 尚未收取的借款手續費；選取的舊借款整併成一筆新借款，完成頁「查看借款紀錄」展開新借款。規則在 `calc.js` 的 `refinanceDue` / `refinancePlan`。
+- 借新還舊：借款展延次數上限 `LOAN_RULES.maxExtensions`（2）。即將到期且展延已滿的借款，借款紀錄的「展延」改為「借新還舊」→ `refinance` 流程（`features/refinance/`：選取借款契約 → 確認資料，送出 `refinance()`）。第 1 步預設勾選點選的那筆，其他近 20 天內到期、且展延 2 次的借款可一併勾選（展延未滿的不列出）；扣款總額 = 應還利息（本期）＋ 尚未收取的借款手續費；選取的舊借款整併成一筆新借款（狀態已撥款），並新增一筆還款紀錄（還款方式借新還舊、已扣款；還款金額＝舊借款本金＋利息＋手續費），完成頁「查看借款紀錄」展開新借款。規則在 `calc.js` 的 `refinanceDue` / `refinancePlan`。
 - 到期通知：有即將到期（`DUE_SOON_DAYS` 天內）的借款時，專區總覽、帳務 › 授信管理的摘要卡下方顯示「有 N 筆借款，即將到期」（`features/hub/DueSoonNotice`），點擊 → 股票借貸明細 › 借款（帳務帶 `back=/account`）。共用基本資料的借款都還沒到期；需要即將到期的任務（T6 部分還款、T7 借新還舊）自己覆寫 `loans`。
 - 未實作的按鈕呼叫 `showToast(COPY.common.notAvailable)`。
 - 不安裝建置工具或 npm 套件（電腦沒有 Node.js）。

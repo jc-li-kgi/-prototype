@@ -248,12 +248,28 @@ export function refinance({ loanIds }) {
     applyDate: n.startDate,
     startDate: n.startDate,
     dueDate: n.dueDate,
-    status: '撥款中',
+    status: '已撥款', // 借新還舊不撥現金（直接償還舊借款），新借款直接生效
     extensions: 0,
     fee: n.fee,
     appliedAt: new Date().toISOString(),
     channel: 'APP',
     refinancedFrom: loanIds,
+  };
+  // 舊借款的還款紀錄（還款方式＝借新還舊）：本金由新借款償還，扣款帳戶只扣利息＋手續費
+  const principal = plan.loans.reduce((sum, l) => sum + l.balance, 0);
+  const record = {
+    id: 'A' + Date.now().toString().slice(-7),
+    method: '借新還舊',
+    status: '已扣款',
+    appliedAt: loan.appliedAt,
+    loanId: loanIds[0],
+    loanIds,
+    principal,
+    interest: plan.interest,
+    fee: plan.fee,
+    total: principal + plan.interest + plan.fee,
+    bank: state.account.payoutBank,
+    channel: 'APP',
   };
   setState((s) => ({
     account: {
@@ -262,6 +278,7 @@ export function refinance({ loanIds }) {
         loan,
         ...s.account.loans.map((l) => (loanIds.includes(l.id) ? { ...l, balance: 0, status: '已還清' } : l)),
       ],
+      repayments: [record, ...(s.account.repayments || [])],
     },
     refiDraft: {},
   }));
