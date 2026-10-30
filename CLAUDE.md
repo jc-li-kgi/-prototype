@@ -83,7 +83,7 @@
 - 帳戶 `opened = false` 代表尚未借款（未開戶）：專區顯示初始頁、帳務 › 授信管理顯示方案卡（`features/hub/LoanIntroCard`）＋認識並開立借貸戶，借款走 `newAccountLoan`（匯入擔保品 → 填寫借款金額 → 確認資料，最後一次送出 `firstLoan`）。專區初始頁的精選擔保品卡可點，進 `newAccountLoan` 並預先勾選該檔全部張數（`?code=`）。
 - 文案放 `src/content/copy.js`；公式與業務規則放 `src/lib/calc.js`；股價放 `src/mock/stocks.js`。
 - **產品資料以根目錄 `產品資料.md` 為準**（標的、收盤價、成數、利率、手續費、展延、維持率規則）。使用者說「依產品資料.md 更新」時：讀 md → 同步到 `stocks.js`、`calc.js` → 檢查測試任務金額（約 100 萬）與 `copy.js` 裡寫死的利率 / 手續費 / 成數 → 驗證畫面。程式改了這些數值時也要回寫 md。股票只能整張擔保（`lots`，1 張 = 1,000 股）；收盤價顯示兩位小數（`format.js` 的 `price`）。
-- 主持人頁（任務列表）：`#/moderator`，依 `scenarios/index.js` 的順序顯示「任務{情境的 no}」＋任務名稱；隱藏入口是長按底部導覽「更多」2 秒（`lib/useLongPress`）。任務：T1 任務一＆二 瀏覽借貸專區＋試算、T3 首次借款、T4 再借一筆、T5 瀏覽借貸明細、T6 部分還款、T7 借新還舊（任務代碼 = 編號）；匯入擔保品（`extra-import-collateral.js`）目前不列入。
+- 主持人頁（任務列表）：`#/moderator`，依 `scenarios/index.js` 的順序顯示「任務{情境的 no}」＋任務名稱；隱藏入口是長按底部導覽「更多」2 秒（`lib/useLongPress`）。任務：T1 任務一＆二 瀏覽借貸專區＋試算、T3 首次借款、T4 再借一筆、T5 瀏覽借貸明細、T6 現金還款、T7 借新還舊（任務代碼 = 編號）；匯入擔保品（`extra-import-collateral.js`）目前不列入。
 - 任務完成：情境設 `completeOnFlows`（例如 T1 = `['newAccountLoan', 'existingLoan']`）時，`startFlow` 不進流程，改顯示「任務完成」對話框（`app.js`），按鈕回任務列表。
 - 所有任務都從證券主頁「我的」（`/home`，`shells/HomeShell.js`）開始：快捷功能「股票借貸」→ 專區，底部導覽「帳務」→ 授信管理。
 - 擔保品紀錄：`account.collateralRecords` 每檔一筆 `{ id, type: 匯入|匯出, code, lots, status: 成功|失敗, appliedAt, channel }`（匯入沒有處理中，新匯入直接是成功）；情境資料要和 `collateral` 對得上。明細 › 擔保品：歷史紀錄（`CollateralHistory`，篩選未開放、可依代碼排序）；已擔保上方是排序「可借款金額高到低」＋搜尋 icon（都未開放，固定依可借款金額排序），每列有「賣股還款」（未開放），展開明細的「查看異動明細」→ `/records/collateral-changes?code=`（`CollateralChanges`，返回回已擔保）。
@@ -96,7 +96,7 @@
 - 選擇還款方式的「借新還舊」：只有展延 2 次的借款才顯示（沒指定借款時，有任何一筆即將到期且展延已滿才顯示），選了進 `refinance` 流程。
 - 還款：借款紀錄到期前 `DUE_SOON_DAYS`（20）天顯示即將到期＋展延 / 還款；還款 → 選擇還款方式（`features/repay/RepayMethodSheet`，由專區 shell 與明細頁放置；專區快捷功能「還款」也會開啟）→ `cashRepay` 流程，送出 `repay()`；試算在 `calc.js` 的 `repayPlan`。
 - 借新還舊：借款展延次數上限 `LOAN_RULES.maxExtensions`（2）。即將到期且展延已滿的借款，借款紀錄的「展延」改為「借新還舊」→ `refinance` 流程（`features/refinance/`：選取借款契約 → 確認資料，送出 `refinance()`）。第 1 步預設勾選點選的那筆，其他近 20 天內到期、且展延 2 次的借款可一併勾選（展延未滿的不列出）；扣款總額 = 應還利息（本期）＋ 尚未收取的借款手續費；選取的舊借款整併成一筆新借款（狀態已撥款），並新增一筆還款紀錄（還款方式借新還舊、已扣款；還款金額＝舊借款本金＋利息＋手續費），完成頁「查看借款紀錄」展開新借款。規則在 `calc.js` 的 `refinanceDue` / `refinancePlan`。
-- 到期通知：有即將到期（`DUE_SOON_DAYS` 天內）的借款時，專區總覽、帳務 › 授信管理的摘要卡下方顯示「有 N 筆借款，即將到期」（`features/hub/DueSoonNotice`），點擊 → 股票借貸明細 › 借款（帳務帶 `back=/account`）。共用基本資料的借款都還沒到期；需要即將到期的任務（T6 部分還款、T7 借新還舊）自己覆寫 `loans`。
+- 到期通知：有即將到期（`DUE_SOON_DAYS` 天內）的借款時，專區總覽、帳務 › 授信管理的摘要卡下方顯示「有 N 筆借款，即將到期」（`features/hub/DueSoonNotice`），點擊 → 股票借貸明細 › 借款（帳務帶 `back=/account`）。共用基本資料的借款都還沒到期；需要即將到期的任務（T6 現金還款、T7 借新還舊）自己覆寫 `loans`。
 - 未實作的按鈕呼叫 `showToast(COPY.common.notAvailable)`。
 - 不安裝建置工具或 npm 套件（電腦沒有 Node.js）。
 

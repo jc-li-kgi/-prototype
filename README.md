@@ -18,7 +18,7 @@ python3 -m http.server 8080
 | 任務三 首次借款（匯入擔保品 + 借款） | `#/start?task=T3` |
 | 任務四 再借一筆 | `#/start?task=T4` |
 | 任務五 瀏覽借貸明細 | `#/start?task=T5` |
-| 任務六 部分還款 | `#/start?task=T6` |
+| 任務六 現金還款 | `#/start?task=T6` |
 | 任務七 借新還舊 | `#/start?task=T7` |
 
 （匯入擔保品任務目前不列入測試，檔案保留在 `src/scenarios/extra-import-collateral.js`）
