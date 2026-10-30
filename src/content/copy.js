@@ -16,6 +16,8 @@ export const COPY = {
     done: '完成',
     gotIt: '我知道了',
     resetDone: '已清除所有測試資料',
+    expand: '展開明細',   // 卡片展開 / 收合（StatementCard 等）
+    collapse: '收闔明細',
   },
 
   // 可借貸額度試算｜Figma 3131:188036（輸入）、2565:50221（選擇標的）、2631:58837（結果）
@@ -508,6 +510,31 @@ export const COPY = {
     },
     emptySearch: '查無符合的股票',
     // 對帳單
-    statementNotAvailable: '對帳單未開放於本次測試',
+    // 對帳單：借款、還款、擔保品匯入 / 匯出彙整成卡片（最新的在最上面）
+    statement: {
+      tags: { loan: '借款', repay: '還款', 匯入: '匯入擔保品', 匯出: '匯出擔保品' },
+      // 篩選：時間（days = 往前幾天，null = 全部）、交易類別（value 對應 tags 的 key）
+      periodTitle: '選擇時間',
+      periods: [
+        { value: 'all', label: '全部期間', days: null },
+        { value: '1m', label: '近一月', days: 30 },
+        { value: '3m', label: '近三月', days: 90 },
+        { value: '6m', label: '近半年', days: 182 },
+        { value: '1y', label: '近一年', days: 365 },
+      ],
+      typeTitle: '選擇交易類別',
+      types: [
+        { value: 'all', label: '全部類別' },
+        { value: 'loan', label: '借款' },
+        { value: 'repay', label: '還款' },
+        { value: '匯入', label: '匯入擔保品' },
+        { value: '匯出', label: '匯出擔保品' },
+      ],
+      emptyFilter: '這段期間沒有符合的紀錄',
+      loan: { startDate: '起息日', dueDate: '到期日', applyDate: '申請日' },
+      repay: { method: '還款方式' },
+      collateral: { lots: '張數' },
+      empty: '目前沒有對帳紀錄',
+    },
   },
 };

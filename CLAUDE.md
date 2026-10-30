@@ -68,7 +68,7 @@
 ## 程式結構規則
 
 - **優先用現有元件**（`src/components/index.js` 統一 import；元件負責樣式，內容由參數帶入）：
-  - ui：Button、Icon、InfoLabel（文字＋ⓘ）、DetailRow、DetailCard（確認資料卡）、DetailPanel（列表展開明細卡；放在白卡裡加 `tone="blue"`）、SummaryCard（摘要卡，overview / flow）、FeeCard、AmountHero（確認頁大金額）、AmountCell（列表金額欄）、StockName（股票名稱＋代碼）、SectionHeader（區塊標題＋連結＋說明）、CollapsibleCard、ExpandToggle、IconAction（圓形圖示捷徑）、EmptyState、StatGroup（並排大數字）、NoticeBar（淡黃提示條）、NoticeCard（通知條：公告 icon＋一行訊息＋›，整張可點；icon 一律 24px）、StockPickCard（精選擔保品卡）、ServiceCardList（圖示＋標題＋說明的服務清單）、AccountPicker、Checkbox、CheckboxHeader（勾選框＋標題＋補充說明，說明與標題對齊；全選用）、Accordion（收合問答，FAQ）、FilterPill、Tag、SearchIcon
+  - ui：Button、Icon、InfoLabel（文字＋ⓘ）、DetailRow、DetailCard（確認資料卡）、DetailPanel（列表展開明細卡；放在白卡裡加 `tone="blue"`）、SummaryCard（摘要卡，overview / flow）、FeeCard、AmountHero（確認頁大金額）、AmountCell（列表金額欄）、StockName（股票名稱＋代碼）、SectionHeader（區塊標題＋連結＋說明）、CollapsibleCard、ExpandToggle、IconAction（圓形圖示捷徑）、EmptyState、StatGroup（並排大數字）、NoticeBar（淡黃提示條）、NoticeCard（通知條：公告 icon＋一行訊息＋›，整張可點；icon 一律 24px）、StatementCard（對帳單卡片：標題＋類型標籤＋資料列，可展開淡藍明細）、StockPickCard（精選擔保品卡）、ServiceCardList（圖示＋標題＋說明的服務清單）、AccountPicker、Checkbox、CheckboxHeader（勾選框＋標題＋補充說明，說明與標題對齊；全選用）、Accordion（收合問答，FAQ）、FilterPill、Tag、SearchIcon
   - form：PickerField（`onOpen` + `displayValue` = 自訂選擇畫面；`hint` 底線下說明）、NumberField（整數輸入＋單位）、AmountField（金額；`disabled` 鎖定；`value=null` + `placeholder` = 未填狀態，tertiary 色）、RadioGroup（單選，橫排平分）、QtyStepper（張數）、SelectableItem（勾選項目）、SearchField（Figma Atom_SearchBar_Mobile；預設淡藍底放白底上，藍底頁面加 `onSurface` 改白底）
   - layout：FlowPage（流程頁框架，流程每一步都用）、PageHeader、StepBar、BottomNav、TextTabs、SegmentedTabs、ListTable／ListRow（列表；ListRow 的 `detail` 自動包在 DetailPanel 白色明細卡裡；欄位每段文字最多 2 行，超出顯示「…」，完整內容（例如商品名稱）要放在展開明細，明細裡的長文字加 `text-wrap`）、Carousel（橫向滑動卡片）、StickyFooter（固定置底；plain = 只有按鈕時）、BottomActions（頁面底部按鈕區，見下方「底部按鈕」）、TotalBar（置底總計；`note` = 標題下方補充，例如已選取筆數；`expanded` + `onToggle` + children = 在置底區內向上展開明細，最高 90%）、ResultPage（完成頁）
   - overlay：Dialog / InfoDialog（置中對話框：ⓘ、注意事項說明、確認提示）、Sheet（底部彈窗：選單、明細；非選單內容包 `.sheet__content`；搜尋類加 `fullHeight` 固定 90% 高，不隨結果數量變矮）、SheetOptions（彈窗選項，選中項淡藍底；`chevron` = 前往型選單，例如選擇還款方式）、Toast
@@ -88,6 +88,7 @@
 - 任務完成：情境設 `completeOnFlows`（例如 T1 = `['newAccountLoan', 'existingLoan']`）時，`startFlow` 不進流程，改顯示「任務完成」對話框（`app.js`），按鈕回任務列表。
 - 所有任務都從證券主頁「我的」（`/home`，`shells/HomeShell.js`）開始：快捷功能「股票借貸」→ 專區，底部導覽「帳務」→ 授信管理。
 - 擔保品紀錄：`account.collateralRecords` 每檔一筆 `{ id, type: 匯入|匯出, code, lots, status: 成功|失敗, appliedAt, channel }`（匯入沒有處理中，新匯入直接是成功）；情境資料要和 `collateral` 對得上。明細 › 擔保品：歷史紀錄（`CollateralHistory`，篩選未開放、可依代碼排序）；已擔保上方是排序「可借款金額高到低」＋搜尋 icon（都未開放，固定依可借款金額排序），每列有「賣股還款」（未開放），展開明細的「查看異動明細」→ `/records/collateral-changes?code=`（`CollateralChanges`，返回回已擔保）。
+- 對帳單（明細 › 對帳單，`features/records/StatementList`）：借款、還款、擔保品匯入 / 匯出彙整成 StatementCard，最新的在最上面；卡片內容與各明細表格的展開明細一致，但對帳單只列成功的交易，不顯示任何狀態（失敗的擔保品匯入不列入）；上方篩選時間（預設全部期間）與交易類別（預設全部類別），可實際篩選。
 - **返回路徑**：股票借貸明細（`/records`）屬於專區，按返回一律回專區（包括從完成頁進來時，不會回到完成頁）；從帳務 › 授信管理進來時網址帶 `back=/account`，返回帳務。切換頁籤會保留 `back`。
 - **申請流程的按鈕狀態**：必填資訊沒完成時，下一步 / 送出按鈕一律 `disabled`，不採用「點擊後才跳錯誤訊息」。會影響能否送出的狀態（例如扣款帳戶餘額不足）直接顯示在欄位旁。
 - 認識股票借貸介紹頁：`features/intro/IntroSheet`（全螢幕從底部開啟，右上 ✕ 關閉回原頁，不是獨立路由）。未借款第一次進專區自動開啟一次（`store.introShown`，每個任務重新計算；情境設 `introSeen: true` 則不自動開啟，例如 T3 首次借款，因為任務一＆二已看過）；專區右上產品說明、帳務「認識股票借貸」也可開啟。本次測試不開放開戶：開戶相關按鈕顯示未開放。「追繳風險評估 › 立即試算」與案例的「試算可借金額」關閉介紹頁並切到專區「試算」頁籤（從帳務開啟時前往 `/lending-zone?tab=simulate`）。
