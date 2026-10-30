@@ -84,6 +84,7 @@
 - 文案放 `src/content/copy.js`；公式與業務規則放 `src/lib/calc.js`；股價放 `src/mock/stocks.js`。
 - **產品資料以根目錄 `產品資料.md` 為準**（標的、收盤價、成數、利率、手續費、展延、維持率規則）。使用者說「依產品資料.md 更新」時：讀 md → 同步到 `stocks.js`、`calc.js` → 檢查測試任務金額（約 100 萬）與 `copy.js` 裡寫死的利率 / 手續費 / 成數 → 驗證畫面。程式改了這些數值時也要回寫 md。股票只能整張擔保（`lots`，1 張 = 1,000 股）；收盤價顯示兩位小數（`format.js` 的 `price`）。
 - 主持人頁（任務列表）：`#/moderator`，依 `scenarios/index.js` 的順序顯示「任務{情境的 no}」＋任務名稱；隱藏入口是長按底部導覽「更多」2 秒（`lib/useLongPress`）。任務：T1 任務一＆二 瀏覽借貸專區＋試算、T3 首次借款、T4 再借一筆、T5 瀏覽借貸明細、T6 現金還款、T7 借新還舊（任務代碼 = 編號）；匯入擔保品（`extra-import-collateral.js`）目前不列入。
+- 任務連動（`scenarios/carry.js`）：T3 首次借款（`carryOut`）完成時，把擔保品、庫存、擔保品紀錄、借款存到 localStorage `lending-proto-carry-v1`（換任務不會清掉，「清除所有測試資料」或重新開始 T3 才清）。T4～T7 的 `carryIn` 帶入受測者的擔保品，已借款總額沿用他借的金額：T4、T5 就是那一筆（T5 另加已還清借款）；T6 拆 60% 快到期＋40%；T7 拆 50%＋25%（都展延 2 次、快到期）＋25%。可借額度放不下借款（T4 還要留 5 萬可再借）或沒有 T3 資料時，改用固定資料。T4 借的錢不帶到 T5～T7。
 - 任務完成：情境設 `completeOnFlows`（例如 T1 = `['newAccountLoan', 'existingLoan']`）時，`startFlow` 不進流程，改顯示「任務完成」對話框（`app.js`），按鈕回任務列表。
 - 所有任務都從證券主頁「我的」（`/home`，`shells/HomeShell.js`）開始：快捷功能「股票借貸」→ 專區，底部導覽「帳務」→ 授信管理。
 - 擔保品紀錄：`account.collateralRecords` 每檔一筆 `{ id, type: 匯入|匯出, code, lots, status: 成功|失敗, appliedAt, channel }`（匯入沒有處理中，新匯入直接是成功）；情境資料要和 `collateral` 對得上。明細 › 擔保品：歷史紀錄（`CollateralHistory`，篩選未開放、可依代碼排序）；已擔保上方是排序「可借款金額高到低」＋搜尋 icon（都未開放，固定依可借款金額排序），每列有「賣股還款」（未開放），展開明細的「查看異動明細」→ `/records/collateral-changes?code=`（`CollateralChanges`，返回回已擔保）。
