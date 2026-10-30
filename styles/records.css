@@ -7,6 +7,8 @@
 }
 
 .records-section { display: flex; flex-direction: column; gap: var(--spacing-16); }
+/* 對帳單：卡片組間距 12 */
+.statement-list { display: flex; flex-direction: column; gap: var(--spacing-12); padding: 0 var(--spacing-16); }
 /* 單檔擔保品異動明細：股票名稱（Figma 1786:98330） */
 .changes-title { padding: 0 var(--spacing-16); }
 .records-section__controls { display: flex; flex-direction: column; gap: var(--spacing-12); padding: 0 var(--spacing-16); }

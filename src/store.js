@@ -4,6 +4,7 @@ import { useReducer, useEffect } from './lib/preact.js';
 import { LOAN_RULES, addMonths, today, repayPlan, refinancePlan } from './lib/calc.js';
 
 const KEY = 'lending-proto-state-v5'; // 資料結構改版時遞增，避免讀到舊格式
+const CARRY_KEY = 'lending-proto-carry-v1'; // 任務三 → 任務四～七連動的資料（見 scenarios/carry.js），換任務不會清掉
 const listeners = new Set();
 
 let state = load();
@@ -49,20 +50,50 @@ export function useStore(selector = (s) => s) {
 
 /* ---------- 情境 ---------- */
 
+/* ---------- 任務連動（任務三 → 四～七） ---------- */
+
+function loadCarry() {
+  try {
+    return JSON.parse(localStorage.getItem(CARRY_KEY));
+  } catch {
+    return null;
+  }
+}
+
+function saveCarry(carry) {
+  try {
+    if (carry) localStorage.setItem(CARRY_KEY, JSON.stringify(carry));
+    else localStorage.removeItem(CARRY_KEY);
+  } catch { /* 私密瀏覽模式時忽略 */ }
+}
+
+/** 是否有任務三的資料（主持人頁顯示用） */
+export function hasCarry() {
+  return !!loadCarry();
+}
+
 export function loadScenario(scenario) {
+  // 重新開始任務三（記錄端）：清掉上一位受測者的資料
+  if (scenario.carryOut) saveCarry(null);
+  // 帶入端：有可用的任務三資料就用，否則用固定資料
+  const carried = scenario.carryIn ? scenario.carryIn(loadCarry()) : null;
   state = {
     ...emptyState(),
     taskId: scenario.id,
     entry: scenario.entry,
     startPath: scenario.startPath,
     completeOnFlows: scenario.completeOnFlows || null, // 開始這些流程時任務完成（見 flows.js startFlow）
-    account: structuredClone(scenario.account),
+    introShown: !!scenario.introSeen, // 前一個任務已看過介紹頁 → 進專區不再自動開啟
+    carryOut: !!scenario.carryOut,     // 完成首次借款時記下帳戶給後面的任務
+    carried: !!carried,                // 這次是否帶入了任務三的資料
+    account: structuredClone(carried || scenario.account),
   };
   save();
   listeners.forEach((fn) => fn());
 }
 
 export function resetAll() {
+  saveCarry(null);
   state = emptyState();
   save();
   listeners.forEach((fn) => fn());
@@ -119,7 +150,7 @@ export function pledgeCollateral(items) {
       const found = list.find((x) => x.code === code);
       if (found) return list.map((x) => (x.code === code ? { ...x, lots: x.lots + sign * lots } : x));
       // 新擔保的股票給一個存入序號
-      return sign > 0 ? [...list, { code, lots, serial: '82' + Date.now().toString().slice(-5) }] : list;
+      return sign > 0 ? [...list, { code, lots, serial: String(8200000 + ((Date.now() + list.length) % 100000)) }] : list;
     };
     let holdings = a.holdings;
     let collateral = a.collateral;
@@ -145,6 +176,16 @@ export function firstLoan(items, draft) {
   pledgeCollateral(items);
   const loan = borrow(draft);
   setState((s) => ({ account: { ...s.account, opened: true } }));
+  // 任務三：記下受測者的帳戶，給任務四～七帶入
+  if (state.carryOut) {
+    const a = state.account;
+    saveCarry({
+      collateral: a.collateral,
+      holdings: a.holdings,
+      collateralRecords: a.collateralRecords,
+      loan: { ...loan },
+    });
+  }
   return loan;
 }
 
@@ -247,12 +288,28 @@ export function refinance({ loanIds }) {
     applyDate: n.startDate,
     startDate: n.startDate,
     dueDate: n.dueDate,
-    status: '撥款中',
+    status: '已撥款', // 借新還舊不撥現金（直接償還舊借款），新借款直接生效
     extensions: 0,
     fee: n.fee,
     appliedAt: new Date().toISOString(),
     channel: 'APP',
     refinancedFrom: loanIds,
+  };
+  // 舊借款的還款紀錄（還款方式＝借新還舊）：本金由新借款償還，扣款帳戶只扣利息＋手續費
+  const principal = plan.loans.reduce((sum, l) => sum + l.balance, 0);
+  const record = {
+    id: 'A' + Date.now().toString().slice(-7),
+    method: '借新還舊',
+    status: '已扣款',
+    appliedAt: loan.appliedAt,
+    loanId: loanIds[0],
+    loanIds,
+    principal,
+    interest: plan.interest,
+    fee: plan.fee,
+    total: principal + plan.interest + plan.fee,
+    bank: state.account.payoutBank,
+    channel: 'APP',
   };
   setState((s) => ({
     account: {
@@ -261,6 +318,7 @@ export function refinance({ loanIds }) {
         loan,
         ...s.account.loans.map((l) => (loanIds.includes(l.id) ? { ...l, balance: 0, status: '已還清' } : l)),
       ],
+      repayments: [record, ...(s.account.repayments || [])],
     },
     refiDraft: {},
   }));

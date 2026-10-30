@@ -525,6 +525,16 @@
 .tag--default { background: var(--color-container-general-active-secondary); color: var(--color-content-general-active); }
 .tag--warning { border: 1px solid var(--color-content-tag-warning); color: var(--color-content-tag-warning); }
 .tag--info { border: 1px solid var(--color-sky-blue-300); color: var(--color-sky-blue-500); } /* Guideline 無對應語意 token，用 Graphic Blue 色票 */
+.tag--highlight { border: 1px solid var(--color-content-tag-highlight); color: var(--color-content-tag-highlight); }
+
+/* ---------- StatementCard 對帳單卡片｜Figma 1822:124697（收合）、1822:124845（展開） ----------
+   內距 16；標題→資料列 24；資料列 12；資料列→明細 / 按鈕 16 */
+.statement-card { display: flex; flex-direction: column; gap: var(--spacing-24); padding: var(--spacing-16); }
+.statement-card__head { display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-8); }
+.statement-card__head > p { flex: 1; min-width: 0; }
+.statement-card__body { display: flex; flex-direction: column; gap: var(--spacing-16); }
+.statement-card__rows { display: flex; flex-direction: column; gap: var(--spacing-12); }
+.statement-card__toggle { align-self: center; display: inline-flex; align-items: center; }
 
 /* ---------- SearchIcon ---------- */
 .search-icon { position: relative; display: inline-block; flex-shrink: 0; }

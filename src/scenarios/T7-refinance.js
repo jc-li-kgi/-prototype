@@ -4,6 +4,7 @@
 //   L000131  15 天後到期、展延 2/2、尚未收借款手續費 → 也可借新還舊，可一併勾選
 //   L000098  90 天後到期 → 不在借新還舊清單
 import { BASE_ACCOUNT, scenarioLoan as loan } from './base-account.js';
+import { carryOk, carriedAccount, splitAmount } from './carry.js';
 
 export default {
   id: 'T7',
@@ -12,6 +13,17 @@ export default {
   instruction: '你有一筆借款快到期了，而且已經展延 2 次、不能再展延。請用借新還舊處理這筆借款，完成後查看新的借款。',
   entry: 'account',
   startPath: '/home',
+  // 有任務三資料：用受測者的擔保品，借款總額沿用他借的金額，拆成 50%（展延 2 次）+ 25%（展延 2 次）+ 25%（未到期）
+  carryIn: (carry) => {
+    if (!carryOk(carry)) return null;
+    const [a, b, c] = splitAmount(carry.loan.amount, [0.5, 0.25, 0.25]);
+    const purpose = carry.loan.purpose;
+    return carriedAccount(carry, [
+      loan({ id: 'L000123', amount: a, purpose, dueIn: 6, extensions: 2, feePaid: true }),
+      loan({ id: 'L000131', amount: b, purpose, dueIn: 15, extensions: 2, feePaid: false }),
+      loan({ id: 'L000098', amount: c, purpose, dueIn: 90, extensions: 0, feePaid: false }),
+    ]);
+  },
   account: {
     ...BASE_ACCOUNT,
     loans: [

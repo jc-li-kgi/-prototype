@@ -5,13 +5,14 @@
 //   從帳務 › 授信管理進來時帶 back=/account
 // 頁面負責組合各功能模組（features 之間不互相 import）
 import { html, useState } from '../lib/preact.js';
-import { PageHeader, TextTabs, SegmentedTabs, SearchField, Button, EmptyState, FilterPill, SearchIcon } from '../components/index.js';
+import { PageHeader, TextTabs, SegmentedTabs, SearchField, Button, FilterPill, SearchIcon } from '../components/index.js';
 import { useStore, showToast } from '../store.js';
 import { navigate } from '../router.js';
 import { startFlow } from '../flows/flows.js';
 import { groupHoldings, stockOf } from '../lib/calc.js';
 import { COPY } from '../content/copy.js';
 import { LoanRecordList } from '../features/records/LoanRecordList.js';
+import { StatementList } from '../features/records/StatementList.js';
 import { RepayMethodSheet } from '../features/repay/RepayMethodSheet.js';
 import { HoldingsTable } from '../features/collateral/HoldingsTable.js';
 import { PledgedList } from '../features/collateral/PledgedList.js';
@@ -97,7 +98,7 @@ export function LendingRecords({ query }) {
         </div>
       `}
 
-      ${tab === 'statement' && html`<${EmptyState} text=${t.statementNotAvailable} />`}
+      ${tab === 'statement' && html`<${StatementList} account=${account} />`}
 
       <${RepayMethodSheet} open=${!!repayLoan} loanId=${repayLoan?.id} onClose=${() => setRepayLoan(null)} />
     </div>
