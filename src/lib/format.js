@@ -20,3 +20,8 @@ export function dateTime(d = new Date()) {
   const p = (x) => String(x).padStart(2, '0');
   return `${d.getFullYear()}/${p(d.getMonth() + 1)}/${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
 }
+
+/** ISO 時間 → [日期, 時間]，例如 ['2025/12/28', '11:45:11']（列表裡日期、時間分兩行時用） */
+export function dateTimeParts(iso) {
+  return dateTime(new Date(iso)).split(' ');
+}

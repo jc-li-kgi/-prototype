@@ -3,16 +3,10 @@
 // 卡片內容與各明細表格（借款紀錄、還款紀錄、擔保品歷史紀錄）的展開明細相同｜卡片：StatementCard
 // 上方篩選：時間（預設全部期間）、交易類別（預設全部類別），點了開底部選單
 import { html, useState } from '../../lib/preact.js';
-import { StatementCard, EmptyState, FilterPill, Sheet, SheetOptions } from '../../components/index.js';
+import { StatementCard, EmptyState, FilterPill, Sheet, SheetOptions, DateTimeLines } from '../../components/index.js';
 import { LOAN_RULES, stockOf, periodInterest, today, addDays } from '../../lib/calc.js';
-import { twd, num, rate, date, dateTime } from '../../lib/format.js';
+import { twd, num, rate, date } from '../../lib/format.js';
 import { COPY } from '../../content/copy.js';
-
-/** 日期 + 時間（兩行） */
-function dateTimeLines(iso) {
-  const [day, time] = dateTime(new Date(iso)).split(' ');
-  return html`<p>${day}</p><p>${time}</p>`;
-}
 
 /** 借款 → 卡片 */
 function loanCard(l) {
@@ -28,7 +22,7 @@ function loanCard(l) {
     rows: [
       [s.startDate, date(l.startDate)],
       [s.dueDate, date(l.dueDate)],
-      [s.applyDate, l.appliedAt ? dateTimeLines(l.appliedAt) : date(l.applyDate)],
+      [s.applyDate, l.appliedAt ? html`<${DateTimeLines} value=${l.appliedAt} />` : date(l.applyDate)],
     ],
     detail: [
       [t.colBalance[0], twd(l.balance)],
@@ -54,7 +48,7 @@ function repayCard(r) {
     title: twd(r.total),
     tag: t.statement.tags.repay,
     rows: [
-      [d.appliedAt, dateTimeLines(r.appliedAt)],
+      [d.appliedAt, html`<${DateTimeLines} value=${r.appliedAt} />`],
       [s.method, r.method, 't-body-regular'],
     ],
     detail: [
@@ -82,7 +76,7 @@ function collateralCard(r) {
     tag: t.statement.tags[r.type],
     rows: [
       [s.lots, t.lots(num(r.lots)), 't-body-regular'],
-      [d.appliedAt, dateTimeLines(r.appliedAt)],
+      [d.appliedAt, html`<${DateTimeLines} value=${r.appliedAt} />`],
     ],
     detail: [
       [d.serial, r.id],

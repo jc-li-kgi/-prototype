@@ -5,11 +5,11 @@
 //   還款：還款紀錄列表，可展開明細
 import { html, useState, useEffect, useRef } from '../../lib/preact.js';
 import {
-  SegmentedTabs, FilterPill, Tag, Button, DetailRow, ListTable, ListRow, EmptyState,
+  SegmentedTabs, FilterPill, Tag, Button, DetailRow, ListTable, ListRow, EmptyState, DateTimeLines,
 } from '../../components/index.js';
 import { showToast } from '../../store.js';
 import { LOAN_RULES, isDueSoon, extensionsUsed, periodInterest } from '../../lib/calc.js';
-import { twd, date, rate, dateTime } from '../../lib/format.js';
+import { twd, date, rate, dateTimeParts } from '../../lib/format.js';
 import { COPY } from '../../content/copy.js';
 
 /**
@@ -89,7 +89,7 @@ function BorrowList({ loans, open, setOpen, onRepay, onRefinance, onRepayRecords
               <${DetailRow} label=${d.interest} value=${twd(periodInterest(l))} />
               <${DetailRow} label=${d.fee} value=${twd(l.fee ?? LOAN_RULES.fee)} />
               <${DetailRow} label=${d.extensions} value=${`${l.extensions ?? 0}/${LOAN_RULES.maxExtensions}`} />
-              <${DetailRow} label=${d.applyDate} value=${applied(l)} />
+              <${DetailRow} label=${d.applyDate} value=${l.appliedAt ? html`<${DateTimeLines} value=${l.appliedAt} />` : date(l.applyDate)} />
               <${DetailRow} label=${d.serial} value=${l.id} />
               <${DetailRow} label=${d.channel} value=${l.channel ?? 'APP'} />
               <div class="records-detail-buttons">
@@ -115,13 +115,6 @@ function BorrowList({ loans, open, setOpen, onRepay, onRefinance, onRepayRecords
   `;
 }
 
-/** 申請日：有申請時間時顯示日期 + 時間（兩行） */
-function applied(l) {
-  if (!l.appliedAt) return date(l.applyDate);
-  const [day, time] = dateTime(new Date(l.appliedAt)).split(' ');
-  return html`<p>${day}</p><p>${time}</p>`;
-}
-
 /** 還款紀錄：最新申請的在最上面｜Figma 3089:63010 */
 function RepayList({ repayments, open, setOpen }) {
   const t = COPY.records;
@@ -141,7 +134,7 @@ function RepayList({ repayments, open, setOpen }) {
       empty=${t.emptyRepay}
     >
       ${rows.map((r) => {
-        const [day, time] = dateTime(new Date(r.appliedAt)).split(' ');
+        const [day] = dateTimeParts(r.appliedAt);
         return html`
           <${ListRow}
             align=${['left', 'right', 'right']}
@@ -151,10 +144,7 @@ function RepayList({ repayments, open, setOpen }) {
                 <p class="t-body-regular c-secondary">${r.status}</p>
               `,
               html`<p class="t-body-regular c-primary nowrap">${r.method}</p>`,
-              html`
-                <p class="n-body-regular c-primary">${day}</p>
-                <p class="n-body-regular c-primary">${time}</p>
-              `,
+              html`<${DateTimeLines} value=${r.appliedAt} class="n-body-regular c-primary" />`,
             ]}
             expanded=${open === r.id}
             onToggle=${() => setOpen(open === r.id ? null : r.id)}

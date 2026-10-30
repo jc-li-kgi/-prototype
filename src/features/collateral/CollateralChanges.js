@@ -6,7 +6,7 @@ import { PageHeader, ListTable, ListRow, DetailRow } from '../../components/inde
 import { useStore } from '../../store.js';
 import { navigate } from '../../router.js';
 import { stockOf } from '../../lib/calc.js';
-import { num, dateTime } from '../../lib/format.js';
+import { num, dateTimeParts } from '../../lib/format.js';
 import { COPY } from '../../content/copy.js';
 
 const ALIGN = ['left', 'right'];
@@ -35,7 +35,7 @@ export function CollateralChanges({ query }) {
         empty=${c.empty}
       >
         ${rows.map((r) => {
-          const [day, time] = dateTime(new Date(r.appliedAt)).split(' ');
+          const [day, time] = dateTimeParts(r.appliedAt);
           return html`
             <${ListRow}
               align=${ALIGN}
