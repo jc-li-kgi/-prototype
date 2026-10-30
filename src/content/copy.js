@@ -30,7 +30,7 @@ export const COPY = {
     lotsLabel: '擔保張數',
     lotsPlaceholder: '請輸入數字',
     lotUnit: '張',
-    customPick: '自選擔保品',
+    customPick: '新增擔保品',
     useHoldings: '使用庫存試算', // 本次測試不開放
     submit: '試算',
     sheetTitle: '選擇可擔保標的',
