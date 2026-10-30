@@ -110,7 +110,6 @@
 .intro-tools__item > div { display: flex; flex-direction: column; gap: var(--spacing-4); }
 
 /* 文字中的連結（立即試算、前往申請） */
-.intro-link { display: inline-flex; color: var(--color-content-general-active); }
 
 /* 我要如何操作 */
 .intro-how { gap: var(--spacing-16); }

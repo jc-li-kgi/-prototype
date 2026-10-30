@@ -90,6 +90,7 @@
   gap: var(--spacing-4);
   color: var(--color-content-general-active);
 }
+.btn-text--negative { color: var(--color-content-semantic-negative); } /* 移除等刪除類動作 */
 .btn-text:disabled { color: var(--color-content-general-disabled); cursor: default; }
 .btn--block { width: 100%; padding: var(--spacing-12) var(--spacing-16); }
 
@@ -534,7 +535,8 @@
 .statement-card__head > p { flex: 1; min-width: 0; }
 .statement-card__body { display: flex; flex-direction: column; gap: var(--spacing-16); }
 .statement-card__rows { display: flex; flex-direction: column; gap: var(--spacing-12); }
-.statement-card__toggle { align-self: center; display: inline-flex; align-items: center; }
+.statement-card__toggle { align-self: center; }
+.expand-button { align-self: center; } /* 在直式 flex 容器裡預設置中 */
 
 /* ---------- SearchIcon ---------- */
 .search-icon { position: relative; display: inline-block; flex-shrink: 0; }

@@ -19,16 +19,3 @@
 /* 借款展開明細下方：還款紀錄 / 展延紀錄（平分寬度）｜Figma 3167:192520；資料列→按鈕 24 */
 .records-detail-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-12); margin-top: calc(var(--spacing-24) - var(--spacing-12)); }
 .records-detail-buttons--single { grid-template-columns: 1fr; } /* 已擔保：查看異動明細 */
-
-/* 擔保品歷史紀錄（暫用版面） */
-.history-list { display: flex; flex-direction: column; gap: var(--spacing-12); padding: 0 var(--spacing-16); }
-.history-item {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-4);
-  padding: var(--spacing-16);
-  border-radius: var(--radius-medium);
-  background: var(--color-container-card-white);
-  box-shadow: var(--shadow-basic);
-}
-.history-item__head { display: flex; align-items: center; justify-content: space-between; }

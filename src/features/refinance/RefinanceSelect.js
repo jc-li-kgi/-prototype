@@ -3,7 +3,7 @@
 // 清單 = 近 DUE_SOON_DAYS 天內到期、且展延 2 次的借款，可一併勾選；下方總計 = 扣款總額（應還利息 + 借款手續費）
 import { html, useState } from '../../lib/preact.js';
 import {
-  FlowPage, SummaryCard, Checkbox, SelectableItem, DetailRow, DetailPanel, Icon, Button, TotalBar,
+  FlowPage, SummaryCard, Checkbox, SelectableItem, DetailRow, DetailPanel, ExpandButton, Button, TotalBar,
 } from '../../components/index.js';
 import { useStore, updateRefiDraft } from '../../store.js';
 import { flowPosition, nextStep, prevStep, flowTitle } from '../../flows/flows.js';
@@ -101,10 +101,7 @@ export function RefinanceSelect({ query }) {
                         <${DetailRow} label=${t.detail.channel} value=${l.channel ?? 'APP'} />
                       <//>
                     `}
-                    <button class="refi-card__toggle icon-text--body c-active" aria-expanded=${expanded} onClick=${() => setOpen(expanded ? null : l.id)}>
-                      <span class="t-body-regular">${expanded ? t.collapse : t.expand}</span>
-                      <${Icon} name=${expanded ? 'chevron-up.svg' : 'chevron-down.svg'} level="body" tint />
-                    </button>
+                    <${ExpandButton} class="refi-card__toggle" expanded=${expanded} onClick=${() => setOpen(expanded ? null : l.id)} />
                   <//>
                 </div>
               `;

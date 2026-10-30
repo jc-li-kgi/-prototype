@@ -152,7 +152,7 @@ function IntroContent({ onClose, onSimulate }) {
                       <div>
                         <p class="t-body-bold c-primary">${tool.title}</p>
                         <p class="t-body-regular c-secondary">
-                          ${tool.desc}${tool.link && html` <button class="intro-link c-active" onClick=${tool.action === 'simulate' ? goSimulate : notAvailable}>${tool.link}</button>`}
+                          ${tool.desc}${tool.link && html` <${Button} variant="text" onClick=${tool.action === 'simulate' ? goSimulate : notAvailable}>${tool.link}<//>`}
                         </p>
                       </div>
                     </li>
@@ -202,9 +202,7 @@ function HowTo({ onApply, opened }) {
           html`
             <p class="intro-how__hint">
               <span class="t-caption-regular c-secondary">${step.hint}</span>
-              <button class="intro-link t-body-regular icon-text--body" onClick=${onApply}>
-                ${step.link}<${Icon} name="forward-16.svg" level="body" />
-              </button>
+              <${Button} variant="text" onClick=${onApply}>${step.link}<${Icon} name="forward-16.svg" level="body" /><//>
             </p>
           `}
         </div>

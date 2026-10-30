@@ -23,6 +23,7 @@ export { StatGroup } from './ui/StatGroup.js';
 export { NoticeBar } from './ui/NoticeBar.js';
 export { NoticeCard } from './ui/NoticeCard.js';
 export { StatementCard } from './ui/StatementCard.js';
+export { ExpandButton } from './ui/ExpandButton.js';
 export { StockPickCard } from './ui/StockPickCard.js';
 export { ServiceCardList } from './ui/ServiceCardList.js';
 export { AccountPicker } from './ui/AccountPicker.js';

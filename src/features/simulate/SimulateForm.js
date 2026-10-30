@@ -46,11 +46,7 @@ export function SimulateForm() {
           <section class="card card--full sim-item">
             <div class="sim-item__head">
               <p class="t-body-bold c-primary">${t.itemLabel(i + 1)}</p>
-              <button
-                class=${'t-body-regular ' + (single ? 'c-disabled' : 'c-negative')}
-                disabled=${single}
-                onClick=${() => remove(i)}
-              >${t.remove}</button>
+              <${Button} variant="text" tone="negative" disabled=${single} onClick=${() => remove(i)}>${t.remove}<//>
             </div>
             <${PickerField}
               displayValue=${stock && `${stock.name} ${it.code}`}

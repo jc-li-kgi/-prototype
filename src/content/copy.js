@@ -267,8 +267,6 @@ export const COPY = {
     extensions: '展延次數',
     interest: '應還利息',
     interestAndFee: '應還利息與借款手續費',
-    expand: '展開明細',
-    collapse: '收闔明細',
     detail: {
       amount: '初始借款金額',
       startDate: '起息日',

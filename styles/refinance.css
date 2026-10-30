@@ -13,7 +13,7 @@
 .refi-card .selectable-item__body { gap: var(--spacing-12); }
 .refi-card__title { display: flex; flex-direction: column; gap: var(--spacing-4); }
 .refi-card__rows { display: flex; flex-direction: column; gap: var(--spacing-12); }
-.refi-card__toggle { align-self: center; display: inline-flex; align-items: center; margin-top: calc(var(--spacing-20) - var(--spacing-12)); } /* 資料列→按鈕 20 */
+.refi-card__toggle { margin-top: calc(var(--spacing-20) - var(--spacing-12)); } /* 資料列→按鈕 20；按鈕本身是 ExpandButton */
 
 /* ---------- 第 2 步：確認資料｜Figma 1804:118296 ---------- */
 .refi-confirm { display: flex; flex-direction: column; gap: var(--spacing-24); }

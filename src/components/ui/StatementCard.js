@@ -3,8 +3,7 @@ import { html, useState } from '../../lib/preact.js';
 import { Tag } from './Tag.js';
 import { DetailRow } from './DetailRow.js';
 import { DetailPanel } from './DetailPanel.js';
-import { Icon } from './Icon.js';
-import { COPY } from '../../content/copy.js';
+import { ExpandButton } from './ExpandButton.js';
 
 /**
  * <StatementCard
@@ -18,7 +17,6 @@ import { COPY } from '../../content/copy.js';
  */
 export function StatementCard({ title, titleClass = 'n-body-bold', tag, tagVariant = 'highlight', rows = [], detail = [] }) {
   const [open, setOpen] = useState(false);
-  const t = COPY.common;
   const row = ([label, value, valueClass]) => html`<${DetailRow} label=${label} value=${value} valueClass=${valueClass} />`;
 
   return html`
@@ -30,13 +28,7 @@ export function StatementCard({ title, titleClass = 'n-body-bold', tag, tagVaria
       <div class="statement-card__body">
         <div class="statement-card__rows">${rows.map(row)}</div>
         ${open && detail.length > 0 && html`<${DetailPanel} tone="blue">${detail.map(row)}<//>`}
-        ${detail.length > 0 &&
-        html`
-          <button class="statement-card__toggle icon-text--body c-active" aria-expanded=${open} onClick=${() => setOpen(!open)}>
-            <span class="t-body-regular">${open ? t.collapse : t.expand}</span>
-            <${Icon} name=${open ? 'chevron-up.svg' : 'chevron-down.svg'} level="body" tint />
-          </button>
-        `}
+        ${detail.length > 0 && html`<${ExpandButton} expanded=${open} onClick=${() => setOpen(!open)} />`}
       </div>
     </article>
   `;
